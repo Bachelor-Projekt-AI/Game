@@ -55,6 +55,15 @@ Bitte halte dich an folgende Richtlinien:
 
 ---
 
+
+## Featureplan
+
+- aktuelle Entwicklungen etc
+- mögliche Ideen
+-  Blabub
+
+
+
 ## Ideen einreichen
 
 Hast du eine Idee für ein neues Feature? 
