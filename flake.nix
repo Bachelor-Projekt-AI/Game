@@ -13,7 +13,9 @@
 				devShells.default = pkgs.mkShell {
 					name = "Bachelorprojekt shell";
 					packages = with pkgs; [
+						gnumake
 						jdk
+						maven
 					];
 				};
 			}
