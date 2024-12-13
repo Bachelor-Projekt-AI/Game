@@ -1,12 +1,17 @@
 build:
-	mvn compile -Dexec.mainClass="org.bachelorprojekt.Main"
+	./gradlew build
+
 clean:
-	rm -r target/*
+	./gradlew clean
+
 jar:
-	mvn package
+	./gradlew jar
+
 run:
-	mvn compile exec:java -Dexec.mainClass="org.bachelorprojekt.Main"
+	./gradlew run
+
 test:
-	mvn test
+	./gradlew test
+
 version:
-	mvn versions:set -DnewVersion=$v && mvn versions:commit
+	./gradlew version -PnewVersion=$(v)

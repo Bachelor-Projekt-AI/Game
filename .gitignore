@@ -24,3 +24,11 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Gradle Cache und temporäre Dateien
+.gradle/
+build/
+
+# Logs und temporäre Dateien
+*.log
+.DS_Store

@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+group = 'org.bachelorprojekt'
+version = '0.1.0'
+description = 'game'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+application {
+    // Setze die Hauptklasse für die Anwendung
+    mainClass = 'org.bachelorprojekt.Main'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
