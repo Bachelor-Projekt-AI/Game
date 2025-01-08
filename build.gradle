@@ -10,22 +10,33 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
+    implementation "com.badlogicgames.gdx:gdx:1.12.0"
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:1.12.0"
+    runtimeOnly "com.badlogicgames.gdx:gdx-platform:1.12.0:natives-desktop"
 }
 
 group = 'org.bachelorprojekt'
 version = '0.1.0'
 description = 'game'
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+// Verwende eine modernere Java-Version (Java 17 wird empfohlen)
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 application {
     // Setze die Hauptklasse für die Anwendung
     mainClass = 'org.bachelorprojekt.Main'
 }
 
+// UTF-8 für die Java-Compiler-Einstellungen
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+// JUnit konfigurieren
 tasks.withType(Test) {
     useJUnitPlatform()
 }

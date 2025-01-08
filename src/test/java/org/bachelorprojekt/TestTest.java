@@ -1,4 +1,4 @@
-package org.bitbiome;
+package org.bachelorprojekt;
 
 import org.junit.jupiter.api.Test;
 
