@@ -32,3 +32,4 @@ build/
 # Logs und temporäre Dateien
 *.log
 .DS_Store
+.idea/
