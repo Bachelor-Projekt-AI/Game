@@ -1,19 +1,44 @@
 package org.bachelorprojekt.character;
 
 import org.bachelorprojekt.inventory.Inventory;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "character")
 public class Character {
+	@Id
+	@Column(name = "name")
     private String name;
+
+	@Column(name = "level")
     private int level;
+
+	@Column(name = "experience")
     private int experience;
+
+	@Column(name = "health")
     private int health;
+
+	@Column(name = "mana")
     private int mana;
+
+	@Column(name = "gold")
     private int gold;
+
+	@Column(name = "inventory")
     private Inventory inventory;
 
     public Character(String name) {
         this.name = name;
+		this.level = 1;
+		this.experience = 0;
+		this.health = 15;
+		this.mana = 15;
+		this.gold = 5;
+		this.inventory = new Inventory();
     }
+
+	public Character() {}
 
     @Override
     public String toString() {
