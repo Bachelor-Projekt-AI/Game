@@ -1,11 +1,17 @@
 package org.bachelorprojekt.inventory;
 
+import java.io.Serializable;
+
+import jakarta.persistence.*;
+
 /**
  * Represents a 4x4 inventory system capable of storing and managing items.
  * Each inventory slot can hold one item. Stackable items can be grouped
  * together up to their maximum stack size.
  */
-public class Inventory {
+@Embeddable
+public class Inventory implements Serializable {
+	@CollectionTable(name = "inventory", joinColumns = @JoinColumn(name = "character_name"))
     private Item[][] items;
 
     /**
