@@ -13,10 +13,11 @@
 				devShells.default = pkgs.mkShell {
 					name = "Bachelorprojekt shell";
 					packages = with pkgs; [
-						gnumake
 						jdk
-						maven
 					];
+					shellHook = ''
+						export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH}''${LD_LIBRARY_PATH:+:}${pkgs.libglvnd}/lib"
+					'';
 				};
 			}
 		);

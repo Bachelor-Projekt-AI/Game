@@ -33,3 +33,5 @@ build/
 *.log
 .DS_Store
 .idea/
+.settings/
+gamestate.db
