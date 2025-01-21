@@ -31,6 +31,12 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+run {
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        jvmArgs = ["-XstartOnFirstThread"]
+    }
+}
+
 application {
     // Setze die Hauptklasse für die Anwendung
     mainClass = 'org.bachelorprojekt.Main'
