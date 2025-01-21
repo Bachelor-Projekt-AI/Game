@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,13 +22,28 @@ public class Main extends ApplicationAdapter {
     private float timeAccumulator = 0; // Zeitakku für das Blinken der Uhr
 
     private boolean isPaused = false; // Zustand des Spiels (Pausiert oder nicht)
+    private boolean isMainMenu = true; // Zustand des Hauptmenüs
+    private boolean isMapOpen = false; // Zustand der Map
     private String[] menuOptions = {"Resume", "Settings", "Leave"};
+    private String[] mainMenuOptions = {"Start Game", "Settings", "Exit"};
     private int selectedOption = 0; // Aktuell ausgewählte Menüoption
+
+    private BitmapFont monospaceFont;
+
+    private void loadMonospaceFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("src/main/resources/fonts/JetBrainsMono-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 14; // Schriftgröße
+        parameter.mono = true; // Monospace aktivieren (falls möglich)
+        monospaceFont = generator.generateFont(parameter);
+        generator.dispose(); // Generator nach Verwendung freigeben
+    }
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont(); // Standard-Schriftart
+        loadMonospaceFont();
     }
 
     @Override
@@ -36,7 +52,11 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (isPaused) {
+        if (isMainMenu) {
+            renderMainMenu();
+        } else if (isMapOpen) {
+            renderMap();
+        } else if (isPaused) {
             renderPauseMenu();
         } else {
             // Spielinhalte rendern
@@ -72,6 +92,23 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+    private void renderMainMenu() {
+        batch.begin();
+
+        font.draw(batch, "Main Menu", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() - 50);
+        for (int i = 0; i < mainMenuOptions.length; i++) {
+            if (i == selectedOption) {
+                font.draw(batch, "> " + mainMenuOptions[i], Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() - 100 - i * 30);
+            } else {
+                font.draw(batch, mainMenuOptions[i], Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() - 100 - i * 30);
+            }
+        }
+
+        batch.end();
+
+        handleMainMenuInput();
+    }
+
     private void renderPauseMenu() {
         batch.begin();
 
@@ -89,9 +126,78 @@ public class Main extends ApplicationAdapter {
         handlePauseMenuInput();
     }
 
+    private void renderMap() {
+        batch.begin();
+
+        monospaceFont.draw(batch, "Map - Chapter 1", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() - 50);
+
+        String[] map = {
+                "                       ,-.^._                 _\n" +
+                        "                     .'      `-.            ,' ;\n" +
+                        "          /`-.  ,----'         `-.   _  ,-.,'  `\n" +
+                        "       _.'   `--'                 `-' '-'      ;\n" +
+                        "      :                         o             ;    __,-.\n" +
+                        "      ,'    o               Blacksmith       ;_'-',.__'--.\n" +
+                        "     :    Healer                            ,---``    `--'\n" +
+                        "     :                                      ;\n" +
+                        "     :                                      :\n" +
+                        "     ;                                      :\n" +
+                        "    (                                       ;\n" +
+                        "     `-.                           *      ,'\n" +
+                        "       ;                          You    :\n" +
+                        "     .'                             .-._,'\n" +
+                        "   .'                               `.\n" +
+                        "_.'                                .__;\n" +
+                        "`._                  o            ;\n" +
+                        "   `.            Innkeeper       :\n" +
+                        "     `.               ,..__,---._;\n" +
+                        "       `-.__         :\n" +
+                        "            `.--.____;\n"
+        };
+
+        for (int i = 0; i < map.length; i++) {
+            monospaceFont.draw(batch, map[i], 150, Gdx.graphics.getHeight() - 100 - i * 20);
+        }
+
+        batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            isMapOpen = false; // Close the map
+        }
+    }
+
+    private void handleMainMenuInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            selectedOption = (selectedOption - 1 + mainMenuOptions.length) % mainMenuOptions.length;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            selectedOption = (selectedOption + 1) % mainMenuOptions.length;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            executeMainMenuOption();
+        }
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+            for (int i = 0; i < mainMenuOptions.length; i++) {
+                if (mouseY > Gdx.graphics.getHeight() - 100 - i * 30 - 20 && mouseY < Gdx.graphics.getHeight() - 100 - i * 30 + 10) {
+                    selectedOption = i;
+                    executeMainMenuOption();
+                    break;
+                }
+            }
+        }
+    }
+
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPaused = true; // Spiel pausieren
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+            isMapOpen = true; // Open the map
         }
     }
 
@@ -117,6 +223,20 @@ public class Main extends ApplicationAdapter {
                     break;
                 }
             }
+        }
+    }
+
+    private void executeMainMenuOption() {
+        switch (selectedOption) {
+            case 0: // Start Game
+                isMainMenu = false;
+                break;
+            case 1: // Settings
+                currentText = "Settings-Menü noch nicht implementiert.";
+                break;
+            case 2: // Exit
+                Gdx.app.exit();
+                break;
         }
     }
 
