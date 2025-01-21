@@ -1,6 +1,8 @@
 package org.bachelorprojekt.inventory;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +12,13 @@ import java.util.List;
  */
 @Entity
 @Table(name = "inventories")
-public class Inventory {
+public class Inventory implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // Unique identifier for the inventory
 
-    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>(); // List of items in the inventory
 
     /**

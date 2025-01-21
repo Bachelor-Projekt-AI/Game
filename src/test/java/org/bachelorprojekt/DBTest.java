@@ -35,13 +35,12 @@ public class DBTest {
 				}
 			}
 		}
-		for(int i=0; i<4; i++) {
-			for(int j=0; j<4; j++) {
-				Item i1 = c1.getInventory().getItem(i, j);
-				Item i2 = c2.getInventory().getItem(i, j);
-				if(!itemsEqual(i1, i2)) {
-					return false;
-				}
+		int i1len = c1.getInventory().getItems().size();
+		for(int i=0; i<i1len; i++) {
+			Item i1 = c1.getInventory().getItem(i);
+			Item i2 = c2.getInventory().getItem(i);
+			if(!itemsEqual(i1, i2)) {
+				return false;
 			}
 		}
 		return true;
