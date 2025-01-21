@@ -28,6 +28,13 @@ public class Main extends ApplicationAdapter {
     private String[] mainMenuOptions = {"Start Game", "Settings", "Exit"};
     private int selectedOption = 0; // Aktuell ausgewählte Menüoption
 
+    private String currentTextChap1 = "";
+    private String fullText = "Chapter 1\nThe Call to Adventure";
+    private float textTimer = 0;
+    private int currentCharIndex = 0;
+
+    private boolean isAnimatingText = true;
+
     private BitmapFont monospaceFont;
 
     private void loadMonospaceFont() {
@@ -52,6 +59,8 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
         if (isMainMenu) {
             renderMainMenu();
         } else if (isMapOpen) {
@@ -60,14 +69,19 @@ public class Main extends ApplicationAdapter {
             renderPauseMenu();
         } else {
             // Spielinhalte rendern
-            updateClock(Gdx.graphics.getDeltaTime());
-
             batch.begin();
-            font.draw(batch, currentText, 50, Gdx.graphics.getHeight() - 50);
-            font.draw(batch, "Uhrzeit: " + displayedTime, 50, Gdx.graphics.getHeight() - 100);
+            if (isAnimatingText) {
+                animateText(Gdx.graphics.getDeltaTime());
+                drawCenteredText(currentText);
+            } else {
+                // Weitere Inhalte des Spiels hier einfügen
+                font.draw(batch, "Press ENTER to continue", Gdx.graphics.getWidth() / 2f - 100, 100);
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                    // Start des Spiels nach der Animation
+                    startGame();
+                }
+            }
             batch.end();
-
-            handleInput();
         }
     }
 
@@ -255,6 +269,38 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+    private void animateText(float delta) {
+        textTimer += delta;
+
+        // Buchstabe für Buchstabe Animation
+        if (textTimer >= 0.1f && currentCharIndex < fullText.length()) {
+            currentTextChap1 += fullText.charAt(currentCharIndex);
+            currentCharIndex++;
+            textTimer = 0;
+        }
+
+        // Animation fertig
+        if (currentCharIndex >= fullText.length()) {
+            isAnimatingText = false;
+        }
+    }
+
+    private void drawCenteredText(String text) {
+        String[] lines = text.split("\\n");
+        float centerX = Gdx.graphics.getWidth() / 2f;
+        float centerY = Gdx.graphics.getHeight() / 2f;
+
+        for (int i = 0; i < lines.length; i++) {
+            float textWidth = font.getRegion().getRegionWidth() / (float) font.getRegion().getRegionHeight() * lines[i].length();
+            font.draw(batch, lines[i], centerX - textWidth / 2f, centerY - (i * 30));
+        }
+    }
+
+    private void startGame() {
+        currentText = "The game starts here!"; // Beispiel für den Übergang ins Spiel
+        isAnimatingText = false;
+    }
+
     @Override
     public void dispose() {
         batch.dispose();
@@ -263,7 +309,7 @@ public class Main extends ApplicationAdapter {
 
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Textadventure mit Uhr");
+        config.setTitle("The Flame of Life");
         config.setWindowedMode(800, 600);
         new Lwjgl3Application(new Main(), config);
     }
