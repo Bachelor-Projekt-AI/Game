@@ -3,10 +3,12 @@
   "description": "The world of Arkenfall is in peril as the Flame of Life begins to fade. A young adventurer must embark on a journey to save it.",
   "chapters": [
     {
+      "isCompleted": false,
       "title": "The Call to Adventure",
       "description": "The protagonist starts in a small village. The elder reveals a prophecy.",
       "quests": [
         {
+          "isCompleted": false,
           "title": "Gather Supplies",
           "description": "Collect supplies from the villagers to prepare for the journey.",
           "objectives": [
@@ -19,13 +21,38 @@
             "Basic weapon"
           ]
         }
+      ],
+      "map": [
+        "                       ,-.^._                 _",
+        "                     .'      `-.            ,' ;",
+        "          /`-.  ,----'         `-.   _  ,-.,'  `",
+        "       _.'   `--'                 `-' '-'      ;",
+        "      :                         o             ;    __,-.",
+        "      ,'    o               Blacksmith       ;_'-',.__'--.",
+        "     :    Healer                            ,---``    `--'",
+        "     :                                      ;",
+        "     :                                      :",
+        "     ;                                      :",
+        "    (                                       ;",
+        "     `-.                           *      ,'",
+        "       ;                          You    :",
+        "     .'                             .-._,'",
+        "   .'                               `.",
+        "_.'                                .__;",
+        "`._                  o            ;",
+        "   `.            Innkeeper       :",
+        "     `.               ,..__,---._;",
+        "       `-.__         :",
+        "            `.--.____;"
       ]
     },
     {
+      "isCompleted": false,
       "title": "Into the Wild",
       "description": "The adventurer ventures into the forest, encountering challenges and choices.",
       "quests": [
         {
+          "isCompleted": false,
           "title": "Defeat the Forest Beast",
           "description": "A giant beast is blocking the path. Defeat it to proceed.",
           "objectives": [
@@ -39,6 +66,7 @@
           ]
         },
         {
+          "isCompleted": false,
           "title": "Help the Lost Traveler",
           "description": "Assist a lost traveler to find their way out of the forest.",
           "objectives": [

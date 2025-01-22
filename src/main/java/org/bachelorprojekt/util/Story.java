@@ -10,11 +10,20 @@ import java.util.List;
 // Main Story Class
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Story {
+    private boolean isCompleted;
     private String title;
     private String description;
     private List<Chapter> chapters;
 
     // Getters and Setters
+    public boolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -45,6 +54,7 @@ public class Story {
         private String title;
         private String description;
         private List<Quest> quests;
+        private List<Map> map;
 
         public String getTitle() {
             return title;
@@ -69,15 +79,28 @@ public class Story {
         public void setQuests(List<Quest> quests) {
             this.quests = quests;
         }
+
+        public List<Map> getMap() {
+            return map;
+        }
     }
 
     // Nested Quest Class
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Quest {
+        private boolean isCompleted;
         private String title;
         private String description;
         private List<String> objectives;
         private List<String> rewards;
+
+        public boolean getIsCompleted() {
+            return isCompleted;
+        }
+
+        public void setIsCompleted(boolean isCompleted) {
+            this.isCompleted = isCompleted;
+        }
 
         public String getTitle() {
             return title;
@@ -112,23 +135,21 @@ public class Story {
         }
     }
 
-    // Main Method to Parse JSON
-    public static void main(String[] args) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            // print current dir
-            System.out.println("Current dir: " + System.getProperty("user.dir"));
-            Story story = mapper.readValue(new File("src/main/resources/story/chapters.json"), Story.class);
-            System.out.println("Title: " + story.getTitle());
-            System.out.println("Description: " + story.getDescription());
-            for (Chapter chapter : story.getChapters()) {
-                System.out.println("Chapter: " + chapter.getTitle());
-                for (Quest quest : chapter.getQuests()) {
-                    System.out.println("  Quest: " + quest.getTitle());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Map {
+        private List<String> mapLines;
+
+        public List<String> getMapLines() {
+            return mapLines;
+        }
+
+        public void setMapLines(List<String> mapLines) {
+            this.mapLines = mapLines;
+        }
+
+        // Returns the map as a single string with newlines
+        public String getParsedMap() {
+            return String.join("\n", mapLines);
         }
     }
 }
