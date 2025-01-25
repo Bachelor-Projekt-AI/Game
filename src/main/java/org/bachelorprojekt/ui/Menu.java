@@ -8,16 +8,12 @@ import org.bachelorprojekt.util.Scene;
 import org.bachelorprojekt.util.TextRenderer;
 
 public class Menu extends Scene {
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private String[] menuOptions;
+    private final String[] menuOptions;
     private int selectedOption;
-    private float startY;
-    private TextRenderer textRenderer;
+    private final float startY;
+    private final TextRenderer textRenderer;
 
     public Menu(SpriteBatch batch, BitmapFont font, String[] menuOptions) {
-        this.batch = batch;
-        this.font = font;
         this.menuOptions = menuOptions;
         this.selectedOption = 0;
         this.startY = 280;
