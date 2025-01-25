@@ -1,9 +1,11 @@
-package org.bachelorprojekt.util;
+package org.bachelorprojekt.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import org.bachelorprojekt.util.Scene;
+import org.bachelorprojekt.util.TextRenderer;
 
 public class Menu extends Scene {
     private SpriteBatch batch;
