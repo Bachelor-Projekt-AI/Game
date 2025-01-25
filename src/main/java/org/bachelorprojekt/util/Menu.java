@@ -1,28 +1,56 @@
 package org.bachelorprojekt.util;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Menu {
+public class Menu extends Scene {
     private SpriteBatch batch;
     private BitmapFont font;
     private String[] menuOptions;
+    private int selectedOption;
+    private float startY;
+    private TextRenderer textRenderer;
 
     public Menu(SpriteBatch batch, BitmapFont font, String[] menuOptions) {
         this.batch = batch;
         this.font = font;
         this.menuOptions = menuOptions;
+        this.selectedOption = 0;
+        this.startY = 280;
+        this.textRenderer = new TextRenderer(font, batch);
     }
 
-    public void renderMenu(float startX, float startY, int selectedOption) {
-        batch.begin();
+    @Override
+    public void render() {
+        textRenderer.drawCenteredText("Lights of Akahzan", 500);
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == selectedOption) {
-                font.draw(batch, "> " + menuOptions[i], startX, startY - i * 30);
+                textRenderer.drawCenteredText("> " + menuOptions[i], startY - i * 30);
             } else {
-                font.draw(batch, menuOptions[i], startX, startY - i * 30);
+                textRenderer.drawCenteredText(menuOptions[i], startY - i * 30);
             }
         }
-        batch.end();
+
+        handleInput();
+    }
+
+    private void handleInput() {
+        // Nach unten navigieren
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            selectedOption = (selectedOption + 1) % menuOptions.length;
+        }
+
+        // Nach oben navigieren
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            selectedOption = (selectedOption - 1 + menuOptions.length) % menuOptions.length;
+        }
+
+        // Auswahl bestätigen (falls benötigt, z. B. ENTER-Taste)
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            System.out.println("Ausgewählte Option: " + menuOptions[selectedOption]);
+            // Hier kannst du eine Aktion basierend auf der Auswahl ausführen
+        }
     }
 }
