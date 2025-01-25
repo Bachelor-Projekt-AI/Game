@@ -1,10 +1,7 @@
-package org.bachelorprojekt.util;
+package org.bachelorprojekt.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 // Main Story Class
