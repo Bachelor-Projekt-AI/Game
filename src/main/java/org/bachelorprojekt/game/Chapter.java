@@ -1,7 +1,6 @@
 package org.bachelorprojekt.game;
 
 import org.bachelorprojekt.character.Player;
-import org.bachelorprojekt.util.Story;
 
 import java.util.ArrayList;
 import java.util.List;

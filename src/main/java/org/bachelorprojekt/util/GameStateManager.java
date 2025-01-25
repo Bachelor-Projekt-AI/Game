@@ -1,21 +1,44 @@
 package org.bachelorprojekt.util;
 
+import org.bachelorprojekt.game.Chapter;
+import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.game.Story;
+
+import java.util.List;
+
 public class GameStateManager {
-    private boolean isMainMenu = true;
-    private boolean isPaused = false;
-    private boolean isMapOpen = false;
-    private boolean isAnimatingText = true;
+    private List<Chapter> chapters; // Story aus JSON geladen
+    private Player player;          // Spielerreferenz
 
-    // Getter und Setter für die Zustände
-    public boolean isMainMenu() { return isMainMenu; }
-    public void setMainMenu(boolean mainMenu) { isMainMenu = mainMenu; }
+    public GameStateManager(List<Chapter> chapters, Player player) {
+        this.chapters = chapters;
+        this.player = player;
+    }
 
-    public boolean isPaused() { return isPaused; }
-    public void setPaused(boolean paused) { isPaused = paused; }
+    public Chapter getCurrentChapter() {
+        return chapters.get(player.getCurrentChapterIndex());
+    }
 
-    public boolean isMapOpen() { return isMapOpen; }
-    public void setMapOpen(boolean mapOpen) { isMapOpen = mapOpen; }
+    public Story.Quest getCurrentQuest() {
+        Chapter currentChapter = getCurrentChapter();
+        return currentChapter.getQuests().get(player.getCurrentQuestIndex());
+    }
 
-    public boolean isAnimatingText() { return isAnimatingText; }
-    public void setAnimatingText(boolean animatingText) { isAnimatingText = animatingText; }
+    public void completeQuest() {
+        Story.Quest currentQuest = getCurrentQuest();
+        currentQuest.complete();
+
+        // Prüfen, ob es weitere Quests im Kapitel gibt
+        Chapter currentChapter = getCurrentChapter();
+        if (currentChapter.getQuests().size() > player.getCurrentQuestIndex() + 1) {
+            player.setCurrentQuestIndex(player.getCurrentQuestIndex() + 1);
+        } else {
+            // Kapitel abschließen und zum nächsten wechseln
+            currentChapter.setCompleted(true);
+            if (chapters.size() > player.getCurrentChapterIndex() + 1) {
+                player.setCurrentChapterIndex(player.getCurrentChapterIndex() + 1);
+                player.setCurrentQuestIndex(0); // Nächste Kapitel startet bei der ersten Quest
+            }
+        }
+    }
 }

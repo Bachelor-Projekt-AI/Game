@@ -45,6 +45,15 @@ public class Story {
         this.chapters = chapters;
     }
 
+    public Chapter getCurrentChapter(int chapterIndex) {
+        return chapters.get(chapterIndex);
+    }
+
+    public Quest getCurrentQuest(int chapterIndex, int questIndex) {
+        return chapters.get(chapterIndex).getQuests().get(questIndex);
+    }
+
+
     // Nested Chapter Class
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Chapter {
