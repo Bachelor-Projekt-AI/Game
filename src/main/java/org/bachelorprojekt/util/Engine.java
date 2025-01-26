@@ -12,6 +12,8 @@ import org.bachelorprojekt.game.ChapterOne;
 import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.ui.Menu;
 
+import java.util.Stack;
+
 public class Engine extends ApplicationAdapter {
 
     private SpriteBatch batch;
@@ -19,14 +21,20 @@ public class Engine extends ApplicationAdapter {
     private GameStateManager gameStateManager;
     private TextRenderer textRenderer;
     private MapRenderer mapRenderer;
-    private Scene scene;
+    private Stack<Scene> sceneStack;
 
     public Engine() {
-
+        this.sceneStack = new Stack<>();
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
+    public void pushScene(Scene scene) {
+        this.sceneStack.push(scene);
+    }
+
+    public void popScene() {
+        if (!sceneStack.isEmpty()) {
+            sceneStack.pop();
+        }
     }
 
     @Override
@@ -45,7 +53,7 @@ public class Engine extends ApplicationAdapter {
         textRenderer = new TextRenderer(this);
         mapRenderer = new MapRenderer(this);
 
-        setScene(new Menu(this, new String[]{"Play", "Options", "Exit"}));
+        pushScene(new Menu(this, new String[]{"Play", "Options", "Exit"}));
     }
 
     @Override
@@ -58,8 +66,8 @@ public class Engine extends ApplicationAdapter {
         if (gameStateManager.isInventoryOpen()) {
             InventoryScreen inventoryScreen = new InventoryScreen(this, gameStateManager.getPlayer());
             inventoryScreen.render();
-        } else if (scene != null) {
-            scene.render();
+        } else if (!sceneStack.isEmpty()) {
+            sceneStack.peek().render();
         }
 
         batch.end();
