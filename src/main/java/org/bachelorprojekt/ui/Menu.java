@@ -2,6 +2,7 @@ package org.bachelorprojekt.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import org.bachelorprojekt.game.ChapterOne;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.Scene;
 import org.bachelorprojekt.util.TextRenderer;
@@ -49,6 +50,7 @@ public class Menu extends Scene {
         // Auswahl bestätigen (falls benötigt, z. B. ENTER-Taste)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (selectedOption == 0) {
+                engine.pushScene(new ChapterOne(engine));
                 // engine.setScene(new GameScreen(engine));
             } else if (selectedOption == 1) {
                 // engine.setScene(new OptionsScreen(engine));

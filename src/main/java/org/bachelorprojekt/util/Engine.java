@@ -99,4 +99,8 @@ public class Engine extends ApplicationAdapter {
     public void exit() {
         Gdx.app.exit();
     }
+
+    public GameStateManager getGameStateManager() {
+        return gameStateManager;
+    }
 }
