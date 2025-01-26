@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.ui.Menu;
-
-import static java.awt.Font.createFont;
 
 public class Engine extends ApplicationAdapter {
 
@@ -32,11 +32,16 @@ public class Engine extends ApplicationAdapter {
         batch = new SpriteBatch();
         font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
 
-        gameStateManager = new GameStateManager();
-        textRenderer = new TextRenderer(font, batch);
-        mapRenderer = new MapRenderer(font, batch);
+        Player player = new Player("Hero");
+        player.addToInventory("Sword");
+        player.addToInventory("Shield");
+        player.addToInventory("Health Potion");
 
-        setScene(new Menu(batch, font, new String[]{"Play", "Options", "Exit"}));
+        gameStateManager = new GameStateManager(null, player);
+        textRenderer = new TextRenderer(this);
+        mapRenderer = new MapRenderer(this);
+
+        setScene(new Menu(this, new String[]{"Play", "Options", "Exit"}));
     }
 
     @Override
@@ -46,7 +51,10 @@ public class Engine extends ApplicationAdapter {
 
         batch.begin();
 
-        if (scene != null) {
+        if (gameStateManager.isInventoryOpen()) {
+            InventoryScreen inventoryScreen = new InventoryScreen(batch, font, gameStateManager.getPlayer());
+            inventoryScreen.render();
+        } else if (scene != null) {
             scene.render();
         }
 
@@ -66,5 +74,13 @@ public class Engine extends ApplicationAdapter {
         BitmapFont customFont = generator.generateFont(parameter);
         generator.dispose(); // Generator freigeben, um Speicherlecks zu vermeiden
         return customFont;
+    }
+
+    public BitmapFont getFont() {
+        return font;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
     }
 }

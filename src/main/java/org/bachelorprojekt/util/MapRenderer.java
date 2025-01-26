@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MapRenderer {
-    private BitmapFont font;
-    private SpriteBatch batch;
+    private final BitmapFont font;
+    private final SpriteBatch batch;
 
-    public MapRenderer(BitmapFont font, SpriteBatch batch) {
-        this.font = font;
-        this.batch = batch;
+    public MapRenderer(Engine engine) {
+        this.font = engine.getFont();
+        this.batch = engine.getBatch();
     }
 
     public void renderMap(String[] map, float startX, float startY) {

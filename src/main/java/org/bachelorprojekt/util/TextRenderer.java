@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import static java.awt.Font.createFont;
-
 public class TextRenderer {
     private BitmapFont font;
     private SpriteBatch batch;
@@ -15,9 +13,9 @@ public class TextRenderer {
     private long startTime; // Zeitstempel für animiertes Rendern
     private int currentCharIndex; // Der aktuelle Index des zuletzt gerenderten Buchstabens
 
-    public TextRenderer(BitmapFont font, SpriteBatch batch) {
-        this.font = font;
-        this.batch = batch;
+    public TextRenderer(Engine engine) {
+        this.font = engine.getFont();
+        this.batch = engine.getBatch();
         this.startTime = TimeUtils.millis(); // Initialisierung des Zeitstempels
         this.currentCharIndex = 0; // Start bei 0
     }

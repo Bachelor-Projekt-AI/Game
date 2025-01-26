@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.Scene;
 import org.bachelorprojekt.util.TextRenderer;
 
@@ -12,12 +13,14 @@ public class Menu extends Scene {
     private int selectedOption;
     private final float startY;
     private final TextRenderer textRenderer;
+    private final Engine engine;
 
-    public Menu(SpriteBatch batch, BitmapFont font, String[] menuOptions) {
+    public Menu(Engine engine, String[] menuOptions) {
         this.menuOptions = menuOptions;
         this.selectedOption = 0;
         this.startY = 280;
-        this.textRenderer = new TextRenderer(font, batch);
+        this.textRenderer = new TextRenderer(engine);
+        this.engine = engine;
     }
 
     @Override
