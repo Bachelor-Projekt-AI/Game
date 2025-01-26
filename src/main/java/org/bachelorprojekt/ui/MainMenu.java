@@ -8,7 +8,7 @@ import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 
-public class Menu extends ScreenAdapter {
+public class MainMenu extends ScreenAdapter {
 
     private final String[] menuOptions;
     private int selectedOption;
@@ -16,7 +16,7 @@ public class Menu extends ScreenAdapter {
     private final TextRenderer textRenderer;
     private final float startY;
 
-    public Menu(Engine engine, String[] menuOptions) {
+    public MainMenu(Engine engine, String[] menuOptions) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
         this.startY = 280;
@@ -26,6 +26,9 @@ public class Menu extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+
+        Gdx.gl.glClearColor(0, 0, 0, 1); // Schwarz als Hintergrundfarbe
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.getBatch().begin();
 

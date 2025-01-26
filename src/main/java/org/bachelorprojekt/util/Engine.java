@@ -1,7 +1,9 @@
 package org.bachelorprojekt.util;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,30 +12,31 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.Chapter;
 import org.bachelorprojekt.game.ChapterOne;
 import org.bachelorprojekt.inventory.InventoryScreen;
+import org.bachelorprojekt.ui.MainMenu;
 import org.bachelorprojekt.ui.Menu;
 
 import java.util.Stack;
 
-public class Engine extends ApplicationAdapter {
+public class Engine extends Game {
 
     private SpriteBatch batch;
     private BitmapFont font;
     private GameStateManager gameStateManager;
     private TextRenderer textRenderer;
     private MapRenderer mapRenderer;
-    private Stack<Scene> sceneStack;
+    private final Stack<Screen> screenStack;
 
     public Engine() {
-        this.sceneStack = new Stack<>();
+        this.screenStack = new Stack<>();
     }
 
-    public void pushScene(Scene scene) {
-        this.sceneStack.push(scene);
+    public void pushScreen(Screen screen) {
+        this.screenStack.push(screen);
     }
 
-    public void popScene() {
-        if (!sceneStack.isEmpty()) {
-            sceneStack.pop();
+    public void popScreen() {
+        if (!screenStack.isEmpty()) {
+            screenStack.pop();
         }
     }
 
@@ -42,6 +45,7 @@ public class Engine extends ApplicationAdapter {
         batch = new SpriteBatch();
         font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
 
+
         Player player = new Player("Hero");
         player.addToInventory("Sword");
         player.addToInventory("Shield");
@@ -49,11 +53,12 @@ public class Engine extends ApplicationAdapter {
 
         Chapter c = new ChapterOne(this);
 
-        gameStateManager = new GameStateManager(null, player);
+        gameStateManager = new GameStateManager(this, player);
         textRenderer = new TextRenderer(this);
-        mapRenderer = new MapRenderer(this);
+        //mapRenderer = new MapRenderer(this);
 
-        pushScene(new Menu(this, new String[]{"Play", "Options", "Exit"}));
+        pushScreen(new Menu(this, new String[]{"Play", "Options", "Exit"}));
+        //pushScene(new Menu(this, new String[]{"Play", "Options", "Exit"}));
     }
 
     @Override
@@ -61,22 +66,16 @@ public class Engine extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-
-        if (gameStateManager.isInventoryOpen()) {
-            InventoryScreen inventoryScreen = new InventoryScreen(this, gameStateManager.getPlayer());
-            inventoryScreen.render();
-        } else if (!sceneStack.isEmpty()) {
-            sceneStack.peek().render();
+        if (!screenStack.isEmpty()) {
+            screenStack.peek().render(Gdx.graphics.getDeltaTime());
         }
-
-        batch.end();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
         font.dispose();
+        //getScreen().dispose();
     }
 
     private BitmapFont loadFont(String fontPath, int fontSize) {
@@ -102,5 +101,13 @@ public class Engine extends ApplicationAdapter {
 
     public GameStateManager getGameStateManager() {
         return gameStateManager;
+    }
+
+    public TextRenderer getTextRenderer() {
+        return textRenderer;
+    }
+
+    public Stack<Screen> getScreenStack() {
+        return screenStack;
     }
 }

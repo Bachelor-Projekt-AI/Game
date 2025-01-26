@@ -17,22 +17,27 @@ public class ChapterOne extends Chapter {
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
 
-        engine.getFont().draw(engine.getBatch(), "Chapter 1: Der Beginn einer Reise", 50, 400);
-        engine.getFont().draw(engine.getBatch(), "You wake up in a quiet village. The elder has summoned you.", 50, 370);
-        engine.getFont().draw(engine.getBatch(), "Press 'E' to open your inventory.", 50, 340);
-        engine.getFont().draw(engine.getBatch(), "Press 'M' to view the map.", 50, 310);
-        engine.getFont().draw(engine.getBatch(), "Press 'ESC' to open the pause menu.", 50, 280);
+        engine.getBatch().begin();
+
+        engine.getFont().draw(engine.getBatch(), "You are in the village of Eld.", 50, 400);
+        engine.getFont().draw(engine.getBatch(), "Nearby locations:", 50, 370);
+        engine.getFont().draw(engine.getBatch(), "- The blacksmith (west)", 50, 340);
+        engine.getFont().draw(engine.getBatch(), "- The healer's hut (north)", 50, 310);
+        engine.getFont().draw(engine.getBatch(), "- The innkeeper (south)", 50, 280);
+        engine.getFont().draw(engine.getBatch(), "Press 'M' to view the map.", 50, 250);
+
+        engine.getBatch().end();
 
         handleInput();
     }
 
-    @Override
     protected void handleInput() {
         // with e open inventory, with m open map, with esc open pause menu
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            engine.pushScene(new InventoryScreen(engine, engine.getGameStateManager().getPlayer()));
+            this.engine.getGameStateManager().setInventoryOpen(true);
+            //this.engine.pushScreen(new InventoryScreen(engine, engine.getGameStateManager().getPlayer()));
             System.out.println("Inventory opened.");
             // Hier kannst du eine Aktion ausführen, wenn das Inventar geöffnet wird
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
