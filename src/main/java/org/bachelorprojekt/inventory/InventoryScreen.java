@@ -1,0 +1,39 @@
+package org.bachelorprojekt.inventory;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.util.Scene;
+
+public class InventoryScreen extends Scene {
+    private SpriteBatch batch;
+    private BitmapFont font;
+    private Player player;
+
+    public InventoryScreen(SpriteBatch batch, BitmapFont font, Player player) {
+        this.batch = batch;
+        this.font = font;
+        this.player = player;
+    }
+
+    @Override
+    public void render() {
+        // Hintergrund zeichnen
+        font.draw(batch, "+-----------------------------+", 50, 500);
+        font.draw(batch, "|         INVENTORY          |", 50, 480);
+        font.draw(batch, "+-----------------------------+", 50, 460);
+
+        // Zeige die Items im Inventar
+        int yPosition = 440;
+        for (String item : player.getInventory()) {
+            font.draw(batch, "- " + item, 60, yPosition);
+            yPosition -= 20; // Nächste Zeile
+        }
+
+        // Schließen-Anweisung anzeigen
+        font.draw(batch, "+-----------------------------+", 50, yPosition - 20);
+        font.draw(batch, "Press 'E' to close the inventory.", 50, yPosition - 40);
+    }
+}
