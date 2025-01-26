@@ -7,4 +7,6 @@ public abstract class Scene {
     }
 
     public abstract void render();
+
+    protected abstract void handleInput();
 }

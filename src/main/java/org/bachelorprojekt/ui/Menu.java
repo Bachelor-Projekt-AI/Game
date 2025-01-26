@@ -2,8 +2,6 @@ package org.bachelorprojekt.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.Scene;
 import org.bachelorprojekt.util.TextRenderer;
@@ -37,7 +35,8 @@ public class Menu extends Scene {
         handleInput();
     }
 
-    private void handleInput() {
+    @Override
+    protected void handleInput() {
         // Nach unten navigieren
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             selectedOption = (selectedOption + 1) % menuOptions.length;

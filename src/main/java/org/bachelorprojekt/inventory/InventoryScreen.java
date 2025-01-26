@@ -36,4 +36,13 @@ public class InventoryScreen extends Scene {
         font.draw(batch, "+-----------------------------+", 50, yPosition - 20);
         font.draw(batch, "Press 'E' to close the inventory.", 50, yPosition - 40);
     }
+
+    @Override
+    protected void handleInput() {
+        // Inventar schließen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            System.out.println("Inventory closed.");
+            // Hier kannst du eine Aktion ausführen, wenn das Inventar geschlossen wird
+        }
+    }
 }
