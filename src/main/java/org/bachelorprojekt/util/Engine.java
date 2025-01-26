@@ -83,4 +83,8 @@ public class Engine extends ApplicationAdapter {
     public SpriteBatch getBatch() {
         return batch;
     }
+
+    public void exit() {
+        Gdx.app.exit();
+    }
 }

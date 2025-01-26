@@ -49,6 +49,13 @@ public class Menu extends Scene {
 
         // Auswahl bestätigen (falls benötigt, z. B. ENTER-Taste)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (selectedOption == 0) {
+                // engine.setScene(new GameScreen(engine));
+            } else if (selectedOption == 1) {
+                // engine.setScene(new OptionsScreen(engine));
+            } else if (selectedOption == 2) {
+                engine.exit();
+            }
             System.out.println("Ausgewählte Option: " + menuOptions[selectedOption]);
             // Hier kannst du eine Aktion basierend auf der Auswahl ausführen
         }
