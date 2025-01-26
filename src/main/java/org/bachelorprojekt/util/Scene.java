@@ -2,8 +2,10 @@ package org.bachelorprojekt.util;
 
 public abstract class Scene {
 
-    public Scene() {
+    protected final Engine engine;
 
+    public Scene(Engine engine) {
+        this.engine = engine;
     }
 
     public abstract void render();

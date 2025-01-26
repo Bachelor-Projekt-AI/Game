@@ -11,14 +11,13 @@ public class Menu extends Scene {
     private int selectedOption;
     private final float startY;
     private final TextRenderer textRenderer;
-    private final Engine engine;
 
     public Menu(Engine engine, String[] menuOptions) {
+        super(engine);
         this.menuOptions = menuOptions;
         this.selectedOption = 0;
         this.startY = 280;
         this.textRenderer = new TextRenderer(engine);
-        this.engine = engine;
     }
 
     @Override

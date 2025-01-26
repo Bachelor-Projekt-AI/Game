@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.game.Chapter;
+import org.bachelorprojekt.game.ChapterOne;
 import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.ui.Menu;
 
@@ -37,6 +39,8 @@ public class Engine extends ApplicationAdapter {
         player.addToInventory("Shield");
         player.addToInventory("Health Potion");
 
+        Chapter c = new ChapterOne(this);
+
         gameStateManager = new GameStateManager(null, player);
         textRenderer = new TextRenderer(this);
         mapRenderer = new MapRenderer(this);
@@ -52,7 +56,7 @@ public class Engine extends ApplicationAdapter {
         batch.begin();
 
         if (gameStateManager.isInventoryOpen()) {
-            InventoryScreen inventoryScreen = new InventoryScreen(batch, font, gameStateManager.getPlayer());
+            InventoryScreen inventoryScreen = new InventoryScreen(this, gameStateManager.getPlayer());
             inventoryScreen.render();
         } else if (scene != null) {
             scene.render();

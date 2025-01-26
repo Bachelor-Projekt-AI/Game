@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.Scene;
 
 public class InventoryScreen extends Scene {
@@ -12,9 +13,10 @@ public class InventoryScreen extends Scene {
     private BitmapFont font;
     private Player player;
 
-    public InventoryScreen(SpriteBatch batch, BitmapFont font, Player player) {
-        this.batch = batch;
-        this.font = font;
+    public InventoryScreen(Engine engine, Player player) {
+        super(engine);
+        this.batch = engine.getBatch();
+        this.font = engine.getFont();
         this.player = player;
     }
 
