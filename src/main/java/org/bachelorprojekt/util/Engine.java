@@ -1,6 +1,5 @@
 package org.bachelorprojekt.util;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.Chapter;
 import org.bachelorprojekt.game.ChapterOne;
-import org.bachelorprojekt.inventory.InventoryScreen;
-import org.bachelorprojekt.ui.MainMenu;
 import org.bachelorprojekt.ui.Menu;
 
 import java.util.Stack;
@@ -51,9 +48,7 @@ public class Engine extends Game {
         player.addToInventory("Shield");
         player.addToInventory("Health Potion");
 
-        Chapter c = new ChapterOne(this);
-
-        gameStateManager = new GameStateManager(this, player);
+        //Chapter c = new ChapterOne(this);
         textRenderer = new TextRenderer(this);
         //mapRenderer = new MapRenderer(this);
 
@@ -101,6 +96,10 @@ public class Engine extends Game {
 
     public GameStateManager getGameStateManager() {
         return gameStateManager;
+    }
+
+    public void setGameStateManager(GameStateManager gameStateManager) {
+        this.gameStateManager = gameStateManager;
     }
 
     public TextRenderer getTextRenderer() {

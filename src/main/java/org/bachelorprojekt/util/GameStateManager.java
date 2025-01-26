@@ -15,9 +15,17 @@ public class GameStateManager {
     private boolean isMapOpen = false;
     private final Stack<Screen> screenStack;
 
+    // GameStateManager is created with an Engine and a Player
     public GameStateManager(Engine engine, Player player) {
         this.engine = engine;
         this.player = player;
+        this.screenStack = engine.getScreenStack();
+    }
+
+    // If a GameStateManager is created with an Engine and another GameStateManager, the player and screenStack are copied from the other GameStateManager
+    public GameStateManager(Engine engine, GameStateManager gameStateManager) {
+        this.engine = engine;
+        this.player = gameStateManager.getPlayer();
         this.screenStack = engine.getScreenStack();
     }
 

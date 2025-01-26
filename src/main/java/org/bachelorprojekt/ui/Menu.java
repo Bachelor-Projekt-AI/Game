@@ -57,7 +57,8 @@ public class Menu extends ScreenAdapter {
         // Auswahl bestätigen (falls benötigt, z. B. ENTER-Taste)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (selectedOption == 0) {
-                engine.getScreenStack().push(new ChapterOne(engine));
+                engine.getScreenStack().push(new GameSelectMenu(engine));
+                //engine.getScreenStack().push(new ChapterOne(engine));
                 // engine.setScene(new GameScreen(engine));
             } else if (selectedOption == 1) {
                 // engine.setScene(new OptionsScreen(engine));

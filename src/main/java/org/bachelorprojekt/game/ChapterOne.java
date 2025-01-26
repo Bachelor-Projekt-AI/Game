@@ -7,7 +7,7 @@ import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.util.Engine;
 
 public class ChapterOne extends Chapter {
-    public ChapterOne(Engine engine) {
+    public ChapterOne(Engine engine, boolean newGame) {
         super("Kapitel 1", "Der Beginn einer Reise", engine);
     }
 

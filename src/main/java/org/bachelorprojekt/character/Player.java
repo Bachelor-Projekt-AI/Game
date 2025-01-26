@@ -1,12 +1,15 @@
 package org.bachelorprojekt.character;
 
+import org.bachelorprojekt.game.Story;
+
 import java.util.List;
 
 public class Player {
     private String name;
-    private List<String> inventory; // Spielerinventar
-    private int currentChapterIndex; // Aktuelles Kapitel
-    private int currentQuestIndex;   // Aktuelle Quest im Kapitel
+    private List<String> inventory;
+    private int currentChapterIndex;
+    private Story.Chapter currentChapter;
+    private int currentQuestIndex;
 
     public Player(String name) {
         this.name = name;
