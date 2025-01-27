@@ -3,6 +3,7 @@ package org.bachelorprojekt.game;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 // Main Story Class
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -89,6 +90,11 @@ public class Story {
         public List<Map> getMap() {
             return map;
         }
+
+        public BooleanSupplier areAllQuestsCompleted() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'areAllQuestsCompleted'");
+        }
     }
 
     // Nested Quest Class
@@ -139,6 +145,11 @@ public class Story {
         public void setRewards(List<String> rewards) {
             this.rewards = rewards;
         }
+
+        public void setCompletedObjectives(List<String> of) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'setCompletedObjectives'");
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -156,6 +167,16 @@ public class Story {
         // Returns the map as a single string with newlines
         public String getParsedMap() {
             return String.join("\n", mapLines);
+        }
+
+        public void setLocations(List<String> of) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'setLocations'");
+        }
+
+        public BooleanSupplier containsLocation(String string) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'containsLocation'");
         }
     }
 }
