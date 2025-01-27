@@ -2,7 +2,7 @@
     {
       "id": 1,
       "name": "Thorir the Blacksmith",
-      "location": "Blacksmith",
+      "location_id": 1,
       "dialogues": [
         "Welcome to my forge!",
         "Do you need a weapon or armor?",
@@ -11,8 +11,8 @@
     },
     {
       "id": 2,
-      "name": "Elena the Healer",
-      "location": "Healer",
+      "name": 2,
+      "location_id": "Healer",
       "dialogues": [
         "Greetings, traveler. How can I help?",
         "I can heal your wounds and restore your vitality.",
@@ -21,8 +21,8 @@
     },
     {
       "id": 3,
-      "name": "Geralt the Innkeeper",
-      "location": "Innkeeper",
+      "name": 3,
+      "location_id": "Innkeeper",
       "dialogues": [
         "Welcome to the Golden Mug!",
         "We have the best ale in the region.",

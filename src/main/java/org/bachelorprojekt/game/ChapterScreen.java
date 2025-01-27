@@ -28,6 +28,7 @@ public class ChapterScreen extends ScreenAdapter {
         
         questFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 16);
 
+        System.out.println(chapter.getLocationIds().get(0));
         this.locations = engine.getGameStateManager().getLocationsForChapter(chapter.getLocationIds());
         this.quests = engine.getGameStateManager().getQuestsForChapter(chapter.getQuestIds());
     }

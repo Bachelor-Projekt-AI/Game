@@ -1,6 +1,7 @@
 package org.bachelorprojekt.util.json.jackson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -9,6 +10,9 @@ public class Map {
     private int id;
     private String name;
     private String placeholder;
+
+    @JsonProperty("location_ids")
+    private List<Integer> locationIds;
     private List<String> layout;
 
     // Getters and Setters
@@ -32,15 +36,11 @@ public class Map {
         return placeholder;
     }
 
-    public void setPlaceholder(String placeholder) {
-        this.placeholder = placeholder;
-    }
-
     public List<String> getLayout() {
         return layout;
     }
 
-    public void setLayout(List<String> layout) {
-        this.layout = layout;
+    public List<Integer> getLocationIds() {
+        return locationIds;
     }
 }

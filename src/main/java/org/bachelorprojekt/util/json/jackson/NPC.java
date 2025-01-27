@@ -1,6 +1,7 @@
 package org.bachelorprojekt.util.json.jackson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -8,7 +9,9 @@ import java.util.List;
 public class NPC {
     private int id;
     private String name;
-    private String location; // Name der Location
+
+    @JsonProperty("location_id")
+    private int locationId;
     private List<String> dialogues;
 
     // Getters and Setters
@@ -28,12 +31,8 @@ public class NPC {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public int getLocationId() {
+        return locationId;
     }
 
     public List<String> getDialogues() {

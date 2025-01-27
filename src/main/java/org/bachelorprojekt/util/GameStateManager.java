@@ -8,6 +8,8 @@ import org.bachelorprojekt.util.json.jackson.Location;
 import org.bachelorprojekt.util.json.jackson.Map;
 import org.bachelorprojekt.util.json.jackson.Quest;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,6 +51,8 @@ public class GameStateManager {
             maps.put(map.getId(), map);
         }
 
+        player.setLocation(locations.get(1));
+
 
         // Set the current chapter to the first chapter
         currentChapterIndex = 1;
@@ -76,6 +80,7 @@ public class GameStateManager {
 
     // Für mehrere IDs: Erzeuge eine Liste der Objekte
     public List<Location> getLocationsForChapter(List<Integer> locationIds) {
+        System.out.println(Arrays.toString(locationIds.toArray()));
         return locationIds.stream().map(locations::get).toList();
     }
 
@@ -114,10 +119,14 @@ public class GameStateManager {
     public void setMapOpen(boolean isOpen) {
         isMapOpen = isOpen;
         if (isOpen) {
-            engine.pushScreen(new MapScreen(engine, maps.get(currentChapterIndex).getLayout(), 550, 550));
+            engine.pushScreen(new MapScreen(engine, maps.get(currentChapterIndex), 550, 550));
         } else {
             engine.popScreen(); // Kehre zum vorherigen Screen zurück (z. B. Kapitel)
         }
+    }
+
+    public void setPlayerLocation(Location location) {
+        player.setLocation(location);
     }
 
 }

@@ -1,27 +1,67 @@
 [
-    {
-      "id": 1,
-      "name": "Blacksmith",
-      "description": "A sturdy workshop filled with the sounds of hammers and anvil.",
-      "coordinates": { "x": 10, "y": 20 },
-      "npc_ids": [1],
-      "connectedLocations": ["Healer", "Innkeeper"]
+  {
+    "id": 1,
+    "name": "Blacksmith",
+    "description": "A sturdy workshop filled with the sounds of hammers and anvil.",
+    "coordinates": {
+      "x": 10,
+      "y": 20
     },
-    {
-      "id": 2,
-      "name": "Healer",
-      "description": "A peaceful hut surrounded by herbs and potions.",
-      "coordinates": { "x": 15, "y": 25 },
-      "npc_ids": [2],
-      "connectedLocations": ["Blacksmith", "Innkeeper"]
+    "npc_ids": [
+      1
+    ],
+    "connectedLocations": [
+      "Healer",
+      "Innkeeper"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Healer",
+    "description": "A peaceful hut surrounded by herbs and potions.",
+    "coordinates": {
+      "x": 15,
+      "y": 25
     },
-    {
-      "id": 3,
-      "name": "Innkeeper",
-      "description": "A lively inn bustling with travelers and adventurers.",
-      "coordinates": { "x": 20, "y": 30 },
-      "npc_ids": [3],
-      "connectedLocations": ["Blacksmith", "Healer"]
-    }
-  ]
+    "npc_ids": [
+      2
+    ],
+    "connectedLocations": [
+      "Blacksmith",
+      "Innkeeper"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Innkeeper",
+    "description": "A lively inn bustling with travelers and adventurers.",
+    "coordinates": {
+      "x": 20,
+      "y": 30
+    },
+    "npc_ids": [
+      3
+    ],
+    "connectedLocations": [
+      "Blacksmith",
+      "Healer"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Dorfplatz",
+    "description": "Ein Dorfplatz mit einem Brunnen in der Mitte.",
+    "coordinates": {
+      "x": 20,
+      "y": 30
+    },
+    "npc_ids": [
+      3
+    ],
+    "connectedLocations": [
+      "Blacksmith",
+      "Healer"
+    ]
+  }
+]
 

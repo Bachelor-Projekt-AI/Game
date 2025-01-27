@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.ui.Menu;
@@ -19,8 +17,6 @@ import org.bachelorprojekt.util.json.jackson.Location;
 import org.bachelorprojekt.util.json.jackson.Map;
 import org.bachelorprojekt.util.json.jackson.Quest;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
 
