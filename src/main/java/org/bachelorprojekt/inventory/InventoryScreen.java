@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.util.Engine;
+import org.lwjgl.opengl.GL20;
 
 public class InventoryScreen extends ScreenAdapter {
     private SpriteBatch batch;
@@ -23,6 +24,9 @@ public class InventoryScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
         // Hintergrund zeichnen
         font.draw(batch, "+-----------------------------+", 50, 500);

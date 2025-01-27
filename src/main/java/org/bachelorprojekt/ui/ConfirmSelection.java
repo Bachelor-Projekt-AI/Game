@@ -4,25 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import org.bachelorprojekt.util.Engine;
-import org.bachelorprojekt.util.GameStateManager;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 
 public class ConfirmSelection extends ScreenAdapter {
     private final Engine engine;
     private final TextRenderer textRenderer;
-    private final int selectedSlot;
-    private final boolean saveExists;
+    private final String message; // Die Nachricht, die angezeigt wird
+    private final Runnable onConfirm; // Aktion für "Ja"
+    private final Runnable onCancel; // Aktion für "Nein"
     private int selectedOption; // 0 = Yes, 1 = No
     private final float startY;
 
-    public ConfirmSelection(Engine engine, int selectedSlot, boolean saveExists) {
+    public ConfirmSelection(Engine engine, String message, Runnable onConfirm, Runnable onCancel) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.selectedSlot = selectedSlot;
-        this.saveExists = saveExists;
+        this.message = message;
+        this.onConfirm = onConfirm;
+        this.onCancel = onCancel;
+        this.selectedOption = 0; // Standardmäßig "Ja" ausgewählt
         this.startY = 300;
-        this.selectedOption = 0;
     }
 
     @Override
@@ -32,17 +33,17 @@ public class ConfirmSelection extends ScreenAdapter {
 
         engine.getBatch().begin();
 
-        // Zeige die Hauptfrage
-        String action = saveExists ? "Load existing game?" : "Create new game?";
-        textRenderer.drawCenteredText(action, startY);
+        // Nachricht anzeigen
+        textRenderer.drawCenteredText(message, startY);
 
-        // Render nur die Auswahl mit Markierung
-        if (selectedOption == 0) {
-            textRenderer.drawCenteredText("> Yes", startY - 50); // Markierter Text für "Yes"
-            textRenderer.drawCenteredText("No", startY - 80);    // Unmarkierter Text für "No"
-        } else {
-            textRenderer.drawCenteredText("Yes", startY - 50);   // Unmarkierter Text für "Yes"
-            textRenderer.drawCenteredText("> No", startY - 80);  // Markierter Text für "No"
+        // Optionen anzeigen
+        String[] options = {"Yes", "No"};
+        for (int i = 0; i < options.length; i++) {
+            if (i == selectedOption) {
+                textRenderer.drawCenteredText("> " + options[i], startY - 50 - (i * 30));
+            } else {
+                textRenderer.drawCenteredText(options[i], startY - 50 - (i * 30));
+            }
         }
 
         engine.getBatch().end();
@@ -50,26 +51,29 @@ public class ConfirmSelection extends ScreenAdapter {
         handleInput();
     }
 
-
     private void handleInput() {
+        // Navigation zwischen "Yes" und "No"
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            selectedOption = (selectedOption == 0) ? 1 : 0; // Wechsel zwischen Yes und No
+            selectedOption = (selectedOption == 0) ? 1 : 0; // Toggle zwischen Yes und No
         }
 
+        // Auswahl bestätigen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if (selectedOption == 0) { // Bestätige Auswahl
-                if (false) {
-//                    // Lade Spielstand und gehe zum Kapitel
-//                    engine.getGameStateManager().loadGameFromSlot(selectedSlot);
-//                    engine.pushScreen(new ChapterOne(engine));
-                } else {
-                    // Gehe zum EnterNameMenu für ein neues Spiel
-                    engine.pushScreen(new EnterNameMenu(engine, selectedSlot));
-                }
+            engine.popScreen();
+            if (selectedOption == 0) {
+                System.out.println("Yes");
+                onConfirm.run(); // "Yes" ausgewählt
             } else {
-                // Kehre zurück zum SaveSlotScreen
-                engine.popScreen();
+                System.out.println("No");
+                onCancel.run(); // "No" ausgewählt
             }
+             // Schließe das ConfirmSelection-Menü
+        }
+
+        // Abbrechen mit ESC
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            engine.popScreen();
+            onCancel.run();
         }
     }
 }

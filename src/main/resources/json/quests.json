@@ -1,0 +1,40 @@
+[
+    {
+      "id": 1,
+      "title": "Talk to the blacksmith",
+      "description": "Collect supplies from the villagers to prepare for the journey.",
+      "objectives": [
+        "Talk to the blacksmith"
+      ],
+      "rewards_item_ids": [2]
+    },
+    {
+      "id": 2,
+      "title": "Gather herbs from the healer",
+      "description": "Collect supplies from the villagers to prepare for the journey.",
+      "objectives": [
+        "Gather herbs from the healer"
+      ],
+      "rewards_item_ids": [1]
+    },
+    {
+      "id": 3,
+      "title": "Get rations from the innkeeper",
+      "description": "Collect supplies from the villagers to prepare for the journey.",
+      "objectives": [
+        "Get rations from the innkeeper"
+      ],
+      "rewards_item_ids": [3]
+    },
+    {
+      "id": 4,
+      "title": "Defeat the Forest Beast",
+      "description": "A giant beast is blocking the path. Defeat it to proceed.",
+      "objectives": [
+        "Locate the beast's lair",
+        "Prepare a trap",
+        "Defeat the beast"
+      ],
+      "rewards_item_ids": []
+    }
+  ]

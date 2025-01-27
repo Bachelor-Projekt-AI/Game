@@ -1,47 +1,94 @@
 package org.bachelorprojekt.util;
 
-import com.badlogic.gdx.Screen;
-import org.bachelorprojekt.game.Chapter;
 import org.bachelorprojekt.character.Player;
-import org.bachelorprojekt.game.Story;
+import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.inventory.InventoryScreen;
+import org.bachelorprojekt.util.json.JsonLoader;
+import org.bachelorprojekt.util.json.jackson.Location;
+import org.bachelorprojekt.util.json.jackson.Map;
+import org.bachelorprojekt.util.json.jackson.Quest;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 
 public class GameStateManager {
     private final Engine engine;
-    private Player player;
+    private final Player player;
+
+    private final HashMap<Integer, Chapter> chapters;
+    private final HashMap<Integer, Location> locations;
+    private final HashMap<Integer, Quest> quests;
+    private final HashMap<Integer, Map> maps;
+
     private boolean isInventoryOpen = false;
     private boolean isMapOpen = false;
-    private final Stack<Screen> screenStack;
-    private Story story;
+
+    /* Current Chapter information */
+    private int currentChapterIndex;
 
     // GameStateManager is created with an Engine and a Player
-    public GameStateManager(Engine engine, Player player) {
+    public GameStateManager(Engine engine, Player player, List<Chapter> chapterList, List<Location> locationList, List<Quest> questList, List<Map> mapList) {
         this.engine = engine;
         this.player = player;
-        this.screenStack = engine.getScreenStack();
-        story = JsonLoader.loadStory("story/chapters.json");
+
+        this.chapters = new HashMap<>();
+        this.locations = new HashMap<>();
+        this.quests = new HashMap<>();
+        this.maps = new HashMap<>();
+
+        for (Chapter chapter : chapterList) {
+            chapters.put(chapter.getId(), chapter);
+        }
+        for (Location location : locationList) {
+            locations.put(location.getId(), location);
+        }
+        for (Quest quest : questList) {
+            quests.put(quest.getId(), quest);
+        }
+        for (Map map : mapList) {
+            maps.put(map.getId(), map);
+        }
+
+
+        // Set the current chapter to the first chapter
+        currentChapterIndex = 1;
     }
 
-    // If a GameStateManager is created with an Engine and another GameStateManager, the player and screenStack are copied from the other GameStateManager
-    public GameStateManager(Engine engine, GameStateManager gameStateManager) {
-        this.engine = engine;
-        this.player = gameStateManager.getPlayer();
-        this.screenStack = engine.getScreenStack();
+    // Direktzugriff für Kapitel
+    public Chapter getChapterById(int chapterId) {
+        return chapters.get(chapterId);
     }
 
-    public Story.Chapter getCurrentChapter() {
-        // Gib das aktuelle Kapitel basierend auf dem Spielerfortschritt zurück
-        int chapterIndex = player.getCurrentChapterIndex();
-        return story.getChapters().get(chapterIndex);
+    // Direktzugriff für Locations
+    public Location getLocationById(int locationId) {
+        return locations.get(locationId);
+    }
+
+    // Direktzugriff für Quests
+    public Quest getQuestById(int questId) {
+        return quests.get(questId);
+    }
+
+    // Direktzugriff für Maps
+    public Map getMapById(int mapId) {
+        return maps.get(mapId);
+    }
+
+    // Für mehrere IDs: Erzeuge eine Liste der Objekte
+    public List<Location> getLocationsForChapter(List<Integer> locationIds) {
+        return locationIds.stream().map(locations::get).toList();
+    }
+
+    public List<Quest> getQuestsForChapter(List<Integer> questIds) {
+        return questIds.stream().map(quests::get).toList();
     }
 
 
-    public Screen getCurrentScreen() {
-        return screenStack.isEmpty() ? null : screenStack.peek();
-    }
+
+
+
+
+
 
     public Player getPlayer() {
         return player;
@@ -54,7 +101,7 @@ public class GameStateManager {
     public void setInventoryOpen(boolean isOpen) {
         isInventoryOpen = isOpen;
         if (isOpen) {
-            engine.getScreenStack().push(new InventoryScreen(engine, player)); // Wechsle zum Inventar-Screen
+            engine.pushScreen(new InventoryScreen(engine, player)); // Wechsle zum Inventar-Screen
         } else {
             engine.popScreen(); // Kehre zum vorherigen Screen zurück (z. B. Kapitel)
         }
@@ -64,11 +111,13 @@ public class GameStateManager {
         return isMapOpen;
     }
 
-    public Story getStory() {
-        return story;
+    public void setMapOpen(boolean isOpen) {
+        isMapOpen = isOpen;
+        if (isOpen) {
+            engine.pushScreen(new MapScreen(engine, maps.get(currentChapterIndex).getLayout(), 550, 550));
+        } else {
+            engine.popScreen(); // Kehre zum vorherigen Screen zurück (z. B. Kapitel)
+        }
     }
 
-    public void setCurrentChapter(int chapterIndex) {
-        player.setCurrentChapterIndex(chapterIndex);
-    }
 }

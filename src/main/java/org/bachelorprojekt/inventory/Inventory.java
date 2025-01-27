@@ -1,7 +1,6 @@
 package org.bachelorprojekt.inventory;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +17,8 @@ public class Inventory implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // Unique identifier for the inventory
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Item> items = new ArrayList<>(); // List of items in the inventory
+    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<InventoryItem> items = new ArrayList<>(); // List of items in the inventory
 
     /**
      * Default constructor required by Hibernate.
@@ -27,48 +26,62 @@ public class Inventory implements Serializable {
     public Inventory() {}
 
     /**
-     * Adds an item to the inventory. If the item is stackable and already exists, increases its quantity.
+     * Adds an item to the inventory. If the item already exists, increases its quantity.
      *
-     * @param newItem The item to add.
-     * @return True if the item was added or stacked, false if the inventory is full.
+     * @param itemId The ID of the item to add.
+     * @param quantity The quantity of the item to add.
+     * @return True if the item was added or its quantity was increased.
      */
-    public boolean addItem(Item newItem) {
-        for (Item item : items) {
-            if (item.getId() == newItem.getId() && item.isStackable()) {
-                int newQuantity = item.getQuantity() + newItem.getQuantity();
-                if (newQuantity <= item.getStackSize()) {
+    public boolean addItem(int itemId, String itemName, int maxStackSize, int quantity) {
+        for (InventoryItem item : items) {
+            if (item.getItemId() == itemId) {
+                int newQuantity = item.getQuantity() + quantity;
+                if (newQuantity <= maxStackSize) {
                     item.setQuantity(newQuantity);
                 } else {
-                    item.setQuantity(item.getStackSize());
-                    newItem.setQuantity(newQuantity - item.getStackSize());
-                    return addItem(newItem); // Add the remainder as a new item
+                    item.setQuantity(maxStackSize);
+                    // Handle overflow if necessary
+                    int overflow = newQuantity - maxStackSize;
+                    return addItem(itemId, itemName, maxStackSize, overflow);
                 }
                 return true;
             }
         }
 
-        // Add as a new item if not stackable or not found
+        // Add a new item if it doesn't exist
+        InventoryItem newItem = new InventoryItem(itemId, itemName, quantity);
         return items.add(newItem);
     }
 
     /**
-     * Removes an item from the inventory.
+     * Removes an item or reduces its quantity from the inventory.
      *
      * @param itemId The ID of the item to remove.
-     * @return True if the item was removed, false if it was not found.
+     * @param quantity The quantity to remove.
+     * @return True if the item was removed or its quantity reduced.
      */
-    public boolean removeItem(int itemId) {
-        return items.removeIf(item -> item.getId() == itemId);
+    public boolean removeItem(int itemId, int quantity) {
+        for (InventoryItem item : items) {
+            if (item.getItemId() == itemId) {
+                if (item.getQuantity() > quantity) {
+                    item.setQuantity(item.getQuantity() - quantity);
+                    return true;
+                } else {
+                    return items.remove(item);
+                }
+            }
+        }
+        return false; // Item not found
     }
 
     /**
      * Retrieves an item by its ID.
      *
      * @param itemId The ID of the item to retrieve.
-     * @return The item if found, or null if not.
+     * @return The InventoryItem if found, or null if not.
      */
-    public Item getItem(int itemId) {
-        return items.stream().filter(item -> item.getId() == itemId).findFirst().orElse(null);
+    public InventoryItem getItem(int itemId) {
+        return items.stream().filter(item -> item.getItemId() == itemId).findFirst().orElse(null);
     }
 
     /**
@@ -76,7 +89,7 @@ public class Inventory implements Serializable {
      *
      * @return The list of items.
      */
-    public List<Item> getItems() {
+    public List<InventoryItem> getItems() {
         return items;
     }
 
@@ -85,7 +98,7 @@ public class Inventory implements Serializable {
      *
      * @param items The list of items to set.
      */
-    public void setItems(List<Item> items) {
+    public void setItems(List<InventoryItem> items) {
         this.items = items;
     }
 

@@ -3,10 +3,11 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import org.bachelorprojekt.game.ChapterOne;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
-import org.lwjgl.opengl.GL20;
 
 public class Menu extends ScreenAdapter {
 
@@ -15,6 +16,7 @@ public class Menu extends ScreenAdapter {
     private final Engine engine;
     private final TextRenderer textRenderer;
     private final float startY;
+    private final Viewport viewport;
 
     public Menu(Engine engine, String[] menuOptions) {
         this.engine = engine;
@@ -22,11 +24,17 @@ public class Menu extends ScreenAdapter {
         this.startY = 280;
         this.selectedOption = 0;
         this.menuOptions = menuOptions;
+        this.viewport = new FitViewport(1920, 1080);
+        this.viewport.apply();
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        viewport.apply();
+        engine.getBatch().setProjectionMatrix(viewport.getCamera().combined);
         engine.getBatch().begin();
 
         textRenderer.drawCenteredText("Lights of Akahzan", 500);
@@ -57,8 +65,8 @@ public class Menu extends ScreenAdapter {
         // Auswahl bestätigen (falls benötigt, z. B. ENTER-Taste)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (selectedOption == 0) {
-                engine.getScreenStack().push(new GameSelectMenu(engine));
-                //engine.getScreenStack().push(new ChapterOne(engine));
+                engine.pushScreen(new GameSelectMenu(engine));
+                // engine.pushScreen(new ChapterOne(engine));
                 // engine.setScene(new GameScreen(engine));
             } else if (selectedOption == 1) {
                 // engine.setScene(new OptionsScreen(engine));
@@ -87,7 +95,7 @@ public class Menu extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height, true);
     }
 
     @Override

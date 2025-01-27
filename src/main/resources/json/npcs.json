@@ -1,0 +1,32 @@
+[
+    {
+      "id": 1,
+      "name": "Thorir the Blacksmith",
+      "location": "Blacksmith",
+      "dialogues": [
+        "Welcome to my forge!",
+        "Do you need a weapon or armor?",
+        "I can repair your equipment for a fair price."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Elena the Healer",
+      "location": "Healer",
+      "dialogues": [
+        "Greetings, traveler. How can I help?",
+        "I can heal your wounds and restore your vitality.",
+        "Be careful out there. The woods are dangerous."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Geralt the Innkeeper",
+      "location": "Innkeeper",
+      "dialogues": [
+        "Welcome to the Golden Mug!",
+        "We have the best ale in the region.",
+        "Feel free to rest in one of our rooms."
+      ]
+    }
+  ]

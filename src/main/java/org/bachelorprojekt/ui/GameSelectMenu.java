@@ -3,7 +3,6 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import org.bachelorprojekt.game.ChapterOne;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameStateManager;
 import org.bachelorprojekt.util.TextRenderer;
@@ -28,7 +27,6 @@ public class GameSelectMenu extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        // Hintergrund löschen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -80,12 +78,35 @@ public class GameSelectMenu extends ScreenAdapter {
             // Spielstand aus der DB laden
             // gameStateManager.loadGameFromSlot(slot);
             System.out.println("Spielstand aus Slot " + (slot + 1) + " geladen.");
-            // engine.pushScreen(new ChapterOne(engine)); // Gehe zum gespeicherten Kapitel
+            engine.pushScreen(new ConfirmSelection(
+                    engine,
+                    "Do you want to load the savegame '" + (slot + 1) + "'?",
+                    () -> {
+                        // Aktion für "Ja"
+                        //loadSaveGame(saveSlotName);
+                    },
+                    () -> {
+                        // Aktion für "Nein"
+                    }
+            ));
+
         } else {
             // Neues Spiel starten
             System.out.println("Neuer Spielstand in Slot " + (slot + 1) + " erstellt.");
             // gameStateManager.startNewGame(slot);
-            engine.pushScreen(new ConfirmSelection(engine, slot, false)); // Starte neues Spiel
+            engine.pushScreen(new ConfirmSelection(
+                    engine,
+                    "Do you want to create a new game in slot '" + (slot + 1) + "'?",
+                    () -> {
+                        // Aktion für "Ja"
+                        System.out.println("Yess");
+                        engine.pushScreen(new EnterNameMenu(engine, slot));
+                    },
+                    () -> {
+                        // Aktion für "Nein"
+                    }
+            ));
+
         }
     }
 

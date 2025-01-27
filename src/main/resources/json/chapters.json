@@ -1,0 +1,10 @@
+[
+    {
+      "id": 1,
+      "title": "The Call to Adventure",
+      "description": "The protagonist starts in a small village. The elder reveals a prophecy.",
+      "quest_ids": [1, 2, 3],
+      "location_ids": [1, 2, 3],
+      "map_id": 1
+    }
+  ]

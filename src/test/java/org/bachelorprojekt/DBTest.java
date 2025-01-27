@@ -3,7 +3,7 @@ package org.bachelorprojekt;
 import java.lang.reflect.Method;
 
 import org.bachelorprojekt.character.Character;
-import org.bachelorprojekt.inventory.Item;
+import org.bachelorprojekt.inventory.InventoryItem;
 import org.bachelorprojekt.util.DB;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +11,11 @@ public class DBTest {
 	@Test
 	public void test() {
 		Character testChar = new Character("Testa");
-		Item testItem = new Item("Testa", 1, 2, 3, true, false);
+		InventoryItem testItem = new InventoryItem(1, "Testa", 1);
 		DB.add(testChar);
 		DB.add(testItem);
 		Character getChar = DB.get(Character.class, "Testa");
-		Item getItem = DB.get(Item.class, testItem.getId());
+		InventoryItem getItem = DB.get(InventoryItem.class, testItem.getId());
 		assert(charsEqual(testChar, getChar));
 		assert(itemsEqual(testItem, getItem));
 	}
@@ -37,8 +37,8 @@ public class DBTest {
 		}
 		int i1len = c1.getInventory().getItems().size();
 		for(int i=0; i<i1len; i++) {
-			Item i1 = c1.getInventory().getItem(i);
-			Item i2 = c2.getInventory().getItem(i);
+			InventoryItem i1 = c1.getInventory().getItem(i);
+			InventoryItem i2 = c2.getInventory().getItem(i);
 			if(!itemsEqual(i1, i2)) {
 				return false;
 			}
@@ -46,8 +46,8 @@ public class DBTest {
 		return true;
 	}
 
-	private boolean itemsEqual(Item i1, Item i2) {
-		Method[] methods = Item.class.getMethods();
+	private boolean itemsEqual(InventoryItem i1, InventoryItem i2) {
+		Method[] methods = InventoryItem.class.getMethods();
 		for(int i=0; i<methods.length; i++) {
 			Method m = methods[i];
 			if(m.getName().startsWith("get")) {
