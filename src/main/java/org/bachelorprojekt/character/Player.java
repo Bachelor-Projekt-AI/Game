@@ -38,6 +38,14 @@ public class Player {
         this.currentChapterIndex = currentChapterIndex;
     }
 
+    public Story.Chapter getCurrentChapter() {
+        return currentChapter;
+    }
+
+    public void setCurrentChapter(Story.Chapter currentChapter) {
+        this.currentChapter = currentChapter;
+    }
+
     public int getCurrentQuestIndex() {
         return currentQuestIndex;
     }

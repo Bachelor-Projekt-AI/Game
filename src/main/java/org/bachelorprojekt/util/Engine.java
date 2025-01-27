@@ -37,6 +37,10 @@ public class Engine extends Game {
         }
     }
 
+    public void clearScreens() {
+        screenStack.clear();
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();

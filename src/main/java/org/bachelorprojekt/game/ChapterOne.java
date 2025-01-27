@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.inventory.InventoryScreen;
+import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.util.Engine;
 
 public class ChapterOne extends Chapter {
@@ -45,6 +46,7 @@ public class ChapterOne extends Chapter {
             // Hier kannst du eine Aktion ausführen, wenn die Karte geöffnet wird
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("Pause menu opened.");
+            engine.getScreenStack().push(new PauseMenu(engine));
             // Hier kannst du eine Aktion ausführen, wenn das Pause-Menü geöffnet wird
         }
     }
