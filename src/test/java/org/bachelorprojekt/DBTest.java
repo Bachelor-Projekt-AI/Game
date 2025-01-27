@@ -1,5 +1,6 @@
 package org.bachelorprojekt;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import org.bachelorprojekt.character.Character;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 public class DBTest {
 	@Test
 	public void test() {
+		new File("gamestate.db").delete();
 		Character testChar = new Character("Testa");
 		Item testItem = new Item("Testa", 1, 2, 3, true, false);
 		DB.add(testChar);
@@ -18,6 +20,7 @@ public class DBTest {
 		Item getItem = DB.get(Item.class, testItem.getId());
 		assert(charsEqual(testChar, getChar));
 		assert(itemsEqual(testItem, getItem));
+		new File("gamestate.db").delete();
 	}
 
 	private boolean charsEqual(Character c1, Character c2) {
