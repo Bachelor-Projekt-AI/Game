@@ -9,16 +9,18 @@ import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.JsonLoader;
 import org.bachelorprojekt.util.MapRenderer;
 
+import java.util.List;
+
 public class ChapterOne extends Chapter {
 
-    private final String[] mapData;
+    private final List<String> mapData;
     private final MapRenderer mapRenderer;
     private final String description;
 
     public ChapterOne(Engine engine, boolean newGame) {
         super("Kapitel 1", "Der Beginn einer Reise", engine);
         Story.Chapter currentChapter = engine.getGameStateManager().getCurrentChapter();
-        this.mapData = currentChapter.getMap().get(0).getMapLines().toArray(new String[0]);
+        this.mapData = currentChapter.getMap();
         this.description = currentChapter.getDescription();
 
         this.mapRenderer = new MapRenderer(engine, mapData, 50, 500);

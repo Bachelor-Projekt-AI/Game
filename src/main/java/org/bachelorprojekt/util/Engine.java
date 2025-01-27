@@ -77,7 +77,7 @@ public class Engine extends Game {
         //getScreen().dispose();
     }
 
-    private BitmapFont loadFont(String fontPath, int fontSize) {
+    public BitmapFont loadFont(String fontPath, int fontSize) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontPath));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = fontSize; // Schriftgröße setzen

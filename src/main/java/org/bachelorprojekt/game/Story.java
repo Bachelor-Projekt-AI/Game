@@ -61,7 +61,7 @@ public class Story {
         private String title;
         private String description;
         private List<Quest> quests;
-        private List<Map> map;
+        private List<String> map;
 
         public String getTitle() {
             return title;
@@ -87,7 +87,7 @@ public class Story {
             this.quests = quests;
         }
 
-        public List<Map> getMap() {
+        public List<String> getMap() {
             return map;
         }
     }
