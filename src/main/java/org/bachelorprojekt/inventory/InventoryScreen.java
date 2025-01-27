@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.util.Engine;
+import org.bachelorprojekt.util.json.jackson.Item;
 import org.lwjgl.opengl.GL20;
 
 public class InventoryScreen extends ScreenAdapter {
@@ -15,10 +16,10 @@ public class InventoryScreen extends ScreenAdapter {
     private final Engine engine;
     private Player player;
 
-    public InventoryScreen(Engine engine, Player player) {
+    public InventoryScreen(Engine engine) {
         this.batch = engine.getBatch();
         this.font = engine.getFont();
-        this.player = player;
+        this.player = engine.getGameStateManager().getPlayer();
         this.engine = engine;
     }
 
@@ -35,8 +36,8 @@ public class InventoryScreen extends ScreenAdapter {
 
         // Zeige die Items im Inventar
         int yPosition = 440;
-        for (String item : player.getInventory()) {
-            font.draw(batch, "- " + item, 60, yPosition);
+        for (Item item : player.getInventory()) {
+            font.draw(batch, "- " + item.getName(), 60, yPosition);
             yPosition -= 20; // Nächste Zeile
         }
 

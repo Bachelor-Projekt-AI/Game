@@ -12,7 +12,7 @@
     {
       "id": 2,
       "name": 2,
-      "location_id": "Healer",
+      "location_id": 2,
       "dialogues": [
         "Greetings, traveler. How can I help?",
         "I can heal your wounds and restore your vitality.",
@@ -22,7 +22,7 @@
     {
       "id": 3,
       "name": 3,
-      "location_id": "Innkeeper",
+      "location_id": 3,
       "dialogues": [
         "Welcome to the Golden Mug!",
         "We have the best ale in the region.",

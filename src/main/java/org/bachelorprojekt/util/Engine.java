@@ -12,10 +12,7 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.ui.Menu;
 import org.bachelorprojekt.util.json.JsonLoader;
-import org.bachelorprojekt.util.json.jackson.Chapter;
-import org.bachelorprojekt.util.json.jackson.Location;
-import org.bachelorprojekt.util.json.jackson.Map;
-import org.bachelorprojekt.util.json.jackson.Quest;
+import org.bachelorprojekt.util.json.jackson.*;
 
 import java.util.List;
 import java.util.Stack;
@@ -66,12 +63,6 @@ public class Engine extends Game {
         font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
         viewport = new FitViewport(1920, 1080);
         viewport.apply();
-
-        Player player = new Player("Hero");
-        player.addToInventory("Sword");
-        player.addToInventory("Shield");
-        player.addToInventory("Health Potion");
-
         textRenderer = new TextRenderer(this);
 
         pushScreen(new Menu(this, new String[]{"Play", "Options", "Exit"}));
@@ -127,14 +118,17 @@ public class Engine extends Game {
         return textRenderer;
     }
 
-    public GameStateManager loadGameData(Engine engine, Player player, String chaptersFile, String locationsFile, String questsFile, String mapsFile) throws Exception {
+    public GameStateManager loadGameData(Engine engine, Player player, String chaptersFile, String locationsFile, String questsFile, String mapsFile, String itemsFile, String npcsFile) throws Exception {
 
         List<Chapter> chapters = JsonLoader.loadChapters(chaptersFile);
         List<Location> locations = JsonLoader.loadLocations(locationsFile);
         List<Quest> quests = JsonLoader.loadQuests(questsFile);
         List<Map> maps = JsonLoader.loadMaps(mapsFile);
+        List<Item> items = JsonLoader.loadItems(itemsFile);
+        List<NPC> npcs = JsonLoader.loadNpcs(npcsFile);
 
-        return new GameStateManager(engine, player, chapters, locations, quests, maps);
+
+        return new GameStateManager(engine, player, chapters, locations, quests, maps, items, npcs);
     }
 
     public void onPlayerNameConfirmed(String playerName, int selectedSlot) {
@@ -149,7 +143,9 @@ public class Engine extends Game {
                     "json/chapters.json",
                     "json/locations.json",
                     "json/quests.json",
-                    "json/maps.json");
+                    "json/maps.json",
+                    "json/items.json",
+                    "json/npcs.json");
 
             setGameStateManager(gameStateManager);
             System.out.println(gameStateManager.getChapterById(1));

@@ -1,8 +1,6 @@
 package org.bachelorprojekt.util;
 
-import org.bachelorprojekt.inventory.Inventory;
-import org.bachelorprojekt.character.Character;
-import org.bachelorprojekt.inventory.InventoryItem;
+import org.bachelorprojekt.character.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -14,9 +12,7 @@ public class DB {
     // Hibernate SessionFactory initialized with the configuration file and annotated classes
     private static SessionFactory factory = new Configuration()
         .configure("config/hibernate.xml") // Path to Hibernate configuration
-        .addAnnotatedClass(InventoryItem.class) // Maps the Item entity
-        .addAnnotatedClass(Inventory.class) // Maps the Inventory entity
-        .addAnnotatedClass(Character.class) // Maps the Character entity
+        .addAnnotatedClass(Player.class) // Maps the Character entity
         .buildSessionFactory();
 
     // Generic method to add an object to the database
