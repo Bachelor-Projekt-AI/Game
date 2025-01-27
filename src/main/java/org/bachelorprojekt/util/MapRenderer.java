@@ -22,9 +22,11 @@ public class MapRenderer extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        batch.begin();
         for (int i = 0; i < map.length; i++) {
             font.draw(batch, map[i], startX, startY - i * 20);
         }
+        batch.end();
     }
 
     protected void handleInput() {

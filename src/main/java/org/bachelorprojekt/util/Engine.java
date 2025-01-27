@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.Chapter;
 import org.bachelorprojekt.game.ChapterOne;
+import org.bachelorprojekt.game.Story;
 import org.bachelorprojekt.ui.Menu;
 
 import java.util.Stack;
@@ -45,7 +46,6 @@ public class Engine extends Game {
     public void create() {
         batch = new SpriteBatch();
         font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
-
 
         Player player = new Player("Hero");
         player.addToInventory("Sword");

@@ -6,10 +6,22 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.util.Engine;
+import org.bachelorprojekt.util.JsonLoader;
+import org.bachelorprojekt.util.MapRenderer;
 
 public class ChapterOne extends Chapter {
+
+    private final String[] mapData;
+    private final MapRenderer mapRenderer;
+    private final String description;
+
     public ChapterOne(Engine engine, boolean newGame) {
         super("Kapitel 1", "Der Beginn einer Reise", engine);
+        Story.Chapter currentChapter = engine.getGameStateManager().getCurrentChapter();
+        this.mapData = currentChapter.getMap().get(0).getMapLines().toArray(new String[0]);
+        this.description = currentChapter.getDescription();
+
+        this.mapRenderer = new MapRenderer(engine, mapData, 50, 500);
     }
 
     @Override
@@ -43,6 +55,7 @@ public class ChapterOne extends Chapter {
             // Hier kannst du eine Aktion ausführen, wenn das Inventar geöffnet wird
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println("Map opened.");
+            this.engine.getScreenStack().push(this.mapRenderer);
             // Hier kannst du eine Aktion ausführen, wenn die Karte geöffnet wird
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("Pause menu opened.");

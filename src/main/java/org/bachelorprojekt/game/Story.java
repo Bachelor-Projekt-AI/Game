@@ -2,6 +2,7 @@ package org.bachelorprojekt.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Main Story Class
@@ -145,6 +146,16 @@ public class Story {
     public static class Map {
         private List<String> mapLines;
 
+        public Map() {
+            this.mapLines = new ArrayList<>();
+        }
+
+        // Konstruktor für Deserialisierung von einem einzelnen String
+        public Map(String line) {
+            this.mapLines = new ArrayList<>();
+            this.mapLines.add(line);
+        }
+
         public List<String> getMapLines() {
             return mapLines;
         }
@@ -153,9 +164,10 @@ public class Story {
             this.mapLines = mapLines;
         }
 
-        // Returns the map as a single string with newlines
+        // Hilfsmethode: Einzelne Map-Zeilen als Text zurückgeben
         public String getParsedMap() {
             return String.join("\n", mapLines);
         }
     }
+
 }
