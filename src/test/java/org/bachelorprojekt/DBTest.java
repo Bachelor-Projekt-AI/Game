@@ -6,12 +6,27 @@ import java.lang.reflect.Method;
 import org.bachelorprojekt.character.Character;
 import org.bachelorprojekt.inventory.Item;
 import org.bachelorprojekt.util.DB;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class DBTest {
+	@BeforeAll
+	public static void backup() {
+		new File("gamestate.db").renameTo(new File("gamestate.db_"));
+	}
+	@AfterAll
+	public static void restore() {
+		new File("gamestate.db_").renameTo(new File("gamestate.db"));
+	}
+	@AfterEach
+	public void clear() {
+		new File("gamestate.db").delete();
+	}
+
 	@Test
 	public void test() {
-		new File("gamestate.db").delete();
 		Character testChar = new Character("Testa");
 		Item testItem = new Item("Testa", 1, 2, 3, true, false);
 		DB.add(testChar);
@@ -20,7 +35,6 @@ public class DBTest {
 		Item getItem = DB.get(Item.class, testItem.getId());
 		assert(charsEqual(testChar, getChar));
 		assert(itemsEqual(testItem, getItem));
-		new File("gamestate.db").delete();
 	}
 
 	private boolean charsEqual(Character c1, Character c2) {
