@@ -35,3 +35,4 @@ build/
 .idea/
 .settings/
 gamestate.db
+bin/
