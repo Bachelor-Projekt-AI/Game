@@ -6,7 +6,8 @@
       "objectives": [
         "Talk to the blacksmith"
       ],
-      "rewards_item_ids": [2]
+      "rewards_item_ids": [2],
+      "npc_id": 1
     },
     {
       "id": 2,
@@ -15,7 +16,8 @@
       "objectives": [
         "Gather herbs from the healer"
       ],
-      "rewards_item_ids": [1]
+      "rewards_item_ids": [1],
+      "npc_id": 2
     },
     {
       "id": 3,
@@ -24,7 +26,8 @@
       "objectives": [
         "Get rations from the innkeeper"
       ],
-      "rewards_item_ids": [3]
+      "rewards_item_ids": [3],
+      "npc_id": 3
     },
     {
       "id": 4,

@@ -8,6 +8,7 @@ import org.bachelorprojekt.util.json.JsonLoader;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import java.util.List;
 
 public class GameStateManager {
@@ -19,7 +20,7 @@ public class GameStateManager {
     private final HashMap<Integer, Quest> quests;
     private final HashMap<Integer, Map> maps;
     private final HashMap<Integer, Item> items;
-    private final HashMap<Integer, NPC> npcs;
+    private final HashMap<String, NPC> npcs;
 
     private boolean isInventoryOpen = false;
     private boolean isMapOpen = false;
@@ -55,7 +56,7 @@ public class GameStateManager {
             items.put(item.getId(), item);
         }
         for (NPC npc : npcList) {
-            npcs.put(npc.getId(), npc);
+            npcs.put(npc.getName(), npc);
         }
 
         player.setLocation(locations.get(1));
@@ -96,7 +97,36 @@ public class GameStateManager {
     }
 
 
+    public void talkToNPC(String npcName) {
+        NPC npc = npcs.get(npcName);
+        if (npc != null) {
+            System.out.println(npc.getDialogues());
+            checkQuestProgress(npc);
+        } else {
+            System.out.println("Kein solcher NPC gefunden.");
+        }
+    }
 
+    public void checkQuestProgress(NPC npc) {
+        List<Quest> activeQuests = player.getActiveQuests();
+        for (Quest quest : activeQuests) {
+            if (quest.getNpcId() == npc.getId()) {
+                System.out.println("Quest fortschrittlich: " + quest.getTitle());
+                player.removeActiveQuest(quest);
+                player.addCompletedQuest(quest);
+            }
+        }
+    }
+
+    public List<NPC> getNPCsInCurrentLocation() {
+        Location currentLocation = player.getLocation();
+        List<NPC> npcs = getNpcsForLocation(currentLocation.getId());
+        return npcs;
+    }
+
+    public List<NPC> getNpcsForLocation(int locationId) {
+        return npcs.values().stream().filter(npc -> npc.getLocationId() == locationId).toList();
+    }
 
 
 

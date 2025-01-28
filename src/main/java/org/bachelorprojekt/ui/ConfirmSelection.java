@@ -34,15 +34,15 @@ public class ConfirmSelection extends ScreenAdapter {
         engine.getBatch().begin();
 
         // Nachricht anzeigen
-        textRenderer.drawCenteredText(message, startY);
+        textRenderer.drawCenteredText(message, startY, this.engine.getFont());
 
         // Optionen anzeigen
         String[] options = {"Yes", "No"};
         for (int i = 0; i < options.length; i++) {
             if (i == selectedOption) {
-                textRenderer.drawCenteredText("> " + options[i], startY - 50 - (i * 30));
+                textRenderer.drawCenteredText("> " + options[i], startY - 50 - (i * 30), this.engine.getFont());
             } else {
-                textRenderer.drawCenteredText(options[i], startY - 50 - (i * 30));
+                textRenderer.drawCenteredText(options[i], startY - 50 - (i * 30), this.engine.getFont());
             }
         }
 

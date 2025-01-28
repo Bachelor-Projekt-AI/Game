@@ -33,14 +33,14 @@ public class GameSelectMenu extends ScreenAdapter {
         engine.getBatch().begin();
 
         // Titel zeichnen
-        textRenderer.drawCenteredText("Select Save Slot", 500);
+        textRenderer.drawCenteredText("Select Save Slot", 500, this.engine.getFont());
 
         // Save Slots anzeigen
         for (int i = 0; i < saveSlots.length; i++) {
             if (i == selectedOption) {
-                textRenderer.drawCenteredText("> " + saveSlots[i], startY - i * 30);
+                textRenderer.drawCenteredText("> " + saveSlots[i], startY - i * 30, this.engine.getFont());
             } else {
-                textRenderer.drawCenteredText(saveSlots[i], startY - i * 30);
+                textRenderer.drawCenteredText(saveSlots[i], startY - i * 30, this.engine.getFont());
             }
         }
 

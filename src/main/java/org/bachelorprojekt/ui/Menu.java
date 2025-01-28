@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 
-public class Menu extends ScreenAdapter {
+public class Menu extends Scene {
 
     private final String[] menuOptions;
     private int selectedOption;
@@ -19,6 +21,7 @@ public class Menu extends ScreenAdapter {
     private final Viewport viewport;
 
     public Menu(Engine engine, String[] menuOptions) {
+        super(engine);
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
         this.startY = 280;
@@ -26,6 +29,23 @@ public class Menu extends ScreenAdapter {
         this.menuOptions = menuOptions;
         this.viewport = new FitViewport(1920, 1080);
         this.viewport.apply();
+
+        addRenderableElement(new RenderableElement(4, 1, "Lights of Akahzan")); // Titel
+        for (int i = 0; i < menuOptions.length; i++) {
+            final int index = i; // Benötigt für Lambda
+            addRenderableElement(new RenderableElement(4, 2 + i, menuOptions[i]) {
+                @Override
+                public void render(SpriteBatch batch, BitmapFont font) {
+                    if (index == selectedOption) {
+                        font.setColor(1, 1, 0, 1); // Gelb
+                        super.render(batch, font);
+                        font.setColor(1, 1, 1, 1); // Weiß zurücksetzen
+                    } else {
+                        super.render(batch, font);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -35,23 +55,13 @@ public class Menu extends ScreenAdapter {
 
         viewport.apply();
         engine.getBatch().setProjectionMatrix(viewport.getCamera().combined);
-        engine.getBatch().begin();
-
-        textRenderer.drawCenteredText("Lights of Akahzan", 500);
-        for (int i = 0; i < menuOptions.length; i++) {
-            if (i == selectedOption) {
-                textRenderer.drawCenteredText("> " + menuOptions[i], startY - i * 30);
-            } else {
-                textRenderer.drawCenteredText(menuOptions[i], startY - i * 30);
-            }
-        }
-
-        engine.getBatch().end();
+        super.render(delta);
 
         handleInput();
     }
 
-    private void handleInput() {
+    @Override
+    public void handleInput() {
         // Nach unten navigieren
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             selectedOption = (selectedOption + 1) % menuOptions.length;

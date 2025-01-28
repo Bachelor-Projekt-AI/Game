@@ -12,6 +12,9 @@ public class Quest {
     private String description;
     private List<String> objectives;
 
+    @JsonProperty("npc_id")
+    private int npcId;
+
     @JsonProperty("rewards_item_ids")
     private List<Integer> rewardsItemIds; // Verknüpft mit Items
 
@@ -54,5 +57,9 @@ public class Quest {
 
     public void setRewardsItemIds(List<Integer> rewardsItemIds) {
         this.rewardsItemIds = rewardsItemIds;
+    }
+
+    public int getNpcId() {
+        return npcId;
     }
 }

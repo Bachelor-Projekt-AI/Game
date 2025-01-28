@@ -29,14 +29,14 @@ public class PauseMenu extends ScreenAdapter {
         engine.getBatch().begin();
 
         // Titel des Pause-Menüs
-        textRenderer.drawCenteredText("Paused", startY);
+        textRenderer.drawCenteredText("Paused", startY, this.engine.getFont());
 
         // Render die Menüoptionen
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == selectedOption) {
-                textRenderer.drawCenteredText("> " + menuOptions[i], startY - (i + 1) * 30);
+                textRenderer.drawCenteredText("> " + menuOptions[i], startY - (i + 1) * 30, this.engine.getFont());
             } else {
-                textRenderer.drawCenteredText(menuOptions[i], startY - (i + 1) * 30);
+                textRenderer.drawCenteredText(menuOptions[i], startY - (i + 1) * 30, this.engine.getFont());
             }
         }
 

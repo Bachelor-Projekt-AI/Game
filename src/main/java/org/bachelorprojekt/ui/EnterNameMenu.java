@@ -33,9 +33,9 @@ public class EnterNameMenu extends ScreenAdapter {
         engine.getBatch().begin();
 
 
-        textRenderer.drawCenteredText("Enter your name:", startY);
-        textRenderer.drawCenteredText(playerName + "_", startY - 50); // Blinken des Cursors simuliert
-        textRenderer.drawCenteredText("Press ESC to cancel.", startY - 100); // Hinweis zum Abbrechen
+        textRenderer.drawCenteredText("Enter your name:", startY, this.engine.getFont());
+        textRenderer.drawCenteredText(playerName + "_", startY - 50, this.engine.getFont()); // Blinken des Cursors simuliert
+        textRenderer.drawCenteredText("Press ESC to cancel.", startY - 100, this.engine.getFont()); // Hinweis zum Abbrechen
 
         engine.getBatch().end();
 
