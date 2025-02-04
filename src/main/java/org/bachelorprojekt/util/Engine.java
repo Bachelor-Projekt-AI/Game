@@ -70,7 +70,9 @@ public class Engine extends Game {
 
     @Override
     public void resize(int width, int height) {
+		Gdx.graphics.setWindowedMode(width, height);
         viewport.update(width, height, true);
+		screenStack.peek().resize(width, height);
     }
 
     @Override

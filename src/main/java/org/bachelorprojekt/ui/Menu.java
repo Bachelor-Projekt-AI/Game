@@ -80,6 +80,7 @@ public class Menu extends Scene {
                 // engine.setScene(new GameScreen(engine));
             } else if (selectedOption == 1) {
                 // engine.setScene(new OptionsScreen(engine));
+                engine.pushScreen(new ResolutionSelectMenu(engine));
             } else if (selectedOption == 2) {
                 engine.exit();
             }
