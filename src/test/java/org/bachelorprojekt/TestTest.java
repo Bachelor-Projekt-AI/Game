@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 //Test cases for testing
+// Funktionstest
 public class TestTest {
 	@Test
 	public void test() {
@@ -38,8 +39,26 @@ public void testQuestIsCompleted_NotAllObjectivesCompleted() {
 
 @Test
 public void testContainsLocation_LocationExists() {
+    Map map = new Map();
+    map.setLocations(List.of("Innkeeper", "Blacksmith", "Castle")); // Nochmal mit Dave sprechen
 
-    assertTrue(true); //LALALA
+    assertTrue(map.containsLocation("Innkeeper"));
+}
+
+@Test
+public void testContainsLocation_LocationDoesNotExist() {
+    Map map = new Map();
+    map.setLocations(List.of("Innkeeper", "Blacksmith", "Castle"));
+
+    assertFalse(map.containsLocation("Forest"));
+}
+
+@Test
+public void testContainsLocation_EmptyMap() {
+    Map map = new Map();
+    map.setLocations(List.of());
+
+    assertFalse(map.containsLocation("Innkeeper"));
 }
 
 
