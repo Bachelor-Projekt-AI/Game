@@ -6,33 +6,30 @@ import java.lang.reflect.Method;
 import org.bachelorprojekt.character.Character;
 import org.bachelorprojekt.inventory.Item;
 import org.bachelorprojekt.util.DB;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class DBTest {
-	@BeforeAll
-	public static void backup() {
-		new File("gamestate.db").renameTo(new File("gamestate.db_"));
+	static String dbFileName = "test.db";
+	DB database;
+
+	@BeforeEach
+	public void init() {
+		database = new DB(dbFileName);
 	}
-	@AfterAll
-	public static void restore() {
-		new File("gamestate.db_").renameTo(new File("gamestate.db"));
-	}
+
 	@AfterEach
-	public void clear() {
-		new File("gamestate.db").delete();
+	public void cleanup() {
+		new File(dbFileName).delete();
 	}
 
 	@Test
 	public void test() {
 		Character testChar = new Character("Testa");
 		Item testItem = new Item("Testa", 1, 2, 3, true, false);
-		DB.add(testChar);
-		DB.add(testItem);
-		Character getChar = DB.get(Character.class, "Testa");
-		Item getItem = DB.get(Item.class, testItem.getId());
+		database.add(testChar);
+		database.add(testItem);
+		Character getChar = database.get(Character.class, "Testa");
+		Item getItem = database.get(Item.class, testItem.getId());
 		assert(charsEqual(testChar, getChar));
 		assert(itemsEqual(testItem, getItem));
 	}
