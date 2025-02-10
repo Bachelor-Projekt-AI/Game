@@ -57,7 +57,7 @@ public class Engine extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        font = loadFont("fonts/PressStart2P-vaV7.ttf", 26);
+        font = loadFont("fonts/JetBrainsMono-Regular.ttf", 26);
         viewport = new FitViewport(1920, 1080);
         viewport.apply();
         textRenderer = new TextRenderer(this);
