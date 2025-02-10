@@ -6,8 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.ui.LoadingScreen;
 import org.bachelorprojekt.ui.Menu;
@@ -18,7 +16,6 @@ public class Engine extends Game {
 
     private SpriteBatch batch;
     private BitmapFont font;
-    private Viewport viewport;
 
     private GameSystemManager gameSystemManager;
     private TextRenderer textRenderer;
@@ -63,8 +60,6 @@ public class Engine extends Game {
     public void create() {
         batch = new SpriteBatch();
         font = loadFont("fonts/JetBrainsMono-Regular.ttf", 26);
-        viewport = new FitViewport(1920, 1080);
-        viewport.apply();
         textRenderer = new TextRenderer(this);
 
         Gdx.graphics.setForegroundFPS(60);
@@ -75,10 +70,6 @@ public class Engine extends Game {
     @Override
     public void resize(int width, int height) {
 		Gdx.graphics.setWindowedMode(width, height);
-        viewport.update(width, height, true);
-		for (Screen screen : screenStack) {
-			screen.resize(width, height);
-		}
     }
 
     @Override

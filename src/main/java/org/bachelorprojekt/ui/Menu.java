@@ -6,8 +6,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 
@@ -18,7 +16,6 @@ public class Menu extends Scene {
     private final Engine engine;
     private final TextRenderer textRenderer;
     private final float startY;
-    private final Viewport viewport;
 
     public Menu(Engine engine, String[] menuOptions) {
         super(engine);
@@ -27,8 +24,6 @@ public class Menu extends Scene {
         this.startY = 280;
         this.selectedOption = 0;
         this.menuOptions = menuOptions;
-        this.viewport = new FitViewport(1920, 1080);
-        this.viewport.apply();
 
         addRenderableElement(new RenderableElement(4, 40, "Lights of Akahzan")); // Titel
         for (int i = 0; i < menuOptions.length; i++) {
@@ -53,8 +48,6 @@ public class Menu extends Scene {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        viewport.apply();
-        engine.getBatch().setProjectionMatrix(viewport.getCamera().combined);
         super.render(delta);
 
         handleInput();
@@ -106,7 +99,7 @@ public class Menu extends Scene {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+
     }
 
     @Override
