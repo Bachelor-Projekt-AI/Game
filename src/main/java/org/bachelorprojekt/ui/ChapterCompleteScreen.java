@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.chapter.ChapterSystem;
 import org.bachelorprojekt.game.ChapterScreen;
@@ -42,24 +43,28 @@ public class ChapterCompleteScreen implements Screen {
 
         batch.begin();
 
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        int centerX = screenWidth / 2;
-        int centerY = screenHeight / 2;
-
         // Kapitel-Abschluss-Text
-        font.draw(batch, "Kapitel " + (currentChapter.getId()) + " abgeschlossen!", centerX - 100, centerY + 50);
+		String chapterFinishText = "Kapitel " + (currentChapter.getId()) + " abgeschlossen!";
+        font.draw(batch, chapterFinishText, getCenteredXStart(chapterFinishText), 590);
 
         // Optionen
-        font.draw(batch, (selectedIndex == 0 ? "> " : "  ") + "Zurück zum Hauptmenü", centerX - 80, centerY);
+		String toMenu = (selectedIndex == 0 ? "> " : "  ") + "Zurück zum Hauptmenü";
+        font.draw(batch, toMenu, getCenteredXStart(toMenu), 540);
         if (nextChapter != null) {
-            font.draw(batch, (selectedIndex == 1 ? "> " : "  ") + "Weiter zu Kapitel " + nextChapterId, centerX - 80, centerY - 40);
+			String toNextChapter = (selectedIndex == 1 ? "> " : "  ") + "Weiter zu Kapitel " + nextChapterId;
+            font.draw(batch, toNextChapter, getCenteredXStart(toNextChapter), 500);
         }
 
         batch.end();
 
         handleInput();
     }
+
+	private int getCenteredXStart(String text) {
+			GlyphLayout layout = new GlyphLayout();
+			layout.setText(font, text);
+			return 960 - (int)layout.width/2;
+	}
 
     private void handleInput() {
         // Navigation mit Pfeiltasten
