@@ -1,6 +1,5 @@
 package org.bachelorprojekt.util;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,9 +11,6 @@ public class TextRenderer {
 
     private long startTime; // Zeitstempel für animiertes Rendern
     private int currentCharIndex; // Der aktuelle Index des zuletzt gerenderten Buchstabens
-
-    private final int screenWidth = 1920;
-    private final int screenHeight = 1080;
 
     public TextRenderer(Engine engine) {
         this.font = engine.getFont();
@@ -36,7 +32,7 @@ public class TextRenderer {
         for (int i = 0; i < lines.length; i++) {
             layout.setText(font, lines[i]); // Breite und Höhe für die aktuelle Zeile berechnen
             float textWidth = layout.width; // Tatsächliche Breite des Textes
-            float centerX = (screenWidth - textWidth) / 2f; // Horizontale Mitte berechnen
+            float centerX = 1920 - textWidth / 2f; // Horizontale Mitte berechnen
 
             // Zeichne die aktuelle Zeile
             font.draw(batch, lines[i], centerX, centerY - (i * 30));
@@ -45,8 +41,8 @@ public class TextRenderer {
 
     // Zeichnet Text basierend auf Prozentwerten der Bildschirmdimensionen
     public void drawTextAtPercent(String text, float percentX, float percentY) {
-        float x = screenWidth * (percentX / 100f);
-        float y = screenHeight * (percentY / 100f);
+        float x = 1920 * percentX / 100f;
+        float y = 1080 * percentY / 100f;
         drawText(text, x, y);
     }
 
@@ -63,9 +59,7 @@ public class TextRenderer {
 
         // Render den sichtbaren Text bis zum aktuellen Index
         String visibleText = text.substring(0, currentCharIndex);
-        float x = screenWidth * (percentX / 100f);
-        float y = screenHeight * (percentY / 100f);
-        font.draw(batch, visibleText, x, y);
+		drawTextAtPercent(visibleText, percentX, percentY);
     }
 
     // Reset für animiertes Rendern, um von vorne zu starten
@@ -79,9 +73,9 @@ public class TextRenderer {
         GlyphLayout layout = new GlyphLayout();
         layout.setText(font, text);
 
-        float boxWidth = screenWidth * (widthPercent / 100f);
-        float x = screenWidth * (percentX / 100f) - boxWidth / 2f;
-        float y = screenHeight * (percentY / 100f);
+        float boxWidth = 1920 * widthPercent / 100f;
+        float x = 1920 * percentX / 100f - boxWidth / 2f;
+        float y = 1080 * percentY / 100f;
 
         font.draw(batch, text, x, y);
     }
