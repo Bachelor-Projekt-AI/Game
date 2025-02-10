@@ -24,9 +24,9 @@ public class JsonLoader {
                 mapper.getTypeFactory().constructCollectionType(List.class, Location.class));
     }
 
-    public static List<Map> loadMaps(String filePath) throws Exception {
+    public static List<Maps> loadMaps(String filePath) throws Exception {
         return mapper.readValue(Gdx.files.internal(filePath).read(),
-                mapper.getTypeFactory().constructCollectionType(List.class, Map.class));
+                mapper.getTypeFactory().constructCollectionType(List.class, Maps.class));
     }
 
     public static List<Quest> loadQuests(String filePath) throws Exception {

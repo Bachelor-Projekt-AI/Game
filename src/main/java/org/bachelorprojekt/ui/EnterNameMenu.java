@@ -3,10 +3,7 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import org.bachelorprojekt.character.Player;
-import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
-import org.bachelorprojekt.util.GameStateManager;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 

@@ -9,12 +9,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.character.Player;
-import org.bachelorprojekt.game.ChapterScreen;
+import org.bachelorprojekt.ui.LoadingScreen;
 import org.bachelorprojekt.ui.Menu;
-import org.bachelorprojekt.util.json.JsonLoader;
-import org.bachelorprojekt.util.json.jackson.*;
 
-import java.util.List;
 import java.util.Stack;
 
 public class Engine extends Game {
@@ -23,7 +20,7 @@ public class Engine extends Game {
     private BitmapFont font;
     private Viewport viewport;
 
-    private GameStateManager gameStateManager;
+    private GameSystemManager gameSystemManager;
     private TextRenderer textRenderer;
     private final Stack<Screen> screenStack;
 
@@ -106,57 +103,35 @@ public class Engine extends Game {
         Gdx.app.exit();
     }
 
-    public GameStateManager getGameStateManager() {
-        return gameStateManager;
+    public GameSystemManager getGameSystemManager() {
+        return gameSystemManager;
     }
 
-    public void setGameStateManager(GameStateManager gameStateManager) {
-        this.gameStateManager = gameStateManager;
+    public void setGameSystemManager(GameSystemManager gameSystemManager) {
+        this.gameSystemManager = gameSystemManager;
     }
 
     public TextRenderer getTextRenderer() {
         return textRenderer;
     }
 
-    public GameStateManager loadGameData(Engine engine, Player player, String chaptersFile, String locationsFile, String questsFile, String mapsFile, String itemsFile, String npcsFile) throws Exception {
-
-        List<Chapter> chapters = JsonLoader.loadChapters(chaptersFile);
-        List<Location> locations = JsonLoader.loadLocations(locationsFile);
-        List<Quest> quests = JsonLoader.loadQuests(questsFile);
-        List<Map> maps = JsonLoader.loadMaps(mapsFile);
-        List<Item> items = JsonLoader.loadItems(itemsFile);
-        List<NPC> npcs = JsonLoader.loadNpcs(npcsFile);
-
-
-        return new GameStateManager(engine, player, chapters, locations, quests, maps, items, npcs);
-    }
-
+    /**
+     * Starting game method
+     * @param playerName
+     * @param selectedSlot
+     */
     public void onPlayerNameConfirmed(String playerName, int selectedSlot) {
+
+        // TODO change this if loading save game is possible
+        int chapterIndex = 1;
+
         System.out.println("Player name confirmed: " + playerName);
 
         // Neues Spiel starten
         Player player = new Player(playerName);
 
-        try {
-            // Erstelle GameStateManager mit neuen Daten
-            GameStateManager gameStateManager = loadGameData(this, player,
-                    "json/chapters.json",
-                    "json/locations.json",
-                    "json/quests.json",
-                    "json/maps.json",
-                    "json/items.json",
-                    "json/npcs.json");
-
-            setGameStateManager(gameStateManager);
-            System.out.println(gameStateManager.getChapterById(1));
-
-            // Initiales Kapitel starten
-            Chapter firstChapter = gameStateManager.getChapterById(1);
-            pushScreen(new ChapterScreen(this, firstChapter));
-
-        } catch (Exception e) {
-            System.err.println("Failed to load game data: " + e.getMessage());
-        }
+        pushScreen(new LoadingScreen(this, player, selectedSlot));
+        //setGameSystemManager(new GameSystemManager(this, player, chapterIndex));
     }
 
 

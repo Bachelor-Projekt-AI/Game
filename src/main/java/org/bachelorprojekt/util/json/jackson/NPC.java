@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NPC {
@@ -14,21 +15,23 @@ public class NPC {
     private int locationId;
     private List<String> dialogues;
 
-    // Getters and Setters
+    public NPC() {
+        this.id = 0;
+        this.name = "";
+        this.locationId = 0;
+        this.dialogues = List.of();
+    }
+
+    // =================================================================================================================
+    // ==                                           Getter Methods                                                    ==
+    // =================================================================================================================
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getLocationId() {
@@ -39,7 +42,22 @@ public class NPC {
         return dialogues;
     }
 
-    public void setDialogues(List<String> dialogues) {
-        this.dialogues = dialogues;
+    // =================================================================================================================
+    // ==                                          Mapping Methods                                                    ==
+    // =================================================================================================================
+
+    private Location location;
+
+    /**
+     * Initialisiert die Verknüpfung des NPCs mit seiner Location.
+     *
+     * @param locationMap Ein Mapping aller Locations anhand ihrer ID.
+     */
+    public void initMapping(Map<Integer, Location> locationMap) {
+        this.location = locationMap.get(this.locationId);
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }
