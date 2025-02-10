@@ -3,6 +3,8 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
@@ -41,8 +43,12 @@ public class LoadingScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
+		String loadingText = "Loading...";
+		GlyphLayout layout = new GlyphLayout();
+		layout.setText(font, loadingText);
+
         engine.getBatch().begin();
-        font.draw(engine.getBatch(), "Loading...", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() / 2f);
+        font.draw(engine.getBatch(), loadingText, 960 - layout.width, 540);
         engine.getBatch().end();
     }
 }
