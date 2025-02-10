@@ -118,7 +118,7 @@ public class ContextMenu extends ScreenAdapter {
             }
 
             // Abbrechen des Menüs
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.C)) {
                 engine.popScreen();
             }
         } else {
@@ -141,6 +141,10 @@ public class ContextMenu extends ScreenAdapter {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 isSubMenuOpen = false;
             }
+			
+			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+				engine.popScreen();
+			}
         }
     }
 
