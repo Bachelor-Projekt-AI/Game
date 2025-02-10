@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import org.bachelorprojekt.util.Engine;
-import org.bachelorprojekt.util.GameStateManager;
+import org.bachelorprojekt.util.GameSystemManager;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 
@@ -14,13 +14,13 @@ public class GameSelectMenu extends ScreenAdapter {
     private int selectedOption;
     private final Engine engine;
     private final TextRenderer textRenderer;
-    private final GameStateManager gameStateManager;
+    private final GameSystemManager gameStateManager;
     private final float startY;
 
     public GameSelectMenu(Engine engine) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.gameStateManager = engine.getGameStateManager();
+        this.gameStateManager = engine.getGameSystemManager();
         this.startY = 280;
         this.selectedOption = 0;
     }

@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import org.bachelorprojekt.game.events.EventDispatcher;
+import org.bachelorprojekt.game.events.LocationReachEvent;
+import org.bachelorprojekt.game.events.NPCInteractionEvent;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 import java.util.Arrays;
@@ -14,6 +17,8 @@ import org.bachelorprojekt.util.TextRenderer;
 import org.bachelorprojekt.util.json.jackson.NPC;
 import org.lwjgl.opengl.GL20;
 
+import java.util.Arrays;
+
 public class ContextMenu extends ScreenAdapter {
     private final Engine engine;
     private final TextRenderer textRenderer;
@@ -21,11 +26,6 @@ public class ContextMenu extends ScreenAdapter {
             "Suche nach Gegenständen",
             "Spreche mit Charakteren",
             "Untersuche ein bestimmtes Objekt"
-    };
-    private final String[][] subOptions = {
-            {"Baum", "Felsen", "Kiste"}, // Sub-Optionen für "Suche nach Gegenständen"
-            {"Healer", "Blacksmith", "Innkeeper"}, // Sub-Optionen für "Spreche mit Charakteren"
-            {"Statue", "Buch", "Schriftrolle"} // Sub-Optionen für "Untersuche ein bestimmtes Objekt"
     };
 
     private int selectedOption = 0; // Hauptmenü-Option
@@ -88,7 +88,7 @@ public class ContextMenu extends ScreenAdapter {
     }
 
     private void drawSubMenu() {
-        String[] currentSubOptions = subOptions[selectedOption];
+        String[] currentSubOptions = getCurrentSubOptions();
         contextMenuFont.draw(engine.getBatch(), "Optionen:", subMenuX, startY);
         for (int i = 0; i < currentSubOptions.length; i++) {
             if (i == selectedSubOption) {
@@ -122,74 +122,100 @@ public class ContextMenu extends ScreenAdapter {
                 engine.popScreen();
             }
         } else {
+            // Hole aktuell verfügbare Sub-Optionen
+            String[] currentSubOptions = getCurrentSubOptions();
+
             // Navigation im Sub-Menü
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                selectedSubOption = (selectedSubOption + 1) % subOptions[selectedOption].length;
+                selectedSubOption = (selectedSubOption + 1) % currentSubOptions.length;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                selectedSubOption = (selectedSubOption - 1 + subOptions[selectedOption].length) % subOptions[selectedOption].length;
+                selectedSubOption = (selectedSubOption - 1 + currentSubOptions.length) % currentSubOptions.length;
             }
 
             // Auswahl im Sub-Menü bestätigen
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                String selectedAction = subOptions[selectedOption][selectedSubOption];
-                System.out.println("Ausgewählte Aktion: " + selectedAction);
-                engine.popScreen(); // Zurück zum Spiel oder vorherigen Menü
+                executeAction();
+                engine.popScreen(); // Menü schließen
             }
 
             // Sub-Menü schließen
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 isSubMenuOpen = false;
             }
-			
+
 			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
 				engine.popScreen();
 			}
         }
     }
 
-    private void executeAction() {
-        switch (selectedOption) {
-            case 0 -> {
-                // Suche nach Gegenständen
-                //String selectedObject = generateSubOptionsForObjects()[selectedSubOption];
-                System.out.println("Du suchst nach: ");
-                //engine.getGameStateManager().searchForObject(selectedObject);
-            }
-            case 1 -> {
-                // Sprechen mit Charakteren
-                String selectedNPC = generateSubOptionsForNPCs()[selectedSubOption];
-                System.out.println("Du sprichst mit: " + selectedNPC);
-                engine.getGameStateManager().talkToNPC(selectedNPC);
-            }
-            case 2 -> {
-                // Untersuchen eines Objekts
-                //String selectedObject = generateSubOptionsForExaminableObjects()[selectedSubOption];
-                System.out.println("Du untersuchst: ");
-                //engine.getGameStateManager().examineObject(selectedObject);
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + selectedOption);
-        }
-        engine.popScreen();
-    }
 
-/*    private String[] generateSubOptionsForObjects() {
-        // Beispiel: Gegenstände in der aktuellen Umgebung
-        return engine.getGameStateManager().getCurrentLocationObjects()
-                .stream().map(Object::getName).toArray(String[]::new);
-    }*/
+    private String[] getCurrentSubOptions() {
+        switch (selectedOption) {
+            case 0:
+                return generateSubOptionsForObjects();
+            case 1:
+                return generateSubOptionsForNPCs();
+            case 2:
+                return generateSubOptionsForExaminableObjects();
+            default:
+                return new String[]{};
+        }
+    }
 
     private String[] generateSubOptionsForNPCs() {
         // Beispiel: NPCs in der aktuellen Umgebung
-        return engine.getGameStateManager().getNPCsInCurrentLocation()
+        return engine.getGameSystemManager().getPlayer().getLocation().getNpcs()
                 .stream().map(NPC::getName).toArray(String[]::new);
     }
 
-    /*private String[] generateSubOptionsForExaminableObjects() {
-        // Beispiel: Untersuchbare Objekte in der Umgebung
-        return engine.getGameStateManager().getExaminableObjects()
-                .stream().map(Object::getName).toArray(String[]::new);
-    }*/
+    // Platzhalter-Methoden für die anderen Fälle (kannst du bei Bedarf implementieren)
+    private String[] generateSubOptionsForObjects() {
+        // Beispiel: Hole die Namen der Objekte in der aktuellen Location
+        // return engine.getGameStateManager().getCurrentLocationObjects()
+        //         .stream().map(obj -> obj.getName()).toArray(String[]::new);
+        return new String[]{"Baum", "Felsen", "Kiste"};
+    }
 
+    private String[] generateSubOptionsForExaminableObjects() {
+        // Beispiel: Unterscheidbare Objekte zum Untersuchen
+        // return engine.getGameStateManager().getExaminableObjects()
+        //         .stream().map(obj -> obj.getName()).toArray(String[]::new);
+        return new String[]{"Statue", "Buch", "Schriftrolle"};
+    }
+
+
+    private void executeAction() {
+        switch (selectedOption) {
+            case 0 -> { // Gegenstände suchen (Beispiel)
+                String selectedObject = generateSubOptionsForObjects()[selectedSubOption];
+                System.out.println("Du suchst nach: " + selectedObject);
+                // Hier könnten wir ein `ItemCollectEvent` auslösen, wenn das sinnvoll wäre
+            }
+            case 1 -> { // Sprechen mit Charakteren
+                String selectedNPCName = generateSubOptionsForNPCs()[selectedSubOption];
+                NPC selectedNPC = engine.getGameSystemManager().getPlayer().getLocation().getNpcs()
+                        .stream()
+                        .filter(npc -> npc.getName().equals(selectedNPCName))
+                        .findFirst().orElse(null);
+
+                if (selectedNPC != null) {
+                    System.out.println("Du sprichst mit: " + selectedNPCName);
+
+                    // **Neues NPC-Interaktions-Event auslösen!**
+                    EventDispatcher.dispatchEvent(new NPCInteractionEvent(selectedNPC.getId()));
+                }
+            }
+            case 2 -> { // Ort untersuchen oder erreichen
+                String selectedLocation = generateSubOptionsForExaminableObjects()[selectedSubOption];
+                System.out.println("Du untersuchst: " + selectedLocation);
+
+                // **Neues Location-Event auslösen!**
+                //EventDispatcher.dispatchEvent(new LocationReachEvent(engine.getGameStateManager().getCurrentLocationId()));
+            }
+            default -> throw new IllegalStateException("Unerwarteter Wert: " + selectedOption);
+        }
+    }
 
 }

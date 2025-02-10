@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bachelorprojekt.util.Engine;
-import org.bachelorprojekt.util.GameStateManager;
+import org.bachelorprojekt.util.GameSystemManager;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 
@@ -39,13 +39,13 @@ public class ResolutionSelectMenu extends ScreenAdapter {
     private int selectedOption;
     private final Engine engine;
     private final TextRenderer textRenderer;
-    private final GameStateManager gameStateManager;
+    private final GameSystemManager gameStateManager;
     private final float startY;
 
     public ResolutionSelectMenu(Engine engine) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.gameStateManager = engine.getGameStateManager();
+        this.gameStateManager = engine.getGameSystemManager();
         this.startY = 280;
         this.selectedOption = 0;
 		this.resStrings.add("Back");

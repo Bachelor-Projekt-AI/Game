@@ -11,7 +11,7 @@
     },
     {
       "id": 2,
-      "name": 2,
+      "name": "Azir the Healer",
       "location_id": 2,
       "dialogues": [
         "Greetings, traveler. How can I help?",
@@ -21,7 +21,7 @@
     },
     {
       "id": 3,
-      "name": 3,
+      "name": "Greta the Innkeeper",
       "location_id": 3,
       "dialogues": [
         "Welcome to the Golden Mug!",

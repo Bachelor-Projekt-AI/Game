@@ -19,7 +19,7 @@ public class InventoryScreen extends ScreenAdapter {
     public InventoryScreen(Engine engine) {
         this.batch = engine.getBatch();
         this.font = engine.getFont();
-        this.player = engine.getGameStateManager().getPlayer();
+        this.player = engine.getGameSystemManager().getPlayer();
         this.engine = engine;
     }
 
@@ -53,7 +53,7 @@ public class InventoryScreen extends ScreenAdapter {
     protected void handleInput() {
         // Inventar schließen
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            engine.getGameStateManager().setInventoryOpen(false);
+            engine.getGameSystemManager().setInventoryOpen(false);
             System.out.println("Inventory closed.");
             // Hier kannst du eine Aktion ausführen, wenn das Inventar geschlossen wird
         }

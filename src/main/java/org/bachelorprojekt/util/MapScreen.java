@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.ui.ConfirmSelection;
 import org.bachelorprojekt.util.json.jackson.Location;
-import org.bachelorprojekt.util.json.jackson.Map;
+import org.bachelorprojekt.util.json.jackson.Maps;
 import org.lwjgl.opengl.GL20;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class MapScreen extends ScreenAdapter {
 
 	private final ChapterScreen chapter;
 
-    private final Map map;
+    private final Maps map;
     private final String placeholder;
     private final Location playerLocation;
     private final List<Location> locations;
@@ -35,14 +35,13 @@ public class MapScreen extends ScreenAdapter {
 	private final float optionsX;
 	private final float optionsY;
 
-    public MapScreen(Engine engine, Map map, float startY, ChapterScreen parent) {
+    public MapScreen(Engine engine, Maps map, float startY, ChapterScreen parent) {
         this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 22);
         this.batch = engine.getBatch();
         this.engine = engine;
         this.map = map;
-        System.out.println(map.getLocationIds().get(0));
-        this.playerLocation = engine.getGameStateManager().getPlayer().getLocation();
-        this.locations = engine.getGameStateManager().getLocationsForChapter(map.getLocationIds());
+        this.playerLocation = engine.getGameSystemManager().getPlayer().getLocation();
+        this.locations = engine.getGameSystemManager().getCurrentChapter().getLocations();
         this.selectableLocations = locations.stream()
                 .filter(location -> !location.equals(playerLocation)) // Nur Orte außer Spielerstandort
                 .toList();
@@ -126,7 +125,7 @@ public class MapScreen extends ScreenAdapter {
                     () -> {
                         // Aktion für "Ja" -> Spieler wird zum ausgewählten Ort bewegt
 
-                        engine.getGameStateManager().setPlayerLocation(selectedLocation);
+                        engine.getGameSystemManager().setPlayerLocation(selectedLocation);
                         engine.popScreen();
                     },
                     () -> {
@@ -138,10 +137,9 @@ public class MapScreen extends ScreenAdapter {
 
         // Zurück zur Karte (ESC oder M drücken)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            engine.getGameStateManager().closeMap();
+            engine.getGameSystemManager().closeMap();
         }
     }
-
 
     private String updateLine(String line, int lineIndex) {
         // Prüfe, ob die nächste Zeile existiert
@@ -163,9 +161,4 @@ public class MapScreen extends ScreenAdapter {
 
         return line; // Keine Änderungen, wenn keine Location in dieser Zeile liegt
     }
-
-
-
-
-
 }
