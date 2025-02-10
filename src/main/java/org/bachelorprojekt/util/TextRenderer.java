@@ -32,7 +32,7 @@ public class TextRenderer {
         for (int i = 0; i < lines.length; i++) {
             layout.setText(font, lines[i]); // Breite und Höhe für die aktuelle Zeile berechnen
             float textWidth = layout.width; // Tatsächliche Breite des Textes
-            float centerX = 1920 - textWidth / 2f; // Horizontale Mitte berechnen
+            float centerX = 960 - textWidth / 2f; // Horizontale Mitte berechnen
 
             // Zeichne die aktuelle Zeile
             font.draw(batch, lines[i], centerX, centerY - (i * 30));

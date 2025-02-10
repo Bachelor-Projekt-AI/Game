@@ -39,13 +39,11 @@ public class ResolutionSelectMenu extends ScreenAdapter {
     private int selectedOption;
     private final Engine engine;
     private final TextRenderer textRenderer;
-    private final GameSystemManager gameStateManager;
     private final float startY;
 
     public ResolutionSelectMenu(Engine engine) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.gameStateManager = engine.getGameSystemManager();
         this.startY = 280;
         this.selectedOption = 0;
 		this.resStrings.add("Back");
