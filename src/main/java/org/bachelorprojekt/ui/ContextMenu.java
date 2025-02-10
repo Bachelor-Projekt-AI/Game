@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import org.bachelorprojekt.game.events.EventDispatcher;
 import org.bachelorprojekt.game.events.LocationReachEvent;
 import org.bachelorprojekt.game.events.NPCInteractionEvent;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+
+import java.util.Arrays;
+
+import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 import org.bachelorprojekt.util.json.jackson.NPC;
@@ -29,19 +34,32 @@ public class ContextMenu extends ScreenAdapter {
 
     private final float startY = 300;
     private final float menuX = 50; // X-Position des Hauptmenüs
-    private final float subMenuX = 350; // X-Position des Sub-Menüs
+    private final float subMenuX; // X-Position des Sub-Menüs
     private final BitmapFont contextMenuFont;
 
-    public ContextMenu(Engine engine) {
+	private final ChapterScreen chapter;
+
+    public ContextMenu(Engine engine, ChapterScreen chapter) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.contextMenuFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 16);
+        this.contextMenuFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 27);
+		this.chapter = chapter;
+
+		subMenuX = 95 + Arrays.stream(options).map(option -> {
+			GlyphLayout layout = new GlyphLayout();
+			layout.setText(contextMenuFont, "> " + option);
+			return (int) layout.width;
+		}).max(Integer::compare).get();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		if (chapter != null) {
+			chapter.draw();
+		}
 
         engine.getBatch().begin();
 
@@ -99,8 +117,8 @@ public class ContextMenu extends ScreenAdapter {
                 selectedSubOption = 0; // Sub-Menü auf Anfangsoption setzen
             }
 
-            // Menü schließen
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            // Abbrechen des Menüs
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.C)) {
                 engine.popScreen();
             }
         } else {
@@ -125,6 +143,10 @@ public class ContextMenu extends ScreenAdapter {
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
                 isSubMenuOpen = false;
             }
+
+			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+				engine.popScreen();
+			}
         }
     }
 
@@ -195,19 +217,5 @@ public class ContextMenu extends ScreenAdapter {
             default -> throw new IllegalStateException("Unerwarteter Wert: " + selectedOption);
         }
     }
-
-
-/*    private String[] generateSubOptionsForObjects() {
-        // Beispiel: Gegenstände in der aktuellen Umgebung
-        return engine.getGameStateManager().getCurrentLocationObjects()
-                .stream().map(Object::getName).toArray(String[]::new);
-    }*/
-
-    /*private String[] generateSubOptionsForExaminableObjects() {
-        // Beispiel: Untersuchbare Objekte in der Umgebung
-        return engine.getGameStateManager().getExaminableObjects()
-                .stream().map(Object::getName).toArray(String[]::new);
-    }*/
-
 
 }

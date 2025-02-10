@@ -13,21 +13,14 @@ public class TextRenderer {
     private long startTime; // Zeitstempel für animiertes Rendern
     private int currentCharIndex; // Der aktuelle Index des zuletzt gerenderten Buchstabens
 
-    private int screenWidth;
-    private int screenHeight;
+    private final int screenWidth = 1920;
+    private final int screenHeight = 1080;
 
     public TextRenderer(Engine engine) {
         this.font = engine.getFont();
         this.batch = engine.getBatch();
         this.startTime = TimeUtils.millis(); // Initialisierung des Zeitstempels
         this.currentCharIndex = 0; // Start bei 0
-        updateScreenDimensions(); // Bildschirmdimensionen initialisieren
-    }
-
-    // Methode zum Aktualisieren der Bildschirmdimensionen (z. B. bei Skalierung)
-    public void updateScreenDimensions() {
-        this.screenWidth = Gdx.graphics.getWidth();
-        this.screenHeight = Gdx.graphics.getHeight();
     }
 
     // Zeichnet Text an einer festen Pixelposition

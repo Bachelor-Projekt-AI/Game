@@ -2,7 +2,6 @@ package org.bachelorprojekt.util;
 
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
-import org.bachelorprojekt.game.events.EventDispatcher;
 import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.manager.LocationManager;
 import org.bachelorprojekt.manager.NpcManager;
@@ -10,7 +9,6 @@ import org.bachelorprojekt.manager.QuestManager;
 import org.bachelorprojekt.quest.QuestSystem;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Location;
-import org.bachelorprojekt.util.json.jackson.Item;
 
 public class GameSystemManager {
     private final Engine engine;
@@ -23,7 +21,7 @@ public class GameSystemManager {
     private Chapter currentChapter;
 
     /**
-     * Erstellt den GameStateManager mit Engine und Player
+     * Erstellt den GameSystemManager mit Engine und Player
      */
     public GameSystemManager(Engine engine, Player player, int chapterIndex) {
         this.engine = engine;
@@ -68,13 +66,14 @@ public class GameSystemManager {
         return isMapOpen;
     }
 
-    public void setMapOpen(boolean isOpen) {
-        isMapOpen = isOpen;
-        if (isOpen) {
-            engine.pushScreen(new MapScreen(engine, storyLoader.getMapManager().getMapById(currentChapter.getMapId()), 550, 550));
-        } else {
-            engine.popScreen();
-        }
+    public void closeMap() {
+        isMapOpen = false;
+        engine.popScreen();
+    }
+
+    public void openMapWithChapter(ChapterScreen chapter) {
+        isMapOpen = true;
+        engine.pushScreen(new MapScreen(engine, currentChapter.getMap(), 650, chapter));
     }
 
     /**

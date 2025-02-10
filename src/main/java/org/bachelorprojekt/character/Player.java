@@ -1,6 +1,5 @@
 package org.bachelorprojekt.character;
 
-import org.bachelorprojekt.quest.QuestSystem;
 import org.bachelorprojekt.util.json.jackson.Item;
 import org.bachelorprojekt.util.json.jackson.Location;
 
@@ -8,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private String name;
+    private final String name;
     private List<Item> inventory;
     private Location location;
 

@@ -57,7 +57,7 @@ public class Engine extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
+        font = loadFont("fonts/PressStart2P-vaV7.ttf", 26);
         viewport = new FitViewport(1920, 1080);
         viewport.apply();
         textRenderer = new TextRenderer(this);
@@ -67,7 +67,11 @@ public class Engine extends Game {
 
     @Override
     public void resize(int width, int height) {
+		Gdx.graphics.setWindowedMode(width, height);
         viewport.update(width, height, true);
+		for (Screen screen : screenStack) {
+			screen.resize(width, height);
+		}
     }
 
     @Override
@@ -122,16 +126,12 @@ public class Engine extends Game {
      */
     public void onPlayerNameConfirmed(String playerName, int selectedSlot) {
 
-        // TODO change this if loading save game is possible
-        int chapterIndex = 1;
-
         System.out.println("Player name confirmed: " + playerName);
 
         // Neues Spiel starten
         Player player = new Player(playerName);
 
         pushScreen(new LoadingScreen(this, player, selectedSlot));
-        //setGameSystemManager(new GameSystemManager(this, player, chapterIndex));
     }
 
 
