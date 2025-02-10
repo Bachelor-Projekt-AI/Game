@@ -1,8 +1,10 @@
 package org.bachelorprojekt.util;
 
+import org.bachelorprojekt.chapter.ChapterSystem;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.inventory.InventoryScreen;
+import org.bachelorprojekt.manager.ChapterManager;
 import org.bachelorprojekt.manager.LocationManager;
 import org.bachelorprojekt.manager.NpcManager;
 import org.bachelorprojekt.manager.QuestManager;
@@ -15,10 +17,10 @@ public class GameSystemManager {
     private final Player player;
     private final StoryLoader storyLoader;
     private final QuestSystem questSystem;
+    private final ChapterSystem chapterSystem;
 
     private boolean isInventoryOpen = false;
     private boolean isMapOpen = false;
-    private Chapter currentChapter;
 
     /**
      * Erstellt den GameSystemManager mit Engine und Player
@@ -28,12 +30,10 @@ public class GameSystemManager {
         this.player = player;
         this.storyLoader = new StoryLoader(); // Lädt alle Story-Daten
         this.questSystem = new QuestSystem(storyLoader.getQuestManager().getAllQuests(), player);
+        this.chapterSystem = new ChapterSystem(engine, chapterIndex, this);
         questSystem.startQuest(1);
         questSystem.startQuest(2);
-        //questSystem.startQuest(3);
-        // Setzt das erste Kapitel
-        this.currentChapter = storyLoader.getChapterManager().getChapterById(chapterIndex);
-
+        questSystem.startQuest(3);
     }
 
     /**
@@ -73,7 +73,8 @@ public class GameSystemManager {
 
     public void openMapWithChapter(ChapterScreen chapter) {
         isMapOpen = true;
-        engine.pushScreen(new MapScreen(engine, currentChapter.getMap(), 650, chapter));
+        // TODO auslagern in chatperSystem!
+        engine.pushScreen(new MapScreen(engine, chapterSystem.getCurrentChapter().getMap(), 650, chapter));
     }
 
     /**
@@ -116,10 +117,19 @@ public class GameSystemManager {
         return storyLoader.getNpcManager();
     }
 
+    public ChapterManager getChapterManager() {
+        return storyLoader.getChapterManager();
+    }
+
     /**
      * Gibt die aktuelle Kapitel-Instanz zurück.
      */
+    // TODO auslagern in chatperSystem!
     public Chapter getCurrentChapter() {
-        return currentChapter;
+        return chapterSystem.getCurrentChapter();
+    }
+
+    public ChapterSystem getChapterSystem() {
+        return chapterSystem;
     }
 }

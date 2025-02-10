@@ -84,6 +84,9 @@ public class Engine extends Game {
     @Override
     public void render() {
         super.render();
+        if (gameSystemManager != null) {
+            gameSystemManager.getChapterSystem().update();
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.ui.ContextMenu;
 import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.util.Engine;
+import org.bachelorprojekt.util.GameSystemManager;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Location;
 import org.bachelorprojekt.util.json.jackson.Quest;
@@ -25,10 +26,10 @@ public class ChapterScreen extends ScreenAdapter {
     private final List<Location> locations; // Locations aus Chapter
     private final BitmapFont questFont;
 
-    public ChapterScreen(Engine engine, Chapter chapter) {
+    public ChapterScreen(Engine engine, Chapter chapter, GameSystemManager gm) {
         this.engine = engine;
         this.chapter = chapter;
-        this.player = engine.getGameSystemManager().getPlayer();
+        this.player = gm.getPlayer();
         questFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 27);
 
         System.out.println(chapter.getLocationIds().get(0));

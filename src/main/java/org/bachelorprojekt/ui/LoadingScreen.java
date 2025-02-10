@@ -27,9 +27,6 @@ public class LoadingScreen extends ScreenAdapter {
                 Gdx.app.postRunnable(() -> {
                     engine.setGameSystemManager(gameSystemManager);
                     loadingComplete = true;
-
-                    // Jetzt erst den ChapterScreen pushen
-                    engine.pushScreen(new ChapterScreen(engine, gameSystemManager.getCurrentChapter()));
                 });
 
             } catch (Exception e) {
