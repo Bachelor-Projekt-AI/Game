@@ -67,6 +67,8 @@ public class Engine extends Game {
         viewport.apply();
         textRenderer = new TextRenderer(this);
 
+        Gdx.graphics.setForegroundFPS(60);
+
         pushScreen(new Menu(this, new String[]{"Play", "Options", "Exit"}));
     }
 
