@@ -6,5 +6,13 @@
       "quest_ids": [1, 2, 3],
       "location_ids": [1, 2, 3, 4],
       "map_id": 1
-    }
+    },
+  {
+    "id": 2,
+    "title": "The Call to Adventure 2",
+    "description": "The protagonist starts in a small village. The elder reveals a prophecy.",
+    "quest_ids": [4],
+    "location_ids": [1, 2, 3, 4],
+    "map_id": 1
+  }
   ]
