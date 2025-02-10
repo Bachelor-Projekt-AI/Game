@@ -47,6 +47,11 @@ public class Engine extends Game {
         }
     }
 
+    public void quitToMenu() {
+        clearScreens();
+        pushScreen(new Menu(this, new String[]{"Play", "Options", "Exit"}));
+    }
+
     public void clearScreens() {
         while (!screenStack.isEmpty()) {
             Screen screen = screenStack.pop();

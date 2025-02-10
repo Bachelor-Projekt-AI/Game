@@ -66,8 +66,7 @@ public class PauseMenu extends ScreenAdapter {
                     saveGame();
                     break;
                 case 2: // Quit to Main Menu
-                    engine.clearScreens(); // Entferne alle Screens
-                    engine.pushScreen(new Menu(engine, new String[]{"Play", "Options", "Exit"})); // Zeige das Hauptmenü
+                    engine.quitToMenu();
                     break;
             }
         }
