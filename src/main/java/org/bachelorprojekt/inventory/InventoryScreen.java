@@ -40,7 +40,7 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
     public static int getMaxCharsPerLine(BitmapFont font) {
-        float screenWidth = Gdx.graphics.getWidth(); // Fensterbreite
+        float screenWidth = 1920;
         GlyphLayout layout = new GlyphLayout(font, "W"); // Ein Zeichen ausmessen
         float charWidth = layout.width; // Breite eines Zeichens
 
@@ -48,7 +48,7 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
     public static int getMaxLinesOnScreen(BitmapFont font) {
-        float screenHeight = Gdx.graphics.getHeight();
+        float screenHeight = 1080;
         float lineHeight = font.getLineHeight(); // Höhe eines einzelnen Zeichens
         return (int) (screenHeight / lineHeight);
     }
@@ -61,7 +61,7 @@ public class InventoryScreen extends ScreenAdapter {
         batch.begin();
 
         String[] bp = renderInventory(player, getMaxCharsPerLine(font));
-        yPosition = Gdx.graphics.getHeight() - 20;
+        yPosition = 1060;
         for (String l : bp) {
             font.draw(batch, l == null ? "" : l, 20, yPosition);
             yPosition -= 40;
