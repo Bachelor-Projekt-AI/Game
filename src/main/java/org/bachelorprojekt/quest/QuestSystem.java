@@ -69,34 +69,25 @@ public class QuestSystem implements EventListener {
         List<QuestInstance> relevantQuests = questInstancesByEvent.get(event.getClass());
 
         if (relevantQuests != null) {
-            List<QuestInstance> toRemove = new ArrayList<>();
+            Iterator<QuestInstance> iterator = relevantQuests.iterator();
 
-            for (QuestInstance questInstance : relevantQuests) {
+            while (iterator.hasNext()) {
+                QuestInstance questInstance = iterator.next();
                 if (!questInstance.isCompleted() && questInstance.getTrigger().isTriggered(event)) {
                     completeQuest(questInstance);
-                    toRemove.add(questInstance);
-                }
-            }
-
-            // Entferne Quests aus der Map
-            if (!toRemove.isEmpty()) {
-                relevantQuests.removeAll(toRemove);
-
-                // Falls keine aktiven Quests mehr für dieses Event existieren, lösche den Key aus der Map
-                if (relevantQuests.isEmpty()) {
-                    questInstancesByEvent.remove(event.getClass());
-                    // TODO maybe dont do this because  all listeners are registered even tho there are no active quests
-                    EventDispatcher.unregisterListener(event.getClass(), this);
+                    iterator.remove(); // ✅ Sicheres Entfernen während Iteration
                 }
             }
         }
     }
 
 
+
     private void completeQuest(QuestInstance questInstance) {
         questInstance.complete();
         giveQuestRewards(questInstance);
         completedQuests.add(questInstance);
+
     }
 
 
