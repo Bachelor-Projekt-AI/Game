@@ -11,8 +11,10 @@ public class Main extends ApplicationAdapter {
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Bachelorprojekt");
-        config.setWindowedMode(800, 600);
-        config.setResizable(false);
+        config.setWindowedMode(1920, 1080);
+        config.setWindowSizeLimits(1920, 1080, -1, -1);
+        config.setFullscreenMode(null);
+        config.setResizable(true);
 
         new Lwjgl3Application(new Engine(), config);
     }

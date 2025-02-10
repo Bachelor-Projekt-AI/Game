@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "Talk to the blacksmith",
+    "description": "Collect supplies from the villagers to prepare for the journey.",
+    "objectives": [
+      "Talk to the blacksmith"
+    ],
+    "rewards_item_ids": [
+      2
+    ],
+    "npc_id": 1,
+    "type": "NPC_INTERACTION"
+  },
+  {
+    "id": 2,
+    "title": "Gather herbs from the healer",
+    "description": "Collect supplies from the villagers to prepare for the journey.",
+    "objectives": [
+      "Gather herbs from the healer"
+    ],
+    "rewards_item_ids": [
+      1
+    ],
+    "npc_id": 2,
+    "type": "NPC_INTERACTION"
+  },
+  {
+    "id": 3,
+    "title": "Get rations from the innkeeper",
+    "description": "Collect supplies from the villagers to prepare for the journey.",
+    "objectives": [
+      "Get rations from the innkeeper"
+    ],
+    "rewards_item_ids": [
+      3
+    ],
+    "npc_id": 3,
+    "type": "NPC_INTERACTION"
+  },
+  {
+    "id": 4,
+    "title": "Gather Healing Herbs",
+    "description": "Find and collect 5 healing herbs in the forest.",
+    "objectives": [
+      "Find and collect 5 healing herbs in the forest."
+    ],
+    "rewards_item_ids": [
+      1
+    ],
+    "required_item_id": 10,
+    "required_amount": 5,
+    "type": "COLLECT_ITEM"
+  },
+  {
+    "id": 5,
+    "title": "Reach the Ancient Ruins",
+    "description": "Travel to the ancient ruins to uncover their secrets.",
+    "objectives": [
+      "Travel to the ancient ruins"
+    ],
+    "rewards_item_ids": [
+      3
+    ],
+    "target_location_id": 2,
+    "type": "VISIT_LOCATION"
+  }
+]
