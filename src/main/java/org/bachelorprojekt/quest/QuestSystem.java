@@ -69,24 +69,36 @@ public class QuestSystem implements EventListener {
         List<QuestInstance> relevantQuests = questInstancesByEvent.get(event.getClass());
 
         if (relevantQuests != null) {
-            Iterator<QuestInstance> iterator = relevantQuests.iterator();
-            while (iterator.hasNext()) {
-                QuestInstance questInstance = iterator.next();
+            List<QuestInstance> toRemove = new ArrayList<>();
 
+            for (QuestInstance questInstance : relevantQuests) {
                 if (!questInstance.isCompleted() && questInstance.getTrigger().isTriggered(event)) {
                     completeQuest(questInstance);
-                    iterator.remove();
-                    completedQuests.add(questInstance);
+                    toRemove.add(questInstance);
+                }
+            }
+
+            // Entferne Quests aus der Map
+            if (!toRemove.isEmpty()) {
+                relevantQuests.removeAll(toRemove);
+
+                // Falls keine aktiven Quests mehr für dieses Event existieren, lösche den Key aus der Map
+                if (relevantQuests.isEmpty()) {
+                    questInstancesByEvent.remove(event.getClass());
+                    // TODO maybe dont do this because  all listeners are registered even tho there are no active quests
+                    EventDispatcher.unregisterListener(event.getClass(), this);
                 }
             }
         }
     }
+
 
     private void completeQuest(QuestInstance questInstance) {
         questInstance.complete();
         giveQuestRewards(questInstance);
         completedQuests.add(questInstance);
     }
+
 
     /**
      * Gibt dem Spieler automatisch die Belohnungen nach Abschluss der Quest.
@@ -106,5 +118,9 @@ public class QuestSystem implements EventListener {
 
     public List<QuestInstance> getCompletedQuests() {
         return new ArrayList<>(completedQuests);
+    }
+
+    public List<QuestInstance> getActiveQuests() {
+        return new ArrayList<>(questInstancesByEvent.values().stream().flatMap(List::stream).toList());
     }
 }

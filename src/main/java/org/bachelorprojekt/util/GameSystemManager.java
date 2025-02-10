@@ -30,7 +30,7 @@ public class GameSystemManager {
         this.questSystem = new QuestSystem(storyLoader.getQuestManager().getAllQuests(), player);
         questSystem.startQuest(1);
         questSystem.startQuest(2);
-        questSystem.startQuest(3);
+        //questSystem.startQuest(3);
         // Setzt das erste Kapitel
         this.currentChapter = storyLoader.getChapterManager().getChapterById(chapterIndex);
 
