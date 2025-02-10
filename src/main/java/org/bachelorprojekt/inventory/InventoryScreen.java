@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.json.jackson.Item;
@@ -14,6 +15,8 @@ import org.lwjgl.opengl.GL20;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.bachelorprojekt.util.Engine.getSpecialFont;
 
 public class InventoryScreen extends ScreenAdapter {
     private SpriteBatch batch;
@@ -26,7 +29,12 @@ public class InventoryScreen extends ScreenAdapter {
     public InventoryScreen(Engine engine) {
         this.batch = engine.getBatch();
         //this.font = engine.getFont();
-        this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 22);
+
+        //this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 22);
+
+        this.font = getSpecialFont();
+
+
         this.player = engine.getGameSystemManager().getPlayer();
         this.engine = engine;
     }
@@ -91,6 +99,7 @@ public class InventoryScreen extends ScreenAdapter {
         final List<Item> items = player.getInventory();
         selectedIndex = items.isEmpty() ? -1 : selectedIndex == -1 ? 0 : selectedIndex;
         Item selectedItem = selectedIndex >= 0 ? items.get(selectedIndex) : null;
+
         final String[] backpack = renderBackpack(items, COMPONENT_WIDTH, mainHeight);
         final String[] equipment = renderEquipment(items, COMPONENT_WIDTH, mainHeight);
         final String[] item = renderItem(selectedItem, COMPONENT_WIDTH, totalLines);
@@ -111,7 +120,7 @@ public class InventoryScreen extends ScreenAdapter {
             counter++;
         }
 
-        for (int i = 0; i < stats.length; i++) {
+        for (int i = 0; i < description.length; i++) {
             inventory[counter] = description[i] + item[counter];
             counter++;
         }
@@ -123,14 +132,15 @@ public class InventoryScreen extends ScreenAdapter {
 
         // Header & Border
         String borderLine = "*".repeat(BACKPACK_WIDTH);
-        String headerLine = "*-Backpack" + "-".repeat(BACKPACK_WIDTH - 9) + "*";
+        String headerText = "*-Backpack";
+        String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length()) + "*";
 
         // Template dynamisch generieren
         List<String> template = new ArrayList<>();
         template.add(headerLine);
 
         for (int i = 0; i < HEIGHT; i++) {
-            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 8) + " |");
+            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 10) + " |");
         }
 
         template.add(borderLine);
@@ -142,8 +152,8 @@ public class InventoryScreen extends ScreenAdapter {
         for (int i = 0; i < HEIGHT; i++) {
             String prefix = (i == selectedIndex) ? "> " : "  ";
             String itemName = i < items.size() ? items.get(i).getName() : ""; // Falls kein Item, dann leer
-            itemName = truncateString(itemName, BACKPACK_WIDTH - 4);
-            String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 4);
+            itemName = truncateString(itemName, BACKPACK_WIDTH - 5);
+            String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 5);
             rendered[i + 1] = "| " + prefix + paddedItem + " |"; // +1 weil Index 0 der Header ist
         }
 
@@ -155,14 +165,15 @@ public class InventoryScreen extends ScreenAdapter {
 
         // Header & Border
         String borderLine = "*".repeat(BACKPACK_WIDTH);
-        String headerLine = "*-Equipment" + "-".repeat(BACKPACK_WIDTH - 12) + "*";
+        String headerText = "*-Equipment";
+        String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length()) + "*";
 
         // Template dynamisch generieren
         List<String> template = new ArrayList<>();
         template.add(headerLine);
 
         for (int i = 0; i < HEIGHT; i++) {
-            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 8) + " |");
+            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 10) + " |");
         }
 
         template.add(borderLine);
@@ -173,8 +184,8 @@ public class InventoryScreen extends ScreenAdapter {
         // Slots mit Items füllen
         for (int i = 0; i < HEIGHT; i++) {
             String itemName = i < items.size() ? items.get(i).getName() : "";
-            itemName = truncateString(itemName, BACKPACK_WIDTH - 4);
-            String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 4);
+            itemName = truncateString(itemName, BACKPACK_WIDTH - 5);
+            String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 5);
             rendered[i + 1] = "| " + paddedItem + " |"; // +1 weil Index 0 der Header ist
         }
 

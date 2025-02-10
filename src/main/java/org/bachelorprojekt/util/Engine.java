@@ -100,9 +100,39 @@ public class Engine extends Game {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(fontPath));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = fontSize; // Schriftgröße setzen
+        parameter.mono = true; // Monospace-Schriftart verwenden
         BitmapFont customFont = generator.generateFont(parameter);
+        setAllFixedWidth(customFont); // Alle Zeichen auf gleiche Breite setzen
         generator.dispose(); // Generator freigeben, um Speicherlecks zu vermeiden
         return customFont;
+    }
+
+    public static void setAllFixedWidth(BitmapFont font) {
+        BitmapFont.BitmapFontData data = font.getData();
+        int maxAdvance = 0;
+        for (int index = 0, end = 65536; index < end; index++) {
+            BitmapFont.Glyph g = data.getGlyph((char) index);
+            if (g != null && g.xadvance > maxAdvance) maxAdvance = g.xadvance;
+        }
+        for (int index = 0, end = 65536; index < end; index++) {
+            BitmapFont.Glyph g = data.getGlyph((char) index);
+            if (g == null) continue;
+            g.xoffset += (maxAdvance - g.xadvance) / 2;
+            g.xadvance = maxAdvance;
+            g.kerning = null;
+            g.fixedWidth = true;
+        }
+    }
+
+    public static BitmapFont getSpecialFont() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/JetBrainsMono-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]}|;:'\",<.>/?\\`~■"; // Hier alle benötigten Zeichen einfügen
+        parameter.size = 26;
+        BitmapFont font = generator.generateFont(parameter);
+        setAllFixedWidth(font);
+        generator.dispose();
+        return font;
     }
 
     public BitmapFont getFont() {

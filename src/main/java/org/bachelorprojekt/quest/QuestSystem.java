@@ -87,7 +87,6 @@ public class QuestSystem implements EventListener {
         questInstance.complete();
         giveQuestRewards(questInstance);
         completedQuests.add(questInstance);
-
     }
 
 
