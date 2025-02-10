@@ -17,8 +17,8 @@ public class RenderableElement implements IRenderable {
 
     @Override
     public void render(SpriteBatch batch, BitmapFont font) {
-        float x = Gdx.graphics.getWidth() * xPercent / 100;
-        float y = Gdx.graphics.getHeight() * (1 - yPercent / 100);
+        float x = 1920 * xPercent / 100;
+        float y = 1080 * (1 - yPercent / 100);
         font.draw(batch, text, x, y);
     }
 }
