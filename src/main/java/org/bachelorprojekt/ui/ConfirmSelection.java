@@ -3,6 +3,8 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+
+import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
@@ -15,6 +17,7 @@ public class ConfirmSelection extends ScreenAdapter {
     private final Runnable onCancel; // Aktion für "Nein"
     private int selectedOption; // 0 = Yes, 1 = No
     private final float startY;
+	private final ChapterScreen chapter;
 
     public ConfirmSelection(Engine engine, String message, Runnable onConfirm, Runnable onCancel) {
         this.engine = engine;
@@ -24,12 +27,28 @@ public class ConfirmSelection extends ScreenAdapter {
         this.onCancel = onCancel;
         this.selectedOption = 0; // Standardmäßig "Ja" ausgewählt
         this.startY = 300;
+		this.chapter = null;
+    }
+
+    public ConfirmSelection(Engine engine, String message, Runnable onConfirm, Runnable onCancel, ChapterScreen chapter) {
+        this.engine = engine;
+        this.textRenderer = engine.getTextRenderer();
+        this.message = message;
+        this.onConfirm = onConfirm;
+        this.onCancel = onCancel;
+        this.selectedOption = 0; // Standardmäßig "Ja" ausgewählt
+        this.startY = 300;
+		this.chapter = chapter;
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		if (chapter != null) {
+			chapter.draw();
+		}
 
         engine.getBatch().begin();
 

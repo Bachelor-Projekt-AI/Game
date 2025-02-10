@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+
+import java.util.Arrays;
+
+import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 import org.bachelorprojekt.util.json.jackson.NPC;
@@ -29,19 +34,32 @@ public class ContextMenu extends ScreenAdapter {
 
     private final float startY = 300;
     private final float menuX = 50; // X-Position des Hauptmenüs
-    private final float subMenuX = 350; // X-Position des Sub-Menüs
+    private final float subMenuX; // X-Position des Sub-Menüs
     private final BitmapFont contextMenuFont;
 
-    public ContextMenu(Engine engine) {
+	private final ChapterScreen chapter;
+
+    public ContextMenu(Engine engine, ChapterScreen chapter) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.contextMenuFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 16);
+        this.contextMenuFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 27);
+		this.chapter = chapter;
+
+		subMenuX = 95 + Arrays.stream(options).map(option -> {
+			GlyphLayout layout = new GlyphLayout();
+			layout.setText(contextMenuFont, "> " + option);
+			return (int) layout.width;
+		}).max(Integer::compare).get();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		if (chapter != null) {
+			chapter.draw();
+		}
 
         engine.getBatch().begin();
 

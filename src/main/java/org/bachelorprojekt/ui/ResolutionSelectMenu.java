@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameStateManager;
@@ -28,16 +29,13 @@ public class ResolutionSelectMenu extends ScreenAdapter {
 	}
 
     private final Resolution[] resolutions = {
-		new Resolution(640, 360),
-		new Resolution(768, 432),
-		new Resolution(1024, 576),
 		new Resolution(1280, 720),
 		new Resolution(1536, 864),
 		new Resolution(1920, 1080),
 		new Resolution(2560, 1440),
 		new Resolution(3840, 2160),
 	};
-	private List<String> resStrings = List.of(this.resolutions).stream().map(Object::toString).collect(java.util.stream.Collectors.toList());
+	private List<String> resStrings = List.of(this.resolutions).stream().map(Object::toString).collect(Collectors.toList());
     private int selectedOption;
     private final Engine engine;
     private final TextRenderer textRenderer;
@@ -101,8 +99,6 @@ public class ResolutionSelectMenu extends ScreenAdapter {
     private void handleResolutionSelection(int selection) {
 		int width = resolutions[selection].width;
 		int height = resolutions[selection].height;
-        // viewport.update(width, height, true);
-		// screenStack.peek().resize(width, height);
 		engine.resize(width, height);
     }
 

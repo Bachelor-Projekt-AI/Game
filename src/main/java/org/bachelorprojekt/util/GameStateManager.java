@@ -1,7 +1,9 @@
 package org.bachelorprojekt.util;
 
 import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.json.jackson.*;
+
 import org.bachelorprojekt.inventory.InventoryScreen;
 import org.bachelorprojekt.util.json.JsonLoader;
 
@@ -128,10 +130,6 @@ public class GameStateManager {
         return npcs.values().stream().filter(npc -> npc.getLocationId() == locationId).toList();
     }
 
-
-
-
-
     public Player getPlayer() {
         return player;
     }
@@ -153,13 +151,14 @@ public class GameStateManager {
         return isMapOpen;
     }
 
-    public void setMapOpen(boolean isOpen) {
-        isMapOpen = isOpen;
-        if (isOpen) {
-            engine.pushScreen(new MapScreen(engine, maps.get(currentChapterIndex), 550, 550));
-        } else {
-            engine.popScreen(); // Kehre zum vorherigen Screen zurück (z. B. Kapitel)
-        }
+	public void closeMap() {
+		isMapOpen = false;
+		engine.popScreen();
+	}
+
+    public void openMapWithChapter(ChapterScreen chapter) {
+        isMapOpen = true;
+        engine.pushScreen(new MapScreen(engine, maps.get(currentChapterIndex), 650, chapter));
     }
 
     public void setPlayerLocation(Location location) {

@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.ui.ConfirmSelection;
 import org.bachelorprojekt.util.json.jackson.Location;
 import org.bachelorprojekt.util.json.jackson.Map;
@@ -17,6 +20,8 @@ public class MapScreen extends ScreenAdapter {
     private final SpriteBatch batch;
     private final Engine engine;
 
+	private final ChapterScreen chapter;
+
     private final Map map;
     private final String placeholder;
     private final Location playerLocation;
@@ -27,8 +32,11 @@ public class MapScreen extends ScreenAdapter {
     private final float startX;
     private final float startY;
 
-    public MapScreen(Engine engine, Map map, float startX, float startY) {
-        this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 16);
+	private final float optionsX;
+	private final float optionsY;
+
+    public MapScreen(Engine engine, Map map, float startY, ChapterScreen parent) {
+        this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 22);
         this.batch = engine.getBatch();
         this.engine = engine;
         this.map = map;
@@ -42,8 +50,17 @@ public class MapScreen extends ScreenAdapter {
         this.placeholder = map.getPlaceholder();
 
         System.out.println("Player location: " + playerLocation.getName());
-        this.startX = startX;
+
+		int longest = map.getLayout().stream().map(this::getStringLengthPx).max(Integer::compare).get();
+		this.startX = (1920 - longest) / 2;
         this.startY = startY;
+
+		this.chapter = parent;
+
+		float optionsWidth = selectableLocations.stream().map(loc -> getStringLengthPx(loc.getName())).reduce(Integer::sum).get()
+			+ (selectableLocations.size() - 1) * 75;
+		this.optionsX = (1920 - optionsWidth) / 2;
+        this.optionsY = startY - map.getLayout().size() * 25 - 50; // Position unterhalb der Karte
     }
 
     @Override
@@ -51,33 +68,43 @@ public class MapScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		if(chapter != null) {
+			chapter.draw();
+		}
+
         batch.begin();
         // Zeichne die Karte Zeile für Zeile
         for (int i = 0; i < map.getLayout().size(); i++) {
             String line = map.getLayout().get(i);
             String updatedLine = updateLine(line, i);
-            font.draw(batch, updatedLine, startX, startY - i * 20);
+            font.draw(batch, updatedLine, startX, startY - i * 25);
         }
 
         // Zeichne die auswählbaren Orte unter der Karte
-        float optionsY = startY - map.getLayout().size() * 20 - 30; // Position unterhalb der Karte
+		float currentX = optionsX;
         for (int i = 0; i < selectableLocations.size(); i++) {
             Location location = selectableLocations.get(i);
-            String locationName = location.getName();
+            String locationText = location.getName();
 
             // Markiere die aktuell ausgewählte Location gelb
             if (i == selectedLocationIndex) {
                 font.setColor(1, 1, 0, 1); // Gelb
-                font.draw(batch, "> " + locationName, startX + (i * 150), optionsY); // Abstand zwischen den Namen
-                font.setColor(1, 1, 1, 1); // Zurücksetzen auf Weiß
-            } else {
-                font.draw(batch, locationName, startX + (i * 150), optionsY);
+				locationText = "> " + locationText;
             }
+			font.draw(batch, locationText, currentX, optionsY);
+			font.setColor(1, 1, 1, 1); // Zurücksetzen auf Weiß
+			currentX += 75 + getStringLengthPx(location.getName());
         }
         batch.end();
 
         handleInput();
     }
+
+	private int getStringLengthPx(String text) {
+			GlyphLayout layout = new GlyphLayout();
+			layout.setText(font, text);
+			return (int) layout.width;
+	}
 
     private void handleInput() {
         // Navigation zwischen den auswählbaren Orten
@@ -104,13 +131,14 @@ public class MapScreen extends ScreenAdapter {
                     },
                     () -> {
                         // Aktion für "Nein" -> Zurück zur Karte
-                    }
+                    },
+					chapter
             ));
         }
 
         // Zurück zur Karte (ESC oder M drücken)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            engine.popScreen();
+            engine.getGameStateManager().closeMap();
         }
     }
 

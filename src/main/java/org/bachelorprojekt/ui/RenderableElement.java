@@ -1,32 +1,24 @@
 package org.bachelorprojekt.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RenderableElement implements IRenderable {
-    private final int zoneX;
-    private final int zoneY;
+    private final float xPercent;
+    private final float yPercent;
     private final String text;
 
-    public RenderableElement(int zoneX, int zoneY, String text) {
-        this.zoneX = zoneX;
-        this.zoneY = zoneY;
+    public RenderableElement(float xPercent, float yPercent, String text) {
+        this.xPercent = xPercent;
+        this.yPercent = yPercent;
         this.text = text;
-    }
-
-    public int getZoneX() {
-        return zoneX;
-    }
-
-    public int getZoneY() {
-        return zoneY;
     }
 
     @Override
     public void render(SpriteBatch batch, BitmapFont font) {
-        // Position basierend auf Zonen berechnen
-        float x = zoneX * 100; // Beispiel: Jede Zone ist 100 Pixel breit
-        float y = 800 - (zoneY * 100); // Beispiel: Jede Zone ist 100 Pixel hoch (invertierte Y-Achse)
+        float x = Gdx.graphics.getWidth() * xPercent / 100;
+        float y = Gdx.graphics.getHeight() * (1 - yPercent / 100);
         font.draw(batch, text, x, y);
     }
 }

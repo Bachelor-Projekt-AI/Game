@@ -60,7 +60,7 @@ public class Engine extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        font = loadFont("fonts/PressStart2P-vaV7.ttf", 24);
+        font = loadFont("fonts/PressStart2P-vaV7.ttf", 26);
         viewport = new FitViewport(1920, 1080);
         viewport.apply();
         textRenderer = new TextRenderer(this);
@@ -72,7 +72,9 @@ public class Engine extends Game {
     public void resize(int width, int height) {
 		Gdx.graphics.setWindowedMode(width, height);
         viewport.update(width, height, true);
-		screenStack.peek().resize(width, height);
+		for (Screen screen : screenStack) {
+			screen.resize(width, height);
+		}
     }
 
     @Override

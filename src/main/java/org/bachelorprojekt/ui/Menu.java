@@ -30,10 +30,10 @@ public class Menu extends Scene {
         this.viewport = new FitViewport(1920, 1080);
         this.viewport.apply();
 
-        addRenderableElement(new RenderableElement(4, 1, "Lights of Akahzan")); // Titel
+        addRenderableElement(new RenderableElement(4, 40, "Lights of Akahzan")); // Titel
         for (int i = 0; i < menuOptions.length; i++) {
             final int index = i; // Benötigt für Lambda
-            addRenderableElement(new RenderableElement(4, 2 + i, menuOptions[i]) {
+            addRenderableElement(new RenderableElement(4, 55 + 10*i, menuOptions[i]) {
                 @Override
                 public void render(SpriteBatch batch, BitmapFont font) {
                     if (index == selectedOption) {
