@@ -27,7 +27,7 @@ public class GameSystemManager {
         this.engine = engine;
         this.player = player;
         this.storyLoader = new StoryLoader(); // Lädt alle Story-Daten
-        this.questSystem = new QuestSystem(storyLoader.getQuestManager().getAllQuests());
+        this.questSystem = new QuestSystem(storyLoader.getQuestManager().getAllQuests(), player);
         questSystem.startQuest(1);
         questSystem.startQuest(2);
         questSystem.startQuest(3);

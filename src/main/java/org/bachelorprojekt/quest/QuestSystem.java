@@ -1,8 +1,10 @@
 package org.bachelorprojekt.quest;
 
+import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.GameEvent;
 import org.bachelorprojekt.game.events.EventDispatcher;
 import org.bachelorprojekt.game.events.EventListener;
+import org.bachelorprojekt.util.json.jackson.Item;
 import org.bachelorprojekt.util.json.jackson.Quest;
 
 import java.util.*;
@@ -11,12 +13,14 @@ public class QuestSystem implements EventListener {
     private final Map<Class<? extends GameEvent>, List<QuestInstance>> questInstancesByEvent = new HashMap<>();
     private final List<QuestInstance> completedQuests = new ArrayList<>();
     private final Map<Integer, Quest> questRepository = new HashMap<>();
+    private final Player player;
 
     /**
      * Initialisiert das Quest-System mit allen verfügbaren Quests.
      */
-    public QuestSystem(List<Quest> allQuests) {
+    public QuestSystem(List<Quest> allQuests, Player player) {
         loadAllQuests(allQuests);
+        this.player = player;
     }
 
     /**
@@ -80,6 +84,24 @@ public class QuestSystem implements EventListener {
 
     private void completeQuest(QuestInstance questInstance) {
         questInstance.complete();
+        giveQuestRewards(questInstance);
+        completedQuests.add(questInstance);
+    }
+
+    /**
+     * Gibt dem Spieler automatisch die Belohnungen nach Abschluss der Quest.
+     */
+    private void giveQuestRewards(QuestInstance questInstance) {
+        List<Item> rewardItems = questInstance.getQuestData().getRewardItems();
+
+        if (!rewardItems.isEmpty()) {
+            for (Item item : rewardItems) {
+                player.addToInventory(item);
+                System.out.println("Belohnung erhalten: " + item.getName());
+            }
+        } else {
+            System.out.println("Keine Belohnungen für diese Quest.");
+        }
     }
 
     public List<QuestInstance> getCompletedQuests() {
