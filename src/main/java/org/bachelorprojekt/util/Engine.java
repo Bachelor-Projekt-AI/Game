@@ -126,16 +126,12 @@ public class Engine extends Game {
      */
     public void onPlayerNameConfirmed(String playerName, int selectedSlot) {
 
-        // TODO change this if loading save game is possible
-        int chapterIndex = 1;
-
         System.out.println("Player name confirmed: " + playerName);
 
         // Neues Spiel starten
         Player player = new Player(playerName);
 
         pushScreen(new LoadingScreen(this, player, selectedSlot));
-        //setGameSystemManager(new GameSystemManager(this, player, chapterIndex));
     }
 
 
