@@ -54,40 +54,45 @@ public class ChapterScreen extends ScreenAdapter {
 
         // Kapitel-Info anzeigen
         questFont.draw(engine.getBatch(), "Chapter: " + chapter.getTitle(), 50, 1020);
-        questFont.draw(engine.getBatch(), chapter.getDescription(), 50, 975);
+		List<String> description = splitAtSpace(chapter.getDescription(), 78); // 1 char is 16 wide. Quests start at 1352, giving us 1252/16 = 78.25 chars
+		int descriptionLine = 0;
+		for (String line : description) {
+			questFont.draw(engine.getBatch(), line, 50, 975 - descriptionLine++ * 30);
+		}
 
         // Dynamisch geladene Locations anzeigen
-        questFont.draw(engine.getBatch(), "Nearby locations:", 50, 930);
-        int locationOffset = 0;
+		int locationsOffset = 960 - descriptionLine * 30;
+        questFont.draw(engine.getBatch(), "Nearby locations:", 50, locationsOffset);
+        int locationLine = 0;
         for (Location location : locations) {
             questFont.draw(engine.getBatch(),
                     "- " + location.getName() + ": " + location.getDescription(),
-                    50, 900 - (locationOffset++ * 30));
+                    50, locationsOffset - (++locationLine * 30));
         }
 
         // **Dynamisch die aktiven Quests abrufen!**
         List<QuestInstance> activeQuests = engine.getGameSystemManager().getQuestSystem().getActiveQuests();
-		int lineNr = 0;
+		int questLine = 0;
         questFont.draw(engine.getBatch(), "Active Quests:", 1352, 1020);
         for (QuestInstance quest : activeQuests) {
 			String title = quest.getQuestData().getTitle();
-			List<String> lines = splitString(title);
-            questFont.draw(engine.getBatch(), "- " + lines.remove(0), 1352, 990 - lineNr++ * 30);
+			List<String> lines = splitAtSpace(title, 31); // Quests start at 1352 and end at 1870 (considering 50 padding). 1 char is 16 wide, giving us 528/16 = 33 chars per line, remove two for "- "
+            questFont.draw(engine.getBatch(), "- " + lines.remove(0), 1352, 990 - questLine++ * 30);
 			for (String line : lines) {
-				questFont.draw(engine.getBatch(), line, 1384, 990 - lineNr++ * 30);
+				questFont.draw(engine.getBatch(), line, 1384, 990 - questLine++ * 30);
 			}
         }
 
         engine.getBatch().end();
     }
 
-	private List<String> splitString(String input) {
+	private List<String> splitAtSpace(String input, int maxLen) {
 		List<String> list = new ArrayList<String>();
-		if (input.length() > 31) { // Quests start at 1352 and end at 1870 (considering 50 padding). 1 char is 16 wide, giving us 528/16 = 33 chars per line, remove two for "- "
-			int i = 32;
+		if (input.length() > maxLen) {
+			int i = maxLen + 1;
 			while (input.charAt(i--) != ' ') ;
 			list.add(input.substring(0, i+1));
-			list.addAll(splitString(input.substring(i+2)));
+			list.addAll(splitAtSpace(input.substring(i+2), maxLen));
 		}
 		else {
 			list.add(input);
