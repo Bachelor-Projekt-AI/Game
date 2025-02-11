@@ -9,11 +9,11 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.ui.ContextMenu;
 import org.bachelorprojekt.ui.PauseMenu;
+import org.bachelorprojekt.ui.QuestScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameSystemManager;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Location;
-import org.bachelorprojekt.util.json.jackson.Quest;
 import org.lwjgl.opengl.GL20;
 
 import java.util.List;
@@ -100,6 +100,8 @@ public class ChapterScreen extends ScreenAdapter {
             System.out.println("Pause menu opened.");
             engine.pushScreen(new PauseMenu(engine));
             // Hier kannst du eine Aktion ausführen, wenn das Pause-Menü geöffnet wird
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            engine.pushScreen(new QuestScreen(engine));
         }
     }
 }

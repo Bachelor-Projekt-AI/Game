@@ -181,4 +181,18 @@ public class Quest {
     public QuestType getQuestType() {
         return questType;
     }
+
+    public int getRequiredProgress() {
+        switch (questType) {
+            case COLLECT_ITEM:
+                return requiredAmount; // Anzahl der gesammelten Items
+            case VISIT_LOCATION:
+                return 1; // 1 bedeutet, dass die Location besucht werden muss
+            case NPC_INTERACTION:
+                return 1; // 1 bedeutet, dass mit dem NPC interagiert wurde
+            default:
+                return 0; // Standardwert für unbekannte Questtypen
+        }
+    }
+
 }
