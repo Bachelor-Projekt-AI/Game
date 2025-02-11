@@ -64,9 +64,12 @@ public class ChapterScreen extends ScreenAdapter {
         questFont.draw(engine.getBatch(), "Nearby locations:", 50, locationsOffset);
         int locationLine = 0;
         for (Location location : locations) {
-            questFont.draw(engine.getBatch(),
-                    "- " + location.getName() + ": " + location.getDescription(),
-                    50, locationsOffset - (++locationLine * 30));
+			String fullDescription = location.getName() + ": " + location.getDescription();
+			List<String> lines = splitAtSpace(fullDescription, 78);
+			questFont.draw(engine.getBatch(), "- " + lines.remove(0), 50, locationsOffset - (++locationLine * 30));
+			for (String line : lines) {
+				questFont.draw(engine.getBatch(), line, 82, locationsOffset - (++locationLine * 30)); // move 2 chars = 32px to the right
+			}
         }
 
         // **Dynamisch die aktiven Quests abrufen!**
@@ -75,7 +78,7 @@ public class ChapterScreen extends ScreenAdapter {
         questFont.draw(engine.getBatch(), "Active Quests:", 1352, 1020);
         for (QuestInstance quest : activeQuests) {
 			String title = quest.getQuestData().getTitle();
-			List<String> lines = splitAtSpace(title, 31); // Quests start at 1352 and end at 1870 (considering 50 padding). 1 char is 16 wide, giving us 528/16 = 33 chars per line, remove two for "- "
+			List<String> lines = splitAtSpace(title, 31); // Quests start at 1352 and end at 1870 (considering 50 padding), giving us 528/16 = 33 chars per line, remove two for "- "
             questFont.draw(engine.getBatch(), "- " + lines.remove(0), 1352, 990 - questLine++ * 30);
 			for (String line : lines) {
 				questFont.draw(engine.getBatch(), line, 1384, 990 - questLine++ * 30);
