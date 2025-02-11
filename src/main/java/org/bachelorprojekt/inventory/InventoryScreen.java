@@ -104,7 +104,7 @@ public class InventoryScreen extends ScreenAdapter {
         final String[] equipment = renderEquipment(items, COMPONENT_WIDTH, mainHeight);
         final String[] item = renderItem(selectedItem, COMPONENT_WIDTH, totalLines);
         final String[] description = renderDescription(selectedItem, COMPONENT_WIDTH * 2, subHeight / 2);
-        final String[] stats = renderStats(COMPONENT_WIDTH * 2, subHeight / 2);
+        final String[] stats = renderStats(player, COMPONENT_WIDTH * 2, subHeight / 2);
 
 
         // creation of backpack and equipment, after that description and stats
@@ -256,13 +256,16 @@ public class InventoryScreen extends ScreenAdapter {
         return template.toArray(new String[0]);
     }
 
-    public static String[] renderStats(final int WIDTH, final int HEIGHT) {
+    public static String[] renderStats(final Player player, final int WIDTH, final int HEIGHT) {
         // Header & Border
         String borderLine = "*".repeat(WIDTH);
         String headerLine = "*-Stats" + "-".repeat(Math.max(0, WIDTH - 8)) + "*"; // -7 für "*-Stats"
 
         // Statistiken als einzeiliger String
-        String statsString = "HP: 100 | AD: 10 | AP: 15 | MR: 12 | Armor: 15 | Money: 1000";
+        int hp = player.getHealth();
+        int maxHp = player.getMaxHealth();
+        int gold = player.getGold();
+        String statsString = "HP: " + hp + "/" + maxHp + " | Gold: " + gold;
 
         // Höhe anpassen (mindestens Header + Border)
         int maxLines = HEIGHT - 2; // Platz für Inhalte ohne Header & Border

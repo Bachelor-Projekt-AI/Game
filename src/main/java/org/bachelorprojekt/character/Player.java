@@ -12,12 +12,14 @@ public class Player {
     private Location location;
     private int maxHealth;
     private int health;
+    private int gold;
 
-    public Player(String name, int health, int maxHealth) {
+    public Player(String name, int health, int maxHealth, int gold) {
         this.name = name;
         this.inventory = new ArrayList<>();
         this.health = health;
         this.maxHealth = maxHealth;
+        this.gold = gold;
     }
 
     public String getName() {
@@ -85,5 +87,13 @@ public class Player {
 
     public boolean isDead() {
         return health == 0;
+    }
+
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public int getGold() {
+        return gold;
     }
 }
