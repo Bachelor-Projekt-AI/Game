@@ -166,7 +166,7 @@ public class InventoryScreen extends ScreenAdapter {
         // Header & Border
         String borderLine = "*".repeat(BACKPACK_WIDTH);
         String headerText = "*-Equipment";
-        String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length()) + "*";
+        String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length() - 2) + "*";
 
         // Template dynamisch generieren
         List<String> template = new ArrayList<>();
