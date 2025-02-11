@@ -131,11 +131,15 @@ public class CombatSystem {
             combatMenu.logMessage("💀 " + player.getName() + " wurde besiegt!", Color.RED);
             combatActive = false;
             engine.popScreen(); // Kampf beenden
+            engine.sendNotification("Du wurdest besiegt!");
+            player.revive();
             return true;
         } else if (enemy.isDead()) {
             combatMenu.logMessage("🏆 " + enemy.getName() + " wurde besiegt!", Color.YELLOW);
             combatActive = false;
             engine.popScreen();
+            engine.sendNotification("Du hast den Kampf gewonnen! Deine HP haben sich erholt.");
+            player.revive();
             return true;
         }
         return false;

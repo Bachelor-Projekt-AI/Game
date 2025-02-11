@@ -97,6 +97,11 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
     private void equipOrUnequipItem() {
+
+        if (engine.isNotificationActive()) {
+            return; // Blockiere Eingaben, solange die Benachrichtigung aktiv ist
+        }
+
         if (selectedIndex >= 0 && selectedIndex < player.getInventory().size()) {
             Item selectedItem = player.getInventory().get(selectedIndex);
             boolean equipped = false;

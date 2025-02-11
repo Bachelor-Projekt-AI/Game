@@ -24,6 +24,15 @@ public class Engine extends Game {
     private TextRenderer textRenderer;
     private final Stack<Screen> screenStack;
     private Texture whiteTexture;
+    private boolean notificationActive = false;
+
+    public boolean isNotificationActive() {
+        return notificationActive;
+    }
+
+    public void setNotificationActive(boolean notificationActive) {
+        this.notificationActive = notificationActive;
+    }
 
     public void sendNotification(String message) {
         pushScreen(new MessageScreen(this, message));

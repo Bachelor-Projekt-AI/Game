@@ -30,6 +30,7 @@ public class MessageScreen extends ScreenAdapter {
     private final List<String> wrappedLines = new ArrayList<>(); // Zeilen mit Wortumbruch
 
     public MessageScreen(Engine engine, String message) {
+        engine.setNotificationActive(true);
         this.engine = engine;
         this.batch = engine.getBatch();
         this.font = engine.getFont();
@@ -127,6 +128,7 @@ public class MessageScreen extends ScreenAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             if (textFullyRendered) {
                 engine.popScreen(); // Nachricht schließen
+                engine.setNotificationActive(false);
             } else {
                 isFastForward = !isFastForward;
                 textSpeed = isFastForward ? TEXT_SPEED_FAST : TEXT_SPEED_NORMAL;
