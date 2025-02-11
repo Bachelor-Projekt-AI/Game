@@ -25,6 +25,13 @@ public class InventoryScreen extends ScreenAdapter {
     private Player player;
     private int yPosition = 500;
     private int selectedIndex = -1;
+    private float holdTimerUp = 0;
+    private float holdTimerDown = 0;
+    private final float initialDelay = 0.3f; // 300ms Verzögerung, bevor sich die Geschwindigkeit erhöht
+    private final float repeatRate = 0.1f;   // Alle 100ms eine Bewegung, wenn Taste gehalten wird
+
+    private int scrollOffset = 0; // Scroll-Offset für sichtbare Items
+    private static final int MAX_ITEMS = 13; // Anzahl der sichtbaren Items im Backpack
 
     public InventoryScreen(Engine engine) {
         this.batch = engine.getBatch();
@@ -73,16 +80,38 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
     protected void handleInput() {
+        int totalItems = player.getInventory().size();
+        float delta = Gdx.graphics.getDeltaTime();
         // Inventar schließen
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (!player.getInventory().isEmpty()) {
-                selectedIndex = Math.max(0, selectedIndex - 1); // Nach oben gehen, aber nicht unter 0
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            holdTimerUp += delta;
+
+            if (holdTimerUp == delta || holdTimerUp >= initialDelay && holdTimerUp % repeatRate < delta) {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    if (selectedIndex < scrollOffset) {
+                        scrollOffset = Math.max(0, scrollOffset - 1);
+                    }
+                }
             }
+        } else {
+            holdTimerUp = 0; // Timer zurücksetzen, wenn Taste losgelassen wird
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if (!player.getInventory().isEmpty()) {
-                selectedIndex = Math.min(player.getInventory().size() - 1, selectedIndex + 1); // Nach unten gehen, aber nicht über das letzte Item hinaus
+
+        // 🔽 Pfeil RUNTER gedrückt
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            holdTimerDown += delta;
+
+            if (holdTimerDown == delta || holdTimerDown >= initialDelay && holdTimerDown % repeatRate < delta) {
+                if (selectedIndex < totalItems - 1) {
+                    selectedIndex++;
+                    if (selectedIndex >= scrollOffset + MAX_ITEMS) {
+                        scrollOffset = Math.min(totalItems - MAX_ITEMS, scrollOffset + 1);
+                    }
+                }
             }
+        } else {
+            holdTimerDown = 0; // Timer zurücksetzen, wenn Taste losgelassen wird
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             engine.getGameSystemManager().setInventoryOpen(false);
@@ -158,6 +187,7 @@ public class InventoryScreen extends ScreenAdapter {
     private void dropItem() {
         if (selectedIndex >= 0 && selectedIndex < player.getInventory().size()) {
             Item selectedItem = player.getInventory().remove(selectedIndex);
+            selectedIndex--;
             engine.sendNotification("You Dropped: " + selectedItem.getName());
         }
     }
@@ -165,12 +195,12 @@ public class InventoryScreen extends ScreenAdapter {
 
     public String[] renderInventory(Player player, final int INV_WITH) {
         int totalLines = getMaxLinesOnScreen(font) - 10;
-        int mainHeight = (int) (totalLines * (2.0 / 3.0)) -1; // 2/3 für Backpack & Equipment
-        int subHeight = (int) (totalLines * (1.0 / 3.0));  // 1/3 für Stats & Description
+        int mainHeight = (int) (totalLines * (2.0 / 3.0)) - 1;
+        int subHeight = (int) (totalLines * (1.0 / 3.0));
 
         final int COMPONENT_WIDTH = INV_WITH / 3;
         final List<Item> items = player.getInventory();
-        selectedIndex = items.isEmpty() ? -1 : selectedIndex == -1 ? 0 : selectedIndex;
+        selectedIndex = items.isEmpty() ? -1 : Math.max(selectedIndex, 0);
         Item selectedItem = selectedIndex >= 0 ? items.get(selectedIndex) : null;
 
         final String[] backpack = renderBackpack(items, COMPONENT_WIDTH, mainHeight);
@@ -179,7 +209,6 @@ public class InventoryScreen extends ScreenAdapter {
         final String[] description = renderDescription(selectedItem, COMPONENT_WIDTH * 2, subHeight / 2);
         final String[] stats = renderStats(player, COMPONENT_WIDTH * 2, subHeight / 2);
 
-        // creation of backpack and equipment, after that description and stats
         final String[] inventory = new String[item.length];
         int counter = 0;
         for (int i = 0; i < backpack.length; i++) {
@@ -201,35 +230,28 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
     public String[] renderBackpack(List<Item> items, final int BACKPACK_WIDTH, final int HEIGHT) {
-
-        // Header & Border
         String borderLine = "*".repeat(BACKPACK_WIDTH);
         String headerText = "*-Backpack";
         String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length()) + "*";
 
-        // Template dynamisch generieren
         List<String> template = new ArrayList<>();
         template.add(headerLine);
 
         for (int i = 0; i < HEIGHT; i++) {
-            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 10) + " |");
+            template.add("| " + " ".repeat(BACKPACK_WIDTH - 4) + " |");
         }
 
         template.add(borderLine);
 
-        // Rendered Liste erzeugen
-        String[] rendered = template.toArray(new String[0]);
-
-        // Slots mit Items oder Leerzeichen füllen
-        for (int i = 0; i < HEIGHT; i++) {
-            String prefix = (i == selectedIndex) ? "> " : "  ";
-            String itemName = i < items.size() ? items.get(i).getName() : ""; // Falls kein Item, dann leer
-            itemName = truncateString(itemName, BACKPACK_WIDTH - 5);
+        for (int i = 0; i < MAX_ITEMS; i++) {
+            int itemIndex = scrollOffset + i;
+            String prefix = (itemIndex == selectedIndex) ? "> " : "  ";
+            String itemName = itemIndex < items.size() ? items.get(itemIndex).getName() : "";
             String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 5);
-            rendered[i + 1] = "| " + prefix + paddedItem + " |"; // +1 weil Index 0 der Header ist
+            template.set(i + 1, "| " + prefix + paddedItem + " |");
         }
 
-        return rendered;
+        return template.toArray(new String[0]);
     }
 
 
