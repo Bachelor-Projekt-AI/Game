@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import org.bachelorprojekt.game.ChapterScreen;
+import org.bachelorprojekt.game.events.EventDispatcher;
+import org.bachelorprojekt.game.events.ItemCollectEvent;
+import org.bachelorprojekt.game.events.LocationReachEvent;
 import org.bachelorprojekt.ui.ConfirmSelection;
 import org.bachelorprojekt.ui.MessageScreen;
 import org.bachelorprojekt.util.json.jackson.Location;
@@ -129,6 +132,7 @@ public class MapScreen extends ScreenAdapter {
                         engine.getGameSystemManager().setPlayerLocation(selectedLocation);
                         engine.popScreen();
                         engine.sendNotification("Du bist nun in " + selectedLocation.getName());
+                        EventDispatcher.dispatchEvent(new LocationReachEvent(selectedLocation.getId()));
                     },
                     () -> {
                         // Aktion für "Nein" -> Zurück zur Karte
