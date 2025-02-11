@@ -10,10 +10,14 @@ public class Player {
     private final String name;
     private List<Item> inventory;
     private Location location;
+    private int maxHealth;
+    private int health;
 
-    public Player(String name) {
+    public Player(String name, int health, int maxHealth) {
         this.name = name;
         this.inventory = new ArrayList<>();
+        this.health = health;
+        this.maxHealth = maxHealth;
     }
 
     public String getName() {
@@ -46,5 +50,40 @@ public class Player {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void heal(int health) {
+        System.out.println("Healing " + health + " health points.");
+        System.out.println("Current health: " + this.health);
+        System.out.println("Max health: " + maxHealth);
+        this.health += health;
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
+        }
+
+        System.out.println("New health: " + this.health);
+    }
+
+    public void damage(int damage) {
+        this.health -= damage;
+        if (this.health < 0) {
+            this.health = 0;
+        }
+    }
+
+    public void revive() {
+        this.health = maxHealth;
+    }
+
+    public boolean isDead() {
+        return health == 0;
     }
 }

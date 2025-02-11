@@ -187,7 +187,7 @@ public class Engine extends Game {
         System.out.println("Player name confirmed: " + playerName);
 
         // Neues Spiel starten
-        Player player = new Player(playerName);
+        Player player = new Player(playerName, 100, 100);
 
         pushScreen(new LoadingScreen(this, player, selectedSlot));
     }
