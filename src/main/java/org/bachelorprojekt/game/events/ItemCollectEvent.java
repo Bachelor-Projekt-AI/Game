@@ -1,19 +1,20 @@
 package org.bachelorprojekt.game.events;
 
 import org.bachelorprojekt.game.GameEvent;
+import org.bachelorprojekt.util.json.jackson.Item;
 
 public class ItemCollectEvent implements GameEvent {
 
-    private final int itemId;
+    private final Item item;
     private final int amount;
 
-    public ItemCollectEvent(int itemId, int amount) {
-        this.itemId = itemId;
+    public ItemCollectEvent(Item item, int amount) {
+        this.item = item;
         this.amount = amount;
     }
 
-    public int getItemId() {
-        return itemId;
+    public Item getItem() {
+        return item;
     }
 
     public int getAmount() {

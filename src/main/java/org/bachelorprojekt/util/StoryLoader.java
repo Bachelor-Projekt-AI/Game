@@ -38,7 +38,7 @@ public class StoryLoader {
 
             // Manager initialisieren
             this.chapterManager = new ChapterManager(chapterList, questList, locationList, mapList);
-            this.locationManager = new LocationManager(locationList, npcList);
+            this.locationManager = new LocationManager(locationList, npcList, itemList);
             this.npcManager = new NpcManager(npcList, locationList);
             this.itemManager = new ItemManager(itemList);
             this.mapManager = new MapManager(mapList, locationList);

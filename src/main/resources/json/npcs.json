@@ -28,5 +28,15 @@
         "We have the best ale in the region.",
         "Feel free to rest in one of our rooms."
       ]
-    }
+    },
+  {
+    "id": 4,
+    "name": "The Village Elder",
+    "location_id": 4,
+    "dialogues": [
+      "Welcome to the village of Laurrency.",
+      "We are a peaceful community.",
+      "Please respect our laws and customs."
+    ]
+  }
   ]

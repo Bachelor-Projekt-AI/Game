@@ -20,6 +20,9 @@ public class Location {
     @JsonProperty("connected_location_ids")
     private List<Integer> connectedLocationIds;
 
+    @JsonProperty("item_table")
+    private List<ItemDrop> itemDrops;
+
     public Location() {
         this.id = 0;
         this.name = "";
@@ -65,7 +68,7 @@ public class Location {
      * @param npcMap      Ein Mapping aller NPCs anhand ihrer ID.
      * @param locationMap Ein Mapping aller Orte anhand ihrer ID.
      */
-    public void initMapping(Map<Integer, Location> locationMap, Map<Integer, NPC> npcMap) {
+    public void initMapping(Map<Integer, Location> locationMap, Map<Integer, NPC> npcMap, Map<Integer, Item> itemMap) {
         // NPCs anhand der IDs setzen
         this.npcs = this.npcIds.stream()
                 .map(npcMap::get)  // IDs in NPC-Objekte umwandeln
@@ -77,6 +80,11 @@ public class Location {
                 .map(locationMap::get)  // IDs in Location-Objekte umwandeln
                 .filter(Objects::nonNull)  // Null-Werte herausfiltern
                 .collect(Collectors.toList());
+
+        // init item mapping  for every item
+
+        this.itemDrops.forEach(itemDrop -> itemDrop.initMapping(itemMap));
+
     }
 
     /**
@@ -93,5 +101,9 @@ public class Location {
      */
     public List<Location> getConnectedLocations() {
         return connectedLocations != null ? connectedLocations : List.of();
+    }
+
+    public List<ItemDrop> getItemDrops() {
+        return itemDrops;
     }
 }

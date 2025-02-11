@@ -4,16 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Array;
 import org.bachelorprojekt.game.events.EventDispatcher;
+import org.bachelorprojekt.game.events.ItemCollectEvent;
 import org.bachelorprojekt.game.events.LocationReachEvent;
 import org.bachelorprojekt.game.events.NPCInteractionEvent;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
-import java.util.Arrays;
+import java.util.*;
 
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
+import org.bachelorprojekt.util.json.jackson.Item;
+import org.bachelorprojekt.util.json.jackson.ItemDrop;
 import org.bachelorprojekt.util.json.jackson.NPC;
 import org.lwjgl.opengl.GL20;
 
@@ -39,6 +43,8 @@ public class ContextMenu extends ScreenAdapter {
 
 	private final ChapterScreen chapter;
 
+    private final List<ItemDrop> foundItems;
+
     public ContextMenu(Engine engine, ChapterScreen chapter) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
@@ -50,6 +56,8 @@ public class ContextMenu extends ScreenAdapter {
 			layout.setText(font, "> " + option);
 			return (int) layout.width;
 		}).max(Integer::compare).get();
+
+        this.foundItems = generateSubOptionsForObjects();
     }
 
     @Override
@@ -153,16 +161,19 @@ public class ContextMenu extends ScreenAdapter {
 
 
     private String[] getCurrentSubOptions() {
-        switch (selectedOption) {
-            case 0:
-                return generateSubOptionsForObjects();
-            case 1:
-                return generateSubOptionsForNPCs();
-            case 2:
-                return generateSubOptionsForExaminableObjects();
-            default:
-                return new String[]{};
-        }
+        return switch (selectedOption) {
+            case 0 -> {
+                if (foundItems.isEmpty()) {
+                    yield new String[]{"Du findest nichts"};
+                }
+                yield foundItems.stream()
+                        .map(drop -> drop.getItem().getName() + " (Chance: " + (drop.getDropRate() * 100) + "%)")
+                        .toArray(String[]::new);
+            }
+            case 1 -> generateSubOptionsForNPCs();
+            case 2 -> generateSubOptionsForExaminableObjects();
+            default -> new String[]{};
+        };
     }
 
     private String[] generateSubOptionsForNPCs() {
@@ -172,11 +183,25 @@ public class ContextMenu extends ScreenAdapter {
     }
 
     // Platzhalter-Methoden für die anderen Fälle (kannst du bei Bedarf implementieren)
-    private String[] generateSubOptionsForObjects() {
-        // Beispiel: Hole die Namen der Objekte in der aktuellen Location
-        // return engine.getGameStateManager().getCurrentLocationObjects()
-        //         .stream().map(obj -> obj.getName()).toArray(String[]::new);
-        return new String[]{"Baum", "Felsen", "Kiste"};
+    private List<ItemDrop> generateSubOptionsForObjects() {
+        // load item table from location and generate sub options with rarity
+        // if a user finds/collects the item, we can trigger an `ItemCollectEvent`
+        // if a user collects the item, we will add it to inv and remove it from the location
+        List<ItemDrop> itemDrops = engine.getGameSystemManager().getPlayer().getLocation().getItemDrops();
+        List<ItemDrop> foundItems = new ArrayList<>();
+        Random random = new Random();
+        for (ItemDrop drop : itemDrops) {
+            if (random.nextDouble() < drop.getDropRate()) { // Drop-Rate beachten
+                foundItems.add(drop); // Item-Namen hinzufügen
+            }
+        }
+
+        // Falls kein Item gefunden wurde, stattdessen Umgebungselemente anzeigen
+        if (foundItems.isEmpty()) {
+            return List.of();
+        }
+
+        return foundItems;
     }
 
     private String[] generateSubOptionsForExaminableObjects() {
@@ -190,9 +215,13 @@ public class ContextMenu extends ScreenAdapter {
     private void executeAction() {
         switch (selectedOption) {
             case 0 -> { // Gegenstände suchen (Beispiel)
-                String selectedObject = generateSubOptionsForObjects()[selectedSubOption];
-                System.out.println("Du suchst nach: " + selectedObject);
-                // Hier könnten wir ein `ItemCollectEvent` auslösen, wenn das sinnvoll wäre
+
+                if (!foundItems.isEmpty()) {
+                    ItemDrop selectedItemDrop = foundItems.get(selectedSubOption);
+                    engine.getGameSystemManager().getPlayer().addToInventory(selectedItemDrop.getItem());
+                    engine.sendNotification("Du hast " + selectedItemDrop.getItem().getName() + " gefunden!");
+                    EventDispatcher.dispatchEvent(new ItemCollectEvent(selectedItemDrop.getItem(), 1));
+                }
             }
             case 1 -> { // Sprechen mit Charakteren
                 String selectedNPCName = generateSubOptionsForNPCs()[selectedSubOption];
