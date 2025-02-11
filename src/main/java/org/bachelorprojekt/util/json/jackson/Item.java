@@ -3,14 +3,20 @@ package org.bachelorprojekt.util.json.jackson;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-enum ItemType {
-    UNKNOWN,
-    WEAPON,
-    CONSUMABLE,
-}
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
+
+    public enum ItemType {
+        UNKNOWN,
+        WEAPON,
+        CONSUMABLE,
+        HEAD,
+        BODY,
+        ARMS,
+        RING,
+        FEET
+    }
+
     private int id;
     private String name;
     private String description;
@@ -40,6 +46,13 @@ public class Item {
     private boolean doesDamage;
 
     private int damage;
+
+    @JsonProperty("damage_reduction")
+    private int damageReduction;
+
+    @JsonProperty("damge_boost")
+    private int damageBoost;
+
     /*
     * "rarity": "rare",
       "sell_price": 100,
@@ -64,6 +77,8 @@ public class Item {
         this.mana = 0;
         this.doesDamage = false;
         this.damage = 0;
+        this.damageReduction = 0;
+        this.damageBoost = 0;
     }
 
     // Getters
@@ -128,6 +143,23 @@ public class Item {
     }
 
     public ItemType getItemType() {
-        return ItemType.valueOf(category);
+        try {
+            return ItemType.valueOf(category.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ItemType.UNKNOWN;
+        }
+    }
+
+    public int getDamageReduction() {
+        return damageReduction;
+    }
+
+    public int getDamageBoost() {
+        return damageBoost;
+    }
+    public boolean isEquippable() {
+        ItemType type = getItemType();
+        return type == ItemType.HEAD || type == ItemType.BODY || type == ItemType.ARMS ||
+                type == ItemType.RING || type == ItemType.FEET;
     }
 }

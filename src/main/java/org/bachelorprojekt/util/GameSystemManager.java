@@ -36,6 +36,7 @@ public class GameSystemManager {
         player.addToInventory(storyLoader.getItemManager().getItemById(5));
         player.addToInventory(storyLoader.getItemManager().getItemById(6));
         player.addToInventory(storyLoader.getItemManager().getItemById(7));
+        player.addToInventory(storyLoader.getItemManager().getItemById(12));
     }
 
     /**

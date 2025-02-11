@@ -88,7 +88,75 @@ public class InventoryScreen extends ScreenAdapter {
             engine.getGameSystemManager().setInventoryOpen(false);
             System.out.println("Inventory closed.");
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            equipOrUnequipItem();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            dropItem();
+        }
     }
+
+    private void equipOrUnequipItem() {
+        if (selectedIndex >= 0 && selectedIndex < player.getInventory().size()) {
+            Item selectedItem = player.getInventory().get(selectedIndex);
+            boolean equipped = false;
+            if (selectedItem.isEquippable()) {
+                switch (selectedItem.getItemType()) {
+                    case HEAD:
+                        if (player.getHead() == selectedItem) {
+                            player.setHead(null);
+                        } else {
+                            player.setHead(selectedItem);
+                            equipped = true;
+                        }
+                        break;
+                    case BODY:
+                        if (player.getBody() == selectedItem) {
+                            player.setBody(null);
+                        } else {
+                            player.setBody(selectedItem);
+                            equipped = true;
+                        }
+                        break;
+                    case ARMS:
+                        if (player.getArms() == selectedItem) {
+                            player.setArms(null);
+                        } else {
+                            player.setArms(selectedItem);
+                            equipped = true;
+                        }
+                        break;
+                    case RING:
+                        if (player.getRing() == selectedItem) {
+                            player.setRing(null);
+                        } else {
+                            player.setRing(selectedItem);
+                            equipped = true;
+                        }
+                        break;
+                    case FEET:
+                        if (player.getFeet() == selectedItem) {
+                            player.setFeet(null);
+                        } else {
+                            player.setFeet(selectedItem);
+                            equipped = true;
+                        }
+                        break;
+                    default:
+                        return;
+                }
+                engine.sendNotification(equipped ? "You equipped: " + selectedItem.getName() : "You unequipped: " + selectedItem.getName());
+            }
+        }
+    }
+
+    private void dropItem() {
+        if (selectedIndex >= 0 && selectedIndex < player.getInventory().size()) {
+            Item selectedItem = player.getInventory().remove(selectedIndex);
+            engine.sendNotification("You Dropped: " + selectedItem.getName());
+        }
+    }
+
 
     public String[] renderInventory(Player player, final int INV_WITH) {
         int totalLines = getMaxLinesOnScreen(font) - 10;
@@ -241,7 +309,6 @@ public class InventoryScreen extends ScreenAdapter {
         List<String> actionsSection = new ArrayList<>();
         actionsSection.add("| SPACE to equip" + " ".repeat(WIDTH - 18) + " |");
         actionsSection.add("| Press D to drop" + " ".repeat(WIDTH - 19) + " |");
-        actionsSection.add("| Press X to see stats" + " ".repeat(WIDTH - 24) + " |");
 
         // Restliche Leerzeilen für die Actions-Sektion (damit Höhe erreicht wird)
         int remainingLines = HEIGHT - (7 + statsList.size() + actionsSection.size());
