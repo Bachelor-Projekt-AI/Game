@@ -4,16 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import org.bachelorprojekt.character.Player;
+import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.ui.ContextMenu;
-import org.bachelorprojekt.ui.MessageScreen;
 import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.ui.QuestScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameSystemManager;
 import org.bachelorprojekt.util.json.jackson.Chapter;
+import org.bachelorprojekt.util.json.jackson.Enemy;
 import org.bachelorprojekt.util.json.jackson.Location;
 import org.lwjgl.opengl.GL20;
 
@@ -121,6 +121,9 @@ public class ChapterScreen extends ScreenAdapter {
             // Hier kannst du eine Aktion ausführen, wenn das Pause-Menü geöffnet wird
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             engine.pushScreen(new QuestScreen(engine));
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
+            CombatSystem combatSystem = new CombatSystem(engine, player, e);
         }
     }
 }

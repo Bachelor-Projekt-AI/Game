@@ -336,11 +336,11 @@ public class InventoryScreen extends ScreenAdapter {
         return template.toArray(new String[0]);
     }
 
-    private static String truncateString(String text, int maxLength) {
+    public static String truncateString(String text, int maxLength) {
         return text.length() > maxLength ? text.substring(0, maxLength - 3) + "..." : text;
     }
 
-    private static String padEnd(String text, int length) {
+    public static String padEnd(String text, int length) {
         if (text.length() > length) {
             return text.substring(0, length); // Falls zu lang, abschneiden
         }

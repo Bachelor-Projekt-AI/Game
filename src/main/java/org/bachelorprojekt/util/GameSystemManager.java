@@ -4,10 +4,7 @@ import org.bachelorprojekt.chapter.ChapterSystem;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.inventory.InventoryScreen;
-import org.bachelorprojekt.manager.ChapterManager;
-import org.bachelorprojekt.manager.LocationManager;
-import org.bachelorprojekt.manager.NpcManager;
-import org.bachelorprojekt.manager.QuestManager;
+import org.bachelorprojekt.manager.*;
 import org.bachelorprojekt.quest.QuestSystem;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Location;
@@ -34,6 +31,11 @@ public class GameSystemManager {
         questSystem.startQuest(1);
         questSystem.startQuest(2);
         questSystem.startQuest(3);
+
+        player.addToInventory(storyLoader.getItemManager().getItemById(4));
+        player.addToInventory(storyLoader.getItemManager().getItemById(5));
+        player.addToInventory(storyLoader.getItemManager().getItemById(6));
+        player.addToInventory(storyLoader.getItemManager().getItemById(7));
     }
 
     /**
