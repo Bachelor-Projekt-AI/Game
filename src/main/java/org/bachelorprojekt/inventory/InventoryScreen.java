@@ -194,46 +194,50 @@ public class InventoryScreen extends ScreenAdapter {
 
     public String[] renderItem(Item item, final int WIDTH, final int HEIGHT) {
 
-        String borderLine = " ".repeat(WIDTH);
-        String headerLine = " Item" + "".repeat(WIDTH - 7) + " ";
+        String borderLine = "*".repeat(WIDTH);
+        String headerLine = "*-Item" + "-".repeat(WIDTH - 7) + "*";
 
         boolean itemSelected = item != null;
         // Header mit Item-Namen (Falls kein Item existiert, leeres Label)
         String itemName = itemSelected ? item.getName() : "No Item Selected";
-        String nameLine = " " + padEnd(itemName, WIDTH - 4) + "  "; // Breite anpassen
+        String nameLine = "| " + padEnd(itemName, WIDTH - 4) + " |"; // Breite anpassen
 
         // Feste Strings für Type & Rarity
         String type = itemSelected ? item.getCategory() : "";
         String rarity = itemSelected ? item.getRarity() : "";
-        String typeRarityLine = " " + padEnd(type, WIDTH / 2 - 3) + "   " + padEnd(rarity, WIDTH / 2 - 3) + "  ";
+        String typeRarityLine = "| " + padEnd(type, WIDTH / 2 - 3) + "| " + padEnd(rarity, WIDTH / 2 - 3) + " |";
 
         // Stats Header
-        String statsHeader = " Stats  Cur ->    Equipped        ";
+        String statsHeader = "| " + " ".repeat(WIDTH - 4) + " |";
 
-        // Platz für Stats (Leerzeilen)
-        List<String> statsSection = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            statsSection.add(" " + " ".repeat(WIDTH - 4) + " ");
-        }
+        String sellPrice = itemSelected ? "Sell Price: " + item.getSellPrice() : "";
+        String sellPriceLine = "| " + padEnd(sellPrice, WIDTH - 4) + " |";
 
-        // On Equip Section
-        String onEquipHeader = " On Equip" + "-".repeat(WIDTH - 14) + " ";
-        List<String> onEquipSection = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            onEquipSection.add(" " + " ".repeat(WIDTH - 4) + " ");
-        }
+        String damageAmount = itemSelected ? item.doesDamage() ? "Damage: " + item.getDamage() : "" : "";
+        String damageAmountLine = "| " + padEnd(damageAmount, WIDTH - 4) + " |";
+
+        String healAmount = itemSelected ? item.givesHp() ? "Heal: " + item.getHealth() : "" : "";
+        String healAmountLine = "| " + padEnd(healAmount, WIDTH - 4) + " |";
+
+        String manaAmount = itemSelected ? item.givesMana() ? "Mana: " + item.getMana() : "" : "";
+        String manaAmountLine = "| " + padEnd(manaAmount, WIDTH - 4) + " |";
+
+        String[] stats = new String[]{sellPriceLine, damageAmountLine, healAmountLine, manaAmountLine};
+
+        //  delete empty strings from stats[]
+        List<String> statsList = new ArrayList<>(Arrays.asList(stats));
 
         // Actions Section
-        String actionsHeader = " Actions" + " ".repeat(WIDTH - 14) + " ";
+        String actionsHeader = "|*-Actions" + "-".repeat(WIDTH - 12) + "-|";
         List<String> actionsSection = new ArrayList<>();
-        actionsSection.add(" SPACE to equip" + " ".repeat(WIDTH - 19) + " ");
-        actionsSection.add(" Press D to drop" + " ".repeat(WIDTH - 19) + " ");
-        actionsSection.add(" Press X to see stats" + " ".repeat(WIDTH - 24) + " ");
+        actionsSection.add("| SPACE to equip" + " ".repeat(WIDTH - 18) + " |");
+        actionsSection.add("| Press D to drop" + " ".repeat(WIDTH - 19) + " |");
+        actionsSection.add("| Press X to see stats" + " ".repeat(WIDTH - 24) + " |");
 
         // Restliche Leerzeilen für die Actions-Sektion (damit Höhe erreicht wird)
-        int remainingLines = HEIGHT - (7 + statsSection.size() + onEquipSection.size() + actionsSection.size());
-        for (int i = 0; i < remainingLines; i++) {
-            actionsSection.add(" " + " ".repeat(WIDTH - 4) + " ");
+        int remainingLines = HEIGHT - (7 + statsList.size() + actionsSection.size());
+        for (int i = 0; i < remainingLines - 1; i++) {
+            actionsSection.add("| " + " ".repeat(WIDTH - 4) + " |");
         }
 
         // Rendering
@@ -244,9 +248,7 @@ public class InventoryScreen extends ScreenAdapter {
         template.add(typeRarityLine);
         template.add(borderLine);
         template.add(statsHeader);
-        template.addAll(statsSection);
-        template.add(onEquipHeader);
-        template.addAll(onEquipSection);
+        template.addAll(statsList);
         template.add(actionsHeader);
         template.addAll(actionsSection);
         template.add(borderLine);
