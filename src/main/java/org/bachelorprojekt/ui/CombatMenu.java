@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import org.bachelorprojekt.character.Player;
@@ -14,7 +13,6 @@ import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.json.jackson.Item;
 import org.lwjgl.opengl.GL20;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,46 +57,32 @@ public class CombatMenu extends ScreenAdapter {
         combatLog.add(new Tuple(message, color));
     }
 
-    public static int getMaxCharsPerLine(BitmapFont font) {
-        float screenWidth = 1920;
-        GlyphLayout layout = new GlyphLayout(font, "W"); // Ein Zeichen ausmessen
-        float charWidth = layout.width; // Breite eines Zeichens
-
-        return (int) (screenWidth / charWidth) - 10; // Maximale Zeichenanzahl pro Zeile mit padding
-    }
-
-    public static int getMaxLinesOnScreen(BitmapFont font) {
-        float screenHeight = 1080;
-        float lineHeight = font.getLineHeight(); // Höhe eines einzelnen Zeichens
-        return (int) (screenHeight / lineHeight);
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        int maxChars = getMaxCharsPerLine(font);
+        int maxChars = 116; //Char width 16, 32 padding
         String[] combatTop = renderCombatTop(combatSystem.getPlayer().getName(), combatSystem.getPlayer().getHealth(), combatSystem.getEnemy().getName(), combatSystem.getEnemy().getHealth(), maxChars);
         String[] bp = renderCombatInventory(engine.getGameSystemManager().getPlayer().getInventory(), maxChars);
         int yPosition = 1060;
         for (String line : combatTop) {
-            font.draw(batch, line, 20, yPosition);
+            font.draw(batch, line, 32, yPosition);
             yPosition -= 40;
         }
 
         // Positionierung (Untere Hälfte)
         yPosition -= 20; // Abstand
         for (String line : bp) {
-            font.draw(batch, line, 20, yPosition);
+            font.draw(batch, line, 32, yPosition);
             yPosition -= 40;
         }
 
 		yPosition = 40;
 		for (Tuple<String, Color> message : combatLog.reversed()) {
 			font.setColor(message.getRight());
-			font.draw(batch, message.getLeft(), 20, yPosition);
+			font.draw(batch, message.getLeft(), 32, yPosition);
 			yPosition += 40;
 		}
 		font.setColor(Color.WHITE);
@@ -165,8 +149,6 @@ public class CombatMenu extends ScreenAdapter {
 
 
     public String[] renderCombatInventory(List<Item> weaponsAndPotions, final int WIDTH) {
-        int totalLines = getMaxLinesOnScreen(font) - 10;
-        int halfLines = totalLines / 2;
         Item selectedItem = selectedIndex >= 0 ? weaponsAndPotions.get(selectedIndex) : null;
         int LEFT_WIDTH = WIDTH / 2;
         int RIGHT_WIDTH = WIDTH / 2;
