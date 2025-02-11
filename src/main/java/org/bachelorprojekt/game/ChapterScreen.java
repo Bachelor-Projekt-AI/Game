@@ -92,7 +92,7 @@ public class ChapterScreen extends ScreenAdapter {
 	private List<String> splitAtSpace(String input, int maxLen) {
 		List<String> list = new ArrayList<String>();
 		if (input.length() > maxLen) {
-			int i = maxLen + 1;
+			int i = maxLen;
 			while (input.charAt(i--) != ' ') ;
 			list.add(input.substring(0, i+1));
 			list.addAll(splitAtSpace(input.substring(i+2), maxLen));
