@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL20;
 public class PauseMenu extends ScreenAdapter {
     private final Engine engine;
     private final TextRenderer textRenderer;
-    private final String[] menuOptions = {"Resume", "Save Game", "Quit to Main Menu"};
+    private final String[] menuOptions = {"Resume", "Save Game", "Options", "Quit to Main Menu"};
     private int selectedOption;
     private final float startY;
 
@@ -34,9 +34,9 @@ public class PauseMenu extends ScreenAdapter {
         // Render die Menüoptionen
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == selectedOption) {
-                textRenderer.drawCenteredText("> " + menuOptions[i], startY - (i + 1) * 30, this.engine.getFont());
+                textRenderer.drawCenteredText("> " + menuOptions[i], startY - (i + 1) * 30 - 15, this.engine.getFont());
             } else {
-                textRenderer.drawCenteredText(menuOptions[i], startY - (i + 1) * 30, this.engine.getFont());
+                textRenderer.drawCenteredText(menuOptions[i], startY - (i + 1) * 30 - 15, this.engine.getFont());
             }
         }
 
@@ -65,7 +65,10 @@ public class PauseMenu extends ScreenAdapter {
                 case 1: // Save Game
                     saveGame();
                     break;
-                case 2: // Quit to Main Menu
+				case 2:
+					engine.pushScreen(new ResolutionSelectMenu(engine));
+					break;
+                case 3: // Quit to Main Menu
                     engine.quitToMenu();
                     break;
             }
