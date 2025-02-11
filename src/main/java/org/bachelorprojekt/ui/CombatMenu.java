@@ -11,6 +11,7 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.json.jackson.Item;
+
 import org.lwjgl.opengl.GL20;
 
 import java.util.ArrayList;
@@ -32,29 +33,45 @@ public class CombatMenu extends ScreenAdapter {
     private int scrollOffset = 0; // Offset für sichtbare Items
     private static final int MAX_ITEMS = 6; // Maximal 6 sichtbare Items
 
+	private class Tuple<T, U> {
+		final T left;
+		final U right;
+
+		Tuple (T left, U right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public T getLeft() {
+			return left;
+		}
+
+		public U getRight() {
+			return right;
+		}
+	}
+
     public CombatMenu(Engine engine, CombatSystem combatSystem) {
         this.batch = engine.getBatch();
         this.combatSystem = combatSystem;
         combatSystem.startCombat();
-        //this.font = engine.getFont();
-
-        //this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 22);
-
         this.font = getSpecialFont();
-
 
         this.player = engine.getGameSystemManager().getPlayer();
         this.engine = engine;
     }
 
+	/**
+	 * Wenn `color` `null` ist, wird als default weiß verwendet.
+	 */
     public void logMessage(String message, Color color) {
-        if (combatLog.size() >= 5) {
+        if (combatLog.size() == 5) {
             combatLog.removeFirst();
         }
 		if (color == null) {
 			color = Color.WHITE;
 		}
-        combatLog.add(new Tuple(message, color));
+        combatLog.add(new Tuple<String, Color>(message, color));
     }
 
     @Override
@@ -139,14 +156,9 @@ public class CombatMenu extends ScreenAdapter {
         return template.replace(placeholder, value + " ".repeat(spaceToFill));
     }
 
-
-
     public void resetSelectedIndex() {
         selectedIndex = -1;
     }
-
-
-
 
     public String[] renderCombatInventory(List<Item> weaponsAndPotions, final int WIDTH) {
         Item selectedItem = selectedIndex >= 0 ? weaponsAndPotions.get(selectedIndex) : null;
@@ -210,10 +222,6 @@ public class CombatMenu extends ScreenAdapter {
         return template.toArray(new String[0]);
     }
 
-
-
-
-
     protected void handleInput() {
         int totalItems = player.getInventory().size();
 
@@ -256,22 +264,4 @@ public class CombatMenu extends ScreenAdapter {
             System.out.println("Inventory closed.");
         }
     }
-
-	private class Tuple<T, U> {
-		final T left;
-		final U right;
-
-		Tuple (T left, U right) {
-			this.left = left;
-			this.right = right;
-		}
-
-		public T getLeft() {
-			return left;
-		}
-
-		public U getRight() {
-			return right;
-		}
-	}
 }
