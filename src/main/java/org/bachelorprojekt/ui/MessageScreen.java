@@ -53,15 +53,13 @@ public class MessageScreen extends ScreenAdapter {
 
         // Abdunkelung des Hintergrunds
         batch.setColor(0, 0, 0, 0.6f);
-        batch.draw(engine.getWhiteTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(engine.getWhiteTexture(), 0, 0, 1920, 1080);
 
         // Berechnung für das Modal (Fenster)
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        int modalWidth = screenWidth / 2;
-        int modalHeight = screenHeight / 3;
-        int centerX = (screenWidth - modalWidth) / 2;
-        int centerY = (screenHeight - modalHeight) / 2;
+        int modalWidth = 960;
+        int modalHeight = 360;
+        int centerX = 480;
+        int centerY = 360;
 
         // Modal mit blauem Rand
         batch.setColor(Color.BLUE);
@@ -78,16 +76,13 @@ public class MessageScreen extends ScreenAdapter {
     }
 
     private void wrapText() {
-        // Maximale Textbreite im Modal
-        float maxWidth = Gdx.graphics.getWidth() / 2f - 40;
-
         // Wortweiser Umbruch
         String[] words = message.split(" ");
         StringBuilder line = new StringBuilder();
         for (String word : words) {
             if (font.getRegion().getTexture() == null) return; // Falls Font noch nicht geladen ist
             GlyphLayout layout = new GlyphLayout(font, line + " " + word);
-            if (layout.width > maxWidth) {
+            if (layout.width > 920) {
                 wrappedLines.add(line.toString());
                 line.setLength(0);
             }
@@ -107,7 +102,6 @@ public class MessageScreen extends ScreenAdapter {
 
         float y = startY;
         int charsRendered = 0;
-        float modalWidth = Gdx.graphics.getWidth() / 2f; // Modalfenster-Breite
         float textPadding = 20; // Abstand vom Rand des Modals
 
         for (String line : wrappedLines) {
@@ -118,7 +112,7 @@ public class MessageScreen extends ScreenAdapter {
             GlyphLayout layout = new GlyphLayout(font, visibleText);
 
             // **Fix:** Zentriere nur innerhalb des Modalfensters!
-            float centeredX = x + (modalWidth - layout.width) / 2 - textPadding;
+            float centeredX = x + (960 - layout.width) / 2 - textPadding;
 
             font.setColor(Color.WHITE);
             font.draw(batch, visibleText, centeredX, y);
