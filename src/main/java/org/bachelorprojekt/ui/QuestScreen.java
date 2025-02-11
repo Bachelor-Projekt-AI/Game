@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameSystemManager;
+import org.bachelorprojekt.util.Keybind;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Quest;
 import org.bachelorprojekt.quest.QuestInstance;
@@ -138,64 +139,63 @@ public class QuestScreen extends ScreenAdapter {
 	}
 
     private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if (viewState == 0 && selectedChapterIndex < chapters.size() - 1) {
-                selectedChapterIndex++;
-            } else if (viewState == 1 && selectedQuestIndex < currentQuests.size() - 1) {
-                selectedQuestIndex++;
-            }
-        }
+		new HelpScreen(engine, List.of(
+			new Keybind(Input.Keys.BACKSPACE, "Close current menu", () -> {
+				if (viewState == 2) {
+					viewState = 1; // Zurück zu Quest-Liste
+				} else if (viewState == 1) {
+					viewState = 0; // Zurück zur Kapitel-Liste
+				} else {
+					engine.popScreen(); // Quest-Screen verlassen
+				}
+			}),
+			new Keybind(Input.Keys.UP, "Move selection up", () -> {
+				if (viewState == 0 && selectedChapterIndex > 0) {
+					selectedChapterIndex--;
+				} else if (viewState == 1 && selectedQuestIndex > 0) {
+					selectedQuestIndex--;
+				}
+			}),
+			new Keybind(Input.Keys.DOWN, "Move selection down", () -> {
+				if (viewState == 0 && selectedChapterIndex < chapters.size() - 1) {
+					selectedChapterIndex++;
+				} else if (viewState == 1 && selectedQuestIndex < currentQuests.size() - 1) {
+					selectedQuestIndex++;
+				}
+			}),
+			new Keybind(Input.Keys.ENTER, "Accept selection", () -> {
+				if (viewState == 0) {
+					// Kapitel gewählt -> Quests laden
+					Chapter selectedChapter = chapters.get(selectedChapterIndex);
+					currentQuests = selectedChapter.getQuests();
+					selectedQuestIndex = 0;
+					viewState = 1;
+				} else if (viewState == 1) {
+					// Quest gewählt -> Details anzeigen
+					Quest selectedQuestData = currentQuests.get(selectedQuestIndex);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (viewState == 0 && selectedChapterIndex > 0) {
-                selectedChapterIndex--;
-            } else if (viewState == 1 && selectedQuestIndex > 0) {
-                selectedQuestIndex--;
-            }
-        }
+					// Suche in aktiven oder abgeschlossenen Quests
+					selectedQuestInstance = questSystem.getQuestInstanceById(selectedQuestData.getId());
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if (viewState == 0) {
-                // Kapitel gewählt -> Quests laden
-                Chapter selectedChapter = chapters.get(selectedChapterIndex);
-                currentQuests = selectedChapter.getQuests();
-                selectedQuestIndex = 0;
-                viewState = 1;
-            } else if (viewState == 1) {
-                // Quest gewählt -> Details anzeigen
-                Quest selectedQuestData = currentQuests.get(selectedQuestIndex);
+					// Falls es keine Instanz gibt, erstelle eine temporäre für die Anzeige
+					if (selectedQuestInstance == null) {
+						selectedQuestInstance = new QuestInstance(selectedQuestData, null);
+					}
 
-                // Suche in aktiven oder abgeschlossenen Quests
-                selectedQuestInstance = questSystem.getQuestInstanceById(selectedQuestData.getId());
-
-                // Falls es keine Instanz gibt, erstelle eine temporäre für die Anzeige
-                if (selectedQuestInstance == null) {
-                    selectedQuestInstance = new QuestInstance(selectedQuestData, null);
-                }
-
-                viewState = 2;
-            }
-            else if (viewState == 2) {
-                // Quest aktivieren oder deaktivieren
-                if (selectedQuestInstance.isCompleted()) {
-                    return; // Quest kann nicht mehr deaktiviert werden
-                }
-                if (!selectedQuestInstance.isActive()) {
-                    questSystem.startQuest(selectedQuestInstance.getQuestData().getId());
-                } else {
-                    questSystem.stopQuest(selectedQuestInstance.getQuestData().getId());
-                }
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE)) {
-            if (viewState == 2) {
-                viewState = 1; // Zurück zu Quest-Liste
-            } else if (viewState == 1) {
-                viewState = 0; // Zurück zur Kapitel-Liste
-            } else {
-                engine.popScreen(); // Quest-Screen verlassen
-            }
-        }
+					viewState = 2;
+				}
+				else if (viewState == 2) {
+					// Quest aktivieren oder deaktivieren
+					if (selectedQuestInstance.isCompleted()) {
+						return; // Quest kann nicht mehr deaktiviert werden
+					}
+					if (!selectedQuestInstance.isActive()) {
+						questSystem.startQuest(selectedQuestInstance.getQuestData().getId());
+					} else {
+						questSystem.stopQuest(selectedQuestInstance.getQuestData().getId());
+					}
+				}
+			})
+		)).render(0);
     }
 }

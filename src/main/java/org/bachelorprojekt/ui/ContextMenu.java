@@ -16,6 +16,7 @@ import java.util.*;
 
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
+import org.bachelorprojekt.util.Keybind;
 import org.bachelorprojekt.util.TextRenderer;
 import org.bachelorprojekt.util.json.jackson.Enemy;
 import org.bachelorprojekt.util.json.jackson.Item;
@@ -116,51 +117,45 @@ public class ContextMenu extends ScreenAdapter {
 
     private void handleInput() {
         if (!isSubMenuOpen) {
-            // Navigation im Hauptmenü
-            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                selectedOption = (selectedOption + 1) % options.length;
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                selectedOption = (selectedOption - 1 + options.length) % options.length;
-            }
-
-            // Öffnen des Sub-Menüs
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                isSubMenuOpen = true;
-                selectedSubOption = 0; // Sub-Menü auf Anfangsoption setzen
-            }
-
-            // Abbrechen des Menüs
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-                engine.popScreen();
-            }
+			new HelpScreen(engine, List.of(
+				new Keybind(Input.Keys.C, "Close context menu", () -> {
+					engine.popScreen();
+				}),
+				new Keybind(Input.Keys.ESCAPE, "Close context menu", () -> {
+					engine.popScreen();
+				}),
+				new Keybind(Input.Keys.UP, "Move selection up", () -> {
+					selectedOption = (selectedOption - 1 + options.length) % options.length;
+				}),
+				new Keybind(Input.Keys.DOWN, "Move selection down", () -> {
+					selectedOption = (selectedOption + 1) % options.length;
+				}),
+				new Keybind(Input.Keys.ENTER, "Accept selection", () -> {
+					isSubMenuOpen = true;
+					selectedSubOption = 0; // Sub-Menü auf Anfangsoption setzen
+				})
+			)).render(0);
         } else {
             // Hole aktuell verfügbare Sub-Optionen
             String[] currentSubOptions = getCurrentSubOptions();
-
-            // Navigation im Sub-Menü
-            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                selectedSubOption = (selectedSubOption + 1) % currentSubOptions.length;
-            }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                selectedSubOption = (selectedSubOption - 1 + currentSubOptions.length) % currentSubOptions.length;
-            }
-
-            // Auswahl im Sub-Menü bestätigen
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                engine.popScreen();
-                executeAction();
-                 // Menü schließen
-            }
-
-            // Sub-Menü schließen
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                isSubMenuOpen = false;
-            }
-
-			if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-				engine.popScreen();
-			}
+			new HelpScreen(engine, List.of(
+				new Keybind(Input.Keys.C, "Close context menu", () -> {
+					engine.popScreen();
+				}),
+				new Keybind(Input.Keys.ESCAPE, "Close submenu", () -> {
+					isSubMenuOpen = false;
+				}),
+				new Keybind(Input.Keys.UP, "Move selection up", () -> {
+					selectedSubOption = (selectedSubOption - 1 + currentSubOptions.length) % currentSubOptions.length;
+				}),
+				new Keybind(Input.Keys.DOWN, "Move selection down", () -> {
+					selectedSubOption = (selectedSubOption + 1) % currentSubOptions.length;
+				}),
+				new Keybind(Input.Keys.ENTER, "Accept selection", () -> {
+					engine.popScreen();
+					executeAction();
+				})
+			)).render(0);
         }
     }
 
