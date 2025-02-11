@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Goblin",
+    "max_health": 75,
+    "base_damage": 30,
+    "bonus_damage": 30,
+    "location_id": 2,
+    "loot_table": [
+      {
+        "item_id": 1,
+        "drop_rate": 0.5
+      },
+      {
+        "item_id": 2,
+        "drop_rate": 0.2
+      }
+    ],
+    "heal_rate": 0.2,
+    "heal_amount": 5
+  },
+  {
+    "id": 2,
+    "name": "Orc Brute",
+    "max_health": 120,
+    "base_damage": 30,
+    "bonus_damage": 30,
+    "location_id": 5,
+    "loot_table": [
+      {
+        "item_id": 1,
+        "drop_rate": 0.5
+      },
+      {
+        "item_id": 2,
+        "drop_rate": 0.2
+      }
+    ],
+    "heal_rate": 0.2,
+    "heal_amount": 5
+  },
+  {
+    "id": 3,
+    "name": "Undead Knight",
+    "max_health": 200,
+    "base_damage": 30,
+    "bonus_damage": 30,
+    "location_id": 8,
+    "loot_table": [
+      {
+        "item_id": 1,
+        "drop_rate": 0.5
+      },
+      {
+        "item_id": 2,
+        "drop_rate": 0.2
+      }
+    ],
+    "heal_rate": 0.2,
+    "heal_amount": 5
+  }
+]

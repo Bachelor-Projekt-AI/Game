@@ -117,6 +117,10 @@ public class GameSystemManager {
         return storyLoader.getNpcManager();
     }
 
+    public EnemyManager getEnemyManager() {
+        return storyLoader.getEnemyManager();
+    }
+
     public ChapterManager getChapterManager() {
         return storyLoader.getChapterManager();
     }
