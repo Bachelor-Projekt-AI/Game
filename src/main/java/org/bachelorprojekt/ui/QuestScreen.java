@@ -12,6 +12,7 @@ import org.bachelorprojekt.util.json.jackson.Quest;
 import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.quest.QuestSystem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuestScreen extends ScreenAdapter {
@@ -49,21 +50,25 @@ public class QuestScreen extends ScreenAdapter {
         Gdx.gl.glClear(Gdx.gl.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        int columnWidth = screenWidth / 3;
 
         // ======================== Spalte 1: Kapitel-Liste ========================
-        font.draw(batch, "Kapitel", 50, screenHeight - 50);
+        font.draw(batch, "Kapitel", 48, 1030);
+		int chapterLine = 0;
         for (int i = 0; i < chapters.size(); i++) {
             Chapter chapter = chapters.get(i);
-            String prefix = (i == selectedChapterIndex && viewState == 0) ? "> " : "  ";
-            font.draw(batch, prefix + chapter.getTitle(), 50, screenHeight - 100 - (i * 30));
+            String prefix = (i == selectedChapterIndex) ? "> " : "- ";
+			List<String> title = splitAtSpace(chapter.getTitle());
+			font.draw(batch, prefix + title.removeFirst(), 48, 980 - chapterLine++ * 30);
+			for (String line : title) {
+				font.draw(batch, "  " + line, 48, 980 - chapterLine++ * 30);
+			}
         }
 
         // ======================== Spalte 2: Quest-Liste ========================
         if (viewState >= 1) {
-            font.draw(batch, "Quests", columnWidth + 50, screenHeight - 50);
+			float chapterX = 672;
+            font.draw(batch, "Quests", chapterX, 1030);
+			int questLine = 0;
             for (int i = 0; i < currentQuests.size(); i++) {
                 Quest quest = currentQuests.get(i);
                 QuestInstance questInstance = questSystem.getQuestInstanceById(quest.getId());
@@ -71,29 +76,46 @@ public class QuestScreen extends ScreenAdapter {
                 boolean isCompleted = questInstance != null && questInstance.isCompleted();
 
                 String status = isCompleted ? " [Abgeschlossen]" : isActive ? " [Aktiv]" : " [Inaktiv]";
-                String prefix = (i == selectedQuestIndex && viewState == 1) ? "> " : "  ";
-                font.draw(batch, prefix + quest.getTitle() + status, columnWidth + 50, screenHeight - 100 - (i * 30));
+                String prefix = (i == selectedQuestIndex) ? "> " : "- ";
+				List<String> titleWithStatus = splitAtSpace(quest.getTitle() + status);
+				font.draw(batch, prefix + titleWithStatus.removeFirst(), chapterX, 980 - questLine++ * 30);
+				for (String line : titleWithStatus) {
+					font.draw(batch, "  " + line, chapterX, 980 - questLine++ * 30);
+				}
             }
         }
 
         // ======================== Spalte 3: Quest-Details ========================
         if (viewState == 2 && selectedQuestInstance != null) {
-            font.draw(batch, "Quest Details", columnWidth * 2 + 50, screenHeight - 50);
-            font.draw(batch, "Titel: " + selectedQuestInstance.getQuestData().getTitle(), columnWidth * 2 + 50, screenHeight - 100);
-            font.draw(batch, "Beschreibung:", columnWidth * 2 + 50, screenHeight - 130);
-            font.draw(batch, selectedQuestInstance.getQuestData().getDescription(), columnWidth * 2 + 50, screenHeight - 160);
+			float detailsX = 1296;
+			float offset = 0;
+            font.draw(batch, "Quest Details", detailsX, 1030);
+
+			String titleText = "Titel: " + selectedQuestInstance.getQuestData().getTitle();
+			List<String> titleLines = splitAtSpace(titleText);
+			for (String titleLine : titleLines) {
+				font.draw(batch, titleLine, detailsX, 980 - offset);
+				offset += 30;
+			}
+
+			String descriptionText = "Beschreibung: " + selectedQuestInstance.getQuestData().getDescription();
+			List<String> descriptionLines = splitAtSpace(descriptionText);
+			for (String descriptionLine : descriptionLines) {
+				font.draw(batch, descriptionLine, detailsX, 970 - offset);
+				offset += 30;
+			}
 
             // Fortschritt anzeigen
             int progress = selectedQuestInstance.getProgress();
             int required = selectedQuestInstance.getQuestData().getRequiredAmount();
-            font.draw(batch, "Fortschritt: " + progress + " / " + required, columnWidth * 2 + 50, screenHeight - 200);
+            font.draw(batch, "Fortschritt: " + progress + " / " + required, detailsX, 960 - offset);
 
             if (!selectedQuestInstance.isActive()) {
-                font.draw(batch, "[ENTER] Quest starten", columnWidth * 2 + 50, screenHeight - 240);
+                font.draw(batch, "[ENTER] Quest starten", detailsX, 920 - offset);
             } else if (selectedQuestInstance.isCompleted()) {
-                font.draw(batch, "Quest abgeschlossen", columnWidth * 2 + 50, screenHeight - 240);
+                font.draw(batch, "Quest abgeschlossen", detailsX, 920 - offset);
             } else {
-                font.draw(batch, "[ENTER] Quest abbrechen", columnWidth * 2 + 50, screenHeight - 240);
+                font.draw(batch, "[ENTER] Quest abbrechen", detailsX, 920 - offset);
             }
         }
 
@@ -101,6 +123,19 @@ public class QuestScreen extends ScreenAdapter {
 
         handleInput();
     }
+
+	private List<String> splitAtSpace(String input) {
+		List<String> list = new ArrayList<String>();
+		if (input.length() > 37) {
+			int i = 37;
+			while (input.charAt(i--) != ' ') ;
+			list.add(input.substring(0, i+1));
+			list.addAll(splitAtSpace(input.substring(i+2)));
+		} else {
+			list.add(input);
+		}
+		return list;
+	}
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
