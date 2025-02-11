@@ -101,11 +101,10 @@ public class InventoryScreen extends ScreenAdapter {
         Item selectedItem = selectedIndex >= 0 ? items.get(selectedIndex) : null;
 
         final String[] backpack = renderBackpack(items, COMPONENT_WIDTH, mainHeight);
-        final String[] equipment = renderEquipment(items, COMPONENT_WIDTH, mainHeight);
+        final String[] equipment = renderEquipment(player, COMPONENT_WIDTH, mainHeight);
         final String[] item = renderItem(selectedItem, COMPONENT_WIDTH, totalLines);
         final String[] description = renderDescription(selectedItem, COMPONENT_WIDTH * 2, subHeight / 2);
         final String[] stats = renderStats(player, COMPONENT_WIDTH * 2, subHeight / 2);
-
 
         // creation of backpack and equipment, after that description and stats
         final String[] inventory = new String[item.length];
@@ -161,36 +160,46 @@ public class InventoryScreen extends ScreenAdapter {
     }
 
 
-    public static String[] renderEquipment(List<Item> items, final int BACKPACK_WIDTH, final int HEIGHT) {
-
+    public static String[] renderEquipment(Player player, final int WIDTH, final int HEIGHT) {
         // Header & Border
-        String borderLine = "*".repeat(BACKPACK_WIDTH);
+        String borderLine = "*".repeat(WIDTH);
         String headerText = "*-Equipment";
-        String headerLine = headerText + "-".repeat(BACKPACK_WIDTH - headerText.length() - 2) + "*";
+        String headerLine = headerText + "-".repeat(WIDTH - headerText.length() - 2) + "*";
+
+        // Liste der Ausrüstungsplätze
+        String[] slots = {"Head:", "Body:", "Arms:", "Ring:", "Feet:"};
+
+        // Items aus dem Player-Objekt holen (falls nichts ausgerüstet ist, soll "Empty" stehen)
+        String[] equippedItems = {
+                player.getHead() != null ? player.getHead().getName() : "Empty",
+                player.getBody() != null ? player.getBody().getName() : "Empty",
+                player.getArms() != null ? player.getArms().getName() : "Empty",
+                player.getRing() != null ? player.getRing().getName() : "Empty",
+                player.getFeet() != null ? player.getFeet().getName() : "Empty"
+        };
 
         // Template dynamisch generieren
         List<String> template = new ArrayList<>();
-        template.add(headerLine);
+        template.add(headerLine); // Header-Zeile
 
-        for (int i = 0; i < HEIGHT; i++) {
-            template.add("| {slot} " + " ".repeat(BACKPACK_WIDTH - 4 - 10) + " |");
+        // Füge Slots ein
+        for (int i = 0; i < slots.length; i++) {
+            String line = "| " + padEnd(slots[i], 6) + " " + padEnd(equippedItems[i], WIDTH - 12) + " |";
+            template.add(line);
         }
 
-        template.add(borderLine);
-
-        // Rendered Liste erzeugen
-        String[] rendered = template.toArray(new String[0]);
-
-        // Slots mit Items füllen
-        for (int i = 0; i < HEIGHT; i++) {
-            String itemName = i < items.size() ? items.get(i).getName() : "";
-            itemName = truncateString(itemName, BACKPACK_WIDTH - 5);
-            String paddedItem = padEnd(itemName, BACKPACK_WIDTH - 5);
-            rendered[i + 1] = "| " + paddedItem + " |"; // +1 weil Index 0 der Header ist
+        // **Auffüllen, damit die Gesamtgröße HEIGHT + 2 erreicht wird**
+        while (template.size() < HEIGHT + 1) {  // **Nicht HEIGHT - 1!**
+            template.add("| " + " ".repeat(WIDTH - 5) + " |");
         }
 
-        return rendered;
+        template.add(borderLine); // Abschlusslinie
+
+        return template.toArray(new String[0]);
     }
+
+
+
 
     public String[] renderItem(Item item, final int WIDTH, final int HEIGHT) {
 

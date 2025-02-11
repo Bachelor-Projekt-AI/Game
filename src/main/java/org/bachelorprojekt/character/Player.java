@@ -13,6 +13,11 @@ public class Player {
     private int maxHealth;
     private int health;
     private int gold;
+    private Item head;
+    private Item body;
+    private Item arms;
+    private Item ring;
+    private Item feet;
 
     public Player(String name, int health, int maxHealth, int gold) {
         this.name = name;
@@ -95,5 +100,45 @@ public class Player {
 
     public int getGold() {
         return gold;
+    }
+
+    public Item getHead() {
+        return head;
+    }
+
+    public void setHead(Item head) {
+        this.head = head;
+    }
+
+    public Item getBody() {
+        return body;
+    }
+
+    public void setBody(Item body) {
+        this.body = body;
+    }
+
+    public Item getArms() {
+        return arms;
+    }
+
+    public void setArms(Item arms) {
+        this.arms = arms;
+    }
+
+    public Item getRing() {
+        return ring;
+    }
+
+    public void setRing(Item ring) {
+        this.ring = ring;
+    }
+
+    public Item getFeet() {
+        return feet;
+    }
+
+    public void setFeet(Item feet) {
+        this.feet = feet;
     }
 }
