@@ -51,7 +51,7 @@ public class InventoryScreen extends ScreenAdapter {
         GlyphLayout layout = new GlyphLayout(font, "W"); // Ein Zeichen ausmessen
         float charWidth = layout.width; // Breite eines Zeichens
 
-        return (int) (screenWidth / charWidth) - 10; // Maximale Zeichenanzahl pro Zeile mit padding
+        return (int) ((screenWidth - 40) / charWidth); // Maximale Zeichenanzahl pro Zeile mit padding
     }
 
     public static int getMaxLinesOnScreen(BitmapFont font) {
@@ -309,7 +309,7 @@ public class InventoryScreen extends ScreenAdapter {
         // Feste Strings für Type & Rarity
         String type = itemSelected ? item.getCategory() : "";
         String rarity = itemSelected ? item.getRarity() : "";
-        String typeRarityLine = "| " + padEnd(type, WIDTH / 2 - 3) + "| " + padEnd(rarity, WIDTH / 2 - 3) + " |";
+        String typeRarityLine = "| " + padEnd(type, WIDTH / 2 - 2) + "| " + padEnd(rarity, WIDTH / 2 - 3) + " |";
 
         // Stats Header
         String statsHeader = "| " + " ".repeat(WIDTH - 4) + " |";
