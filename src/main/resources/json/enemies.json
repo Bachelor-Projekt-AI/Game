@@ -2,7 +2,37 @@
   {
     "id": 1,
     "name": "Goblin",
+    "dialogues": [
+      "Hehehe, du bist ein Leckerbissen für meine Sammlung!",
+      "Gold oder Leben? Ach, ich nehme einfach beides!",
+      "Du bist ja langsamer als meine Oma – und die ist schon tot!"
+    ],
     "max_health": 75,
+    "base_damage": 30,
+    "bonus_damage": 30,
+    "location_id": 1,
+    "loot_table": [
+      {
+        "item_id": 1,
+        "drop_rate": 0.5
+      },
+      {
+        "item_id": 2,
+        "drop_rate": 0.2
+      }
+    ],
+    "heal_rate": 0.2,
+    "heal_amount": 5
+  },
+  {
+    "id": 2,
+    "name": "Orc Brute",
+    "dialogues": [
+      "Ich zerquetsche dich wie eine Made!",
+      "Deine Knochen werden meine neue Trophäe sein!",
+      "Niemand besiegt mich! Naja... fast niemand."
+    ],
+    "max_health": 120,
     "base_damage": 30,
     "bonus_damage": 30,
     "location_id": 2,
@@ -20,32 +50,17 @@
     "heal_amount": 5
   },
   {
-    "id": 2,
-    "name": "Orc Brute",
-    "max_health": 120,
-    "base_damage": 30,
-    "bonus_damage": 30,
-    "location_id": 5,
-    "loot_table": [
-      {
-        "item_id": 1,
-        "drop_rate": 0.5
-      },
-      {
-        "item_id": 2,
-        "drop_rate": 0.2
-      }
-    ],
-    "heal_rate": 0.2,
-    "heal_amount": 5
-  },
-  {
     "id": 3,
     "name": "Undead Knight",
+    "dialogues": [
+      "Dein Blut wird mein rostiges Schwert nähren!",
+      "Der Tod ist erst der Anfang... für DICH!",
+      "Ich war ein Krieger... jetzt bin ich eine Legende!"
+    ],
     "max_health": 200,
     "base_damage": 30,
     "bonus_damage": 30,
-    "location_id": 8,
+    "location_id": 3,
     "loot_table": [
       {
         "item_id": 1,

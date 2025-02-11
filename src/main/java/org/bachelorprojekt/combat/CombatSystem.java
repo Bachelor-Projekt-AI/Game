@@ -27,6 +27,7 @@ public class CombatSystem {
         this.combatActive = true;
         this.combatMenu = new CombatMenu(engine, this); // CombatMenu erhält CombatSystem-Referenz
         engine.pushScreen(combatMenu);
+        engine.sendNotification(enemy.getRandomDialogue());
     }
 
     public Enemy getEnemy() {

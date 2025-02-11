@@ -2,13 +2,18 @@ package org.bachelorprojekt.util.json.jackson;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Enemy {
     private int id;
     private String name;
+
+    @JsonProperty("dialogues")
+    private List<String> dialogues;
 
     @JsonProperty("max_health")
     private int maxHealth;
@@ -35,9 +40,13 @@ public class Enemy {
     @JsonProperty("heal_amount")
     private int healAmount;
 
+    private int health;
+    private static final Random RANDOM = new Random();
+
     public Enemy() {
         this.id = 0;
         this.name = "";
+        this.dialogues = List.of();  // Initialisiere als leere Liste, um NullPointer zu vermeiden
         this.maxHealth = 0;
         this.baseDamage = 0;
         this.bonusDamage = 0;
@@ -45,6 +54,7 @@ public class Enemy {
         this.lootTable = List.of();
         this.healRate = 0;
         this.healAmount = 0;
+        this.health = maxHealth; // Start-Gesundheit auf Max setzen
     }
 
     // ============================= GETTER =============================
@@ -92,15 +102,31 @@ public class Enemy {
         return healAmount;
     }
 
+    public List<String> getDialogues() {
+        return dialogues;
+    }
+
     // ============================= MAPPING =============================
     public void initMapping(Map<Integer, Location> locationMap, Map<Integer, Item> itemMap) {
         this.location = locationMap.get(this.locationId);
         this.health = maxHealth;
-        // Mappe Items aus der Loot-Tabelle
         this.lootItems = lootTable.stream()
                 .map(lootEntry -> itemMap.get(lootEntry.getItemId()))
                 .filter(item -> item != null)
                 .toList();
+    }
+
+    // ============================= METHODEN =============================
+
+    /**
+     * Gibt einen zufälligen Dialog des Gegners zurück.
+     * Falls keine Dialoge vorhanden sind, wird eine Standardnachricht zurückgegeben.
+     */
+    public String getRandomDialogue() {
+        if (dialogues == null || dialogues.isEmpty()) {
+            return name + " knurrt dich feindselig an!";
+        }
+        return dialogues.get(RANDOM.nextInt(dialogues.size()));
     }
 
     // ============================= INNER CLASS =============================
@@ -121,8 +147,6 @@ public class Enemy {
 
     // ========================== Setter for internal combat ===================
 
-    private int health;
-
     public void damage(int damage) {
         this.health -= damage;
         if (this.health < 0) {
@@ -132,8 +156,8 @@ public class Enemy {
 
     public void heal(int healAmount) {
         this.health += healAmount;
-        if (this.health > 100) {
-            this.health = 100;
+        if (this.health > maxHealth) {
+            this.health = maxHealth;
         }
     }
 
@@ -144,5 +168,4 @@ public class Enemy {
     public boolean isDead() {
         return health == 0;
     }
-
 }

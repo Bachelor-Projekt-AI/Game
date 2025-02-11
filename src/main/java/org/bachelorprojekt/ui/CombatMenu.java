@@ -223,6 +223,7 @@ public class CombatMenu extends ScreenAdapter {
     }
 
     protected void handleInput() {
+        if (engine.isNotificationActive()) return;
         int totalItems = player.getInventory().size();
 
         // Nach oben scrollen
@@ -247,6 +248,7 @@ public class CombatMenu extends ScreenAdapter {
 
         // Auswahl bestätigen (z. B. Angriff)
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (selectedIndex == -1) return;
             if (!player.getInventory().isEmpty()) {
                 Item selectedItem = player.getInventory().get(selectedIndex);
                 if (selectedItem.getCategory().equals("weapon")) {

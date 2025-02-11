@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
+import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.game.events.EventDispatcher;
 import org.bachelorprojekt.game.events.ItemCollectEvent;
 import org.bachelorprojekt.game.events.LocationReachEvent;
@@ -16,6 +17,7 @@ import java.util.*;
 import org.bachelorprojekt.game.ChapterScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
+import org.bachelorprojekt.util.json.jackson.Enemy;
 import org.bachelorprojekt.util.json.jackson.Item;
 import org.bachelorprojekt.util.json.jackson.ItemDrop;
 import org.bachelorprojekt.util.json.jackson.NPC;
@@ -29,7 +31,8 @@ public class ContextMenu extends ScreenAdapter {
     private final String[] options = {
             "Suche nach Gegenständen",
             "Spreche mit Charakteren",
-            "Untersuche ein bestimmtes Objekt"
+            "Untersuche ein bestimmtes Objekt",
+            "Fordere Gegner heraus"
     };
 
     private int selectedOption = 0; // Hauptmenü-Option
@@ -44,6 +47,7 @@ public class ContextMenu extends ScreenAdapter {
 	private final ChapterScreen chapter;
 
     private final List<ItemDrop> foundItems;
+    private final List<Enemy> foundEnemies;
 
     public ContextMenu(Engine engine, ChapterScreen chapter) {
         this.engine = engine;
@@ -58,6 +62,7 @@ public class ContextMenu extends ScreenAdapter {
 		}).max(Integer::compare).get();
 
         this.foundItems = generateSubOptionsForObjects();
+        this.foundEnemies = generateSubOptionsForEnemyCombats();
     }
 
     @Override
@@ -172,8 +177,37 @@ public class ContextMenu extends ScreenAdapter {
             }
             case 1 -> generateSubOptionsForNPCs();
             case 2 -> generateSubOptionsForExaminableObjects();
+            case 3 -> {
+                if (foundEnemies.isEmpty()) {
+                    yield new String[]{"Du findest niemanden"};
+                }
+                yield foundEnemies.stream()
+                        .map(Enemy::getName)
+                        .toArray(String[]::new);
+            }
             default -> new String[]{};
         };
+    }
+
+    private List<Enemy> generateSubOptionsForEnemyCombats() {
+        // load enemy table from location and generate sub options with rarity
+        // if a user finds/collects the item, we can trigger an `ItemCollectEvent`
+        // if a user collects the item, we will add it to inv and remove it from the location
+        List<Enemy> allEnemies = engine.getGameSystemManager().getEnemyManager().getEnemies();
+        // map allEnemies.getLocation to the currentlocation of the player and add it to foundEnemies
+        List<Enemy> foundEnemies = new ArrayList<>();
+        for (Enemy enemy : allEnemies) {
+            if (enemy.getLocation().getId() == engine.getGameSystemManager().getPlayer().getLocation().getId()) {
+                foundEnemies.add(enemy);
+            }
+        }
+
+        // Falls kein Item gefunden wurde, stattdessen Umgebungselemente anzeigen
+        if (foundEnemies.isEmpty()) {
+            return List.of();
+        }
+
+        return foundEnemies;
     }
 
     private String[] generateSubOptionsForNPCs() {
@@ -245,6 +279,12 @@ public class ContextMenu extends ScreenAdapter {
 
                 // **Neues Location-Event auslösen!**
                 //EventDispatcher.dispatchEvent(new LocationReachEvent(engine.getGameStateManager().getCurrentLocationId()));
+            }
+            case 3 -> {
+                if (!foundEnemies.isEmpty()) {
+                    Enemy selectedEnemy = foundEnemies.get(selectedSubOption);
+                    new CombatSystem(engine, engine.getGameSystemManager().getPlayer(), selectedEnemy);
+                }
             }
             default -> throw new IllegalStateException("Unerwarteter Wert: " + selectedOption);
         }
