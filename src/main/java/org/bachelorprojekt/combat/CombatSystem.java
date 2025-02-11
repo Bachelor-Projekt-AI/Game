@@ -6,6 +6,8 @@ import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.json.jackson.Enemy;
 import org.bachelorprojekt.util.json.jackson.Item;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.Random;
 
 public class CombatSystem {
@@ -76,7 +78,7 @@ public class CombatSystem {
         if (random.nextDouble() <= healRate) {
             int healAmount = enemy.getHealAmount();
             enemy.heal(healAmount);
-            combatMenu.logMessage("🩹 " + enemy.getName() + " heilt sich um " + healAmount + " HP!", "red");
+            combatMenu.logMessage("🩹 " + enemy.getName() + " heilt sich um " + healAmount + " HP!", Color.RED);
         } else {
             attack(enemy, player, damage, "Angriff");
         }
@@ -97,10 +99,10 @@ public class CombatSystem {
             }
 
             combatMenu.logMessage("💥 " + getName(attacker) + " trifft mit " + attackName + " für " + damage + " Schaden!",
-                    attacker instanceof Player ? "green" : "red");
+                    attacker instanceof Player ? Color.GREEN : Color.RED);
         } else {
             combatMenu.logMessage("❌ " + getName(attacker) + " verfehlt mit " + attackName + "!",
-                    attacker instanceof Player ? "green" : "red");
+                    attacker instanceof Player ? Color.GREEN : Color.RED);
         }
     }
 
@@ -117,7 +119,7 @@ public class CombatSystem {
         if (!potion.givesHp()) return; // Nur Heiltränke verwenden
         int healAmount = potion.getHealth();
         player.heal(healAmount);
-        combatMenu.logMessage("🩹 " + player.getName() + " trinkt " + potion.getName() + " und heilt " + healAmount + " HP!", "green");
+        combatMenu.logMessage("🩹 " + player.getName() + " trinkt " + potion.getName() + " und heilt " + healAmount + " HP!", Color.GREEN);
         combatMenu.resetSelectedIndex();
         player.getInventory().remove(potion); // Trank verbrauchen
     }
@@ -126,12 +128,12 @@ public class CombatSystem {
         System.out.println(player.isDead());
         System.out.println(player.getHealth());
         if (player.isDead()) {
-            combatMenu.logMessage("💀 " + player.getName() + " wurde besiegt!", "red");
+            combatMenu.logMessage("💀 " + player.getName() + " wurde besiegt!", Color.RED);
             combatActive = false;
             engine.popScreen(); // Kampf beenden
             return true;
         } else if (enemy.isDead()) {
-            combatMenu.logMessage("🏆 " + enemy.getName() + " wurde besiegt!", "yellow");
+            combatMenu.logMessage("🏆 " + enemy.getName() + " wurde besiegt!", Color.YELLOW);
             combatActive = false;
             engine.popScreen();
             return true;

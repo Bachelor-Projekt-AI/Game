@@ -3,9 +3,11 @@ package org.bachelorprojekt.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.util.Engine;
@@ -25,10 +27,9 @@ public class CombatMenu extends ScreenAdapter {
     private BitmapFont font;
     private final Engine engine;
     private Player player;
-    private int yPosition = 500;
     private int selectedIndex = -1;
     private final CombatSystem combatSystem;
-
+	private List<Tuple<String, Color>> combatLog = new ArrayList<Tuple<String, Color>>();
 
     private int scrollOffset = 0; // Offset für sichtbare Items
     private static final int MAX_ITEMS = 6; // Maximal 6 sichtbare Items
@@ -48,12 +49,14 @@ public class CombatMenu extends ScreenAdapter {
         this.engine = engine;
     }
 
-    public void logMessage(String message, String color) {
-        /*if (combatLog.size() >= 6) {
+    public void logMessage(String message, Color color) {
+        if (combatLog.size() >= 5) {
             combatLog.removeFirst();
         }
-        combatLog.add(message);*/
-        System.out.println(message);
+		if (color == null) {
+			color = Color.WHITE;
+		}
+        combatLog.add(new Tuple(message, color));
     }
 
     public static int getMaxCharsPerLine(BitmapFont font) {
@@ -79,7 +82,7 @@ public class CombatMenu extends ScreenAdapter {
         int maxChars = getMaxCharsPerLine(font);
         String[] combatTop = renderCombatTop(combatSystem.getPlayer().getName(), combatSystem.getPlayer().getHealth(), combatSystem.getEnemy().getName(), combatSystem.getEnemy().getHealth(), maxChars);
         String[] bp = renderCombatInventory(engine.getGameSystemManager().getPlayer().getInventory(), maxChars);
-        int yPosition = Gdx.graphics.getHeight() - 20;
+        int yPosition = 1060;
         for (String line : combatTop) {
             font.draw(batch, line, 20, yPosition);
             yPosition -= 40;
@@ -91,6 +94,14 @@ public class CombatMenu extends ScreenAdapter {
             font.draw(batch, line, 20, yPosition);
             yPosition -= 40;
         }
+
+		yPosition = 40;
+		for (Tuple<String, Color> message : combatLog.reversed()) {
+			font.setColor(message.getRight());
+			font.draw(batch, message.getLeft(), 20, yPosition);
+			yPosition += 40;
+		}
+		font.setColor(Color.WHITE);
 
         batch.end();
 
@@ -263,4 +274,22 @@ public class CombatMenu extends ScreenAdapter {
             System.out.println("Inventory closed.");
         }
     }
+
+	private class Tuple<T, U> {
+		final T left;
+		final U right;
+
+		Tuple (T left, U right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public T getLeft() {
+			return left;
+		}
+
+		public U getRight() {
+			return right;
+		}
+	}
 }
