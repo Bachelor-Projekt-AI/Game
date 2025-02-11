@@ -135,8 +135,9 @@ public class ContextMenu extends ScreenAdapter {
 
             // Auswahl im Sub-Menü bestätigen
             if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                engine.popScreen();
                 executeAction();
-                engine.popScreen(); // Menü schließen
+                 // Menü schließen
             }
 
             // Sub-Menü schließen
@@ -202,7 +203,9 @@ public class ContextMenu extends ScreenAdapter {
 
                 if (selectedNPC != null) {
                     System.out.println("Du sprichst mit: " + selectedNPCName);
-
+                    // get random dialogue from npc
+                    String dialogue = selectedNPC.getDialogues().get((int) (Math.random() * selectedNPC.getDialogues().size()));
+                    engine.sendNotification(selectedNPCName + ": " + dialogue);
                     // **Neues NPC-Interaktions-Event auslösen!**
                     EventDispatcher.dispatchEvent(new NPCInteractionEvent(selectedNPC.getId()));
                 }
