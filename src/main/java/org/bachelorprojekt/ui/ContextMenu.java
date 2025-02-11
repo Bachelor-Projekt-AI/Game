@@ -35,19 +35,19 @@ public class ContextMenu extends ScreenAdapter {
     private final float startY = 300;
     private final float menuX = 50; // X-Position des Hauptmenüs
     private final float subMenuX; // X-Position des Sub-Menüs
-    private final BitmapFont contextMenuFont;
+    private final BitmapFont font;
 
 	private final ChapterScreen chapter;
 
     public ContextMenu(Engine engine, ChapterScreen chapter) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.contextMenuFont = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 27);
+        this.font = engine.loadFont("fonts/JetBrainsMono-Regular.ttf", 27);
 		this.chapter = chapter;
 
 		subMenuX = 95 + Arrays.stream(options).map(option -> {
 			GlyphLayout layout = new GlyphLayout();
-			layout.setText(contextMenuFont, "> " + option);
+			layout.setText(font, "> " + option);
 			return (int) layout.width;
 		}).max(Integer::compare).get();
     }
@@ -77,26 +77,26 @@ public class ContextMenu extends ScreenAdapter {
     }
 
     private void drawMenu() {
-        contextMenuFont.draw(engine.getBatch(), "Was möchtest du tun?", menuX, startY);
+        font.draw(engine.getBatch(), "Was möchtest du tun?", menuX, startY);
         for (int i = 0; i < options.length; i++) {
             if (i == selectedOption) {
-                contextMenuFont.draw(engine.getBatch(), "> " + options[i], menuX, startY - 50 - (i * 30));
+                font.draw(engine.getBatch(), "> " + options[i], menuX, startY - 50 - (i * 30));
             } else {
-                contextMenuFont.draw(engine.getBatch(), options[i], menuX, startY - 50 - (i * 30));
+                font.draw(engine.getBatch(), options[i], menuX, startY - 50 - (i * 30));
             }
         }
     }
 
     private void drawSubMenu() {
         String[] currentSubOptions = getCurrentSubOptions();
-        contextMenuFont.draw(engine.getBatch(), "Optionen:", subMenuX, startY);
+        font.draw(engine.getBatch(), "Optionen:", subMenuX, startY);
         for (int i = 0; i < currentSubOptions.length; i++) {
             if (i == selectedSubOption) {
-                contextMenuFont.setColor(1, 1, 0, 1); // Gelb
-                contextMenuFont.draw(engine.getBatch(), "> " + currentSubOptions[i], subMenuX, startY - 50 - (i * 30));
-                contextMenuFont.setColor(1, 1, 1, 1); // Weiß
+                font.setColor(1, 1, 0, 1); // Gelb
+                font.draw(engine.getBatch(), "> " + currentSubOptions[i], subMenuX, startY - 50 - (i * 30));
+                font.setColor(1, 1, 1, 1); // Weiß
             } else {
-                contextMenuFont.draw(engine.getBatch(), currentSubOptions[i], subMenuX, startY - 50 - (i * 30));
+                font.draw(engine.getBatch(), currentSubOptions[i], subMenuX, startY - 50 - (i * 30));
             }
         }
     }
