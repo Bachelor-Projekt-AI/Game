@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.ui.ContextMenu;
+import org.bachelorprojekt.ui.LoadingScreen;
 import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.ui.QuestScreen;
 import org.bachelorprojekt.util.Engine;
@@ -88,7 +90,10 @@ public class ChapterScreen extends ScreenAdapter {
                 }
             }
         } else {
-            font.draw(engine.getBatch(), "Loading quests...", 1352, 1020);
+            String loadingText = "Loading...";
+            GlyphLayout layout = new GlyphLayout();
+            layout.setText(font, loadingText);
+            font.draw(engine.getBatch(), "Loading...", 960 - layout.width, 540);
         }
 
 
