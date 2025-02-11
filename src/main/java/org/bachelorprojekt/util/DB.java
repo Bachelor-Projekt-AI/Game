@@ -1,8 +1,6 @@
 package org.bachelorprojekt.util;
 
-import org.bachelorprojekt.inventory.Inventory;
-import org.bachelorprojekt.inventory.Item;
-import org.bachelorprojekt.character.Character;
+import org.bachelorprojekt.character.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,13 +11,12 @@ public class DB {
 	// Hibernate SessionFactory initialized with the configuration file and annotated classes
 	private SessionFactory factory;
 
+	// Hibernate SessionFactory initialized with the configuration file and annotated classes
 	public DB(String filename) {
 		this.factory = new Configuration()
 			.configure("config/hibernate.xml") // Path to Hibernate configuration
 			.setProperty("hibernate.connection.url", "jdbc:sqlite:" + filename)
-			.addAnnotatedClass(Item.class) // Maps the Item entity
-			.addAnnotatedClass(Inventory.class) // Maps the Inventory entity
-			.addAnnotatedClass(Character.class) // Maps the Character entity
+			.addAnnotatedClass(Player.class) // Maps the Character entity
 			.buildSessionFactory();
 	}
 

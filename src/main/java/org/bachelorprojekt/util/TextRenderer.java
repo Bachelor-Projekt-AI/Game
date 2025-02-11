@@ -13,6 +13,9 @@ public class TextRenderer {
     private long startTime; // Zeitstempel für animiertes Rendern
     private int currentCharIndex; // Der aktuelle Index des zuletzt gerenderten Buchstabens
 
+    private final int screenWidth = 1920;
+    private final int screenHeight = 1080;
+
     public TextRenderer(Engine engine) {
         this.font = engine.getFont();
         this.batch = engine.getBatch();
@@ -20,10 +23,14 @@ public class TextRenderer {
         this.currentCharIndex = 0; // Start bei 0
     }
 
-    // Zeichnet statischen Text, zentriert
-    public void drawCenteredText(String text, float centerY) {
+    // Zeichnet Text an einer festen Pixelposition
+    public void drawText(String text, float x, float y) {
+        font.draw(batch, text, x, y);
+    }
+
+    // Zeichnet Text zentriert auf den Bildschirm
+    public void drawCenteredText(String text, float centerY, BitmapFont font) {
         GlyphLayout layout = new GlyphLayout(); // Hilfsklasse für genaue Textgröße
-        float screenWidth = Gdx.graphics.getWidth(); // Bildschirmbreite abrufen
 
         String[] lines = text.split("\\n"); // Mehrzeiligen Text splitten
         for (int i = 0; i < lines.length; i++) {
@@ -36,10 +43,15 @@ public class TextRenderer {
         }
     }
 
-
+    // Zeichnet Text basierend auf Prozentwerten der Bildschirmdimensionen
+    public void drawTextAtPercent(String text, float percentX, float percentY) {
+        float x = screenWidth * (percentX / 100f);
+        float y = screenHeight * (percentY / 100f);
+        drawText(text, x, y);
+    }
 
     // Zeichnet animierten Text, Buchstabe für Buchstabe
-    public void drawAnimatedText(String text, float x, float y, float speed) {
+    public void drawAnimatedText(String text, float percentX, float percentY, float speed) {
         // Initialisiere startTime nur einmal
         if (startTime == 0) {
             startTime = TimeUtils.millis();
@@ -51,6 +63,8 @@ public class TextRenderer {
 
         // Render den sichtbaren Text bis zum aktuellen Index
         String visibleText = text.substring(0, currentCharIndex);
+        float x = screenWidth * (percentX / 100f);
+        float y = screenHeight * (percentY / 100f);
         font.draw(batch, visibleText, x, y);
     }
 
@@ -58,5 +72,17 @@ public class TextRenderer {
     public void resetAnimation() {
         this.startTime = TimeUtils.millis();
         this.currentCharIndex = 0;
+    }
+
+    // Zeichnet eine Box mit Text zentriert
+    public void drawTextBox(String text, float percentX, float percentY, float widthPercent) {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(font, text);
+
+        float boxWidth = screenWidth * (widthPercent / 100f);
+        float x = screenWidth * (percentX / 100f) - boxWidth / 2f;
+        float y = screenHeight * (percentY / 100f);
+
+        font.draw(batch, text, x, y);
     }
 }

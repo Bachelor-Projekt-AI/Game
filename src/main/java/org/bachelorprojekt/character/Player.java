@@ -1,45 +1,50 @@
 package org.bachelorprojekt.character;
 
+import org.bachelorprojekt.util.json.jackson.Item;
+import org.bachelorprojekt.util.json.jackson.Location;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private String name;
-    private List<String> inventory; // Spielerinventar
-    private int currentChapterIndex; // Aktuelles Kapitel
-    private int currentQuestIndex;   // Aktuelle Quest im Kapitel
+    private final String name;
+    private List<Item> inventory;
+    private Location location;
 
     public Player(String name) {
         this.name = name;
-        this.inventory = new java.util.ArrayList<>();
-        this.currentChapterIndex = 0; // Start im ersten Kapitel
-        this.currentQuestIndex = 0;   // Start mit der ersten Quest
+        this.inventory = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public List<String> getInventory() {
+    public List<Item> getInventory() {
         return inventory;
     }
 
-    public void addToInventory(String item) {
+    public void addToInventory(Item item) {
         inventory.add(item);
     }
 
-    public int getCurrentChapterIndex() {
-        return currentChapterIndex;
+    public void removeFromInventory(Item item) {
+        inventory.remove(item);
     }
 
-    public void setCurrentChapterIndex(int currentChapterIndex) {
-        this.currentChapterIndex = currentChapterIndex;
+    public void removeFromInventory(int index) {
+        inventory.remove(index);
     }
 
-    public int getCurrentQuestIndex() {
-        return currentQuestIndex;
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
 
-    public void setCurrentQuestIndex(int currentQuestIndex) {
-        this.currentQuestIndex = currentQuestIndex;
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "name": "Blacksmith",
+    "description": "A sturdy workshop filled with the sounds of hammers and anvil.",
+    "npc_ids": [
+      1
+    ],
+    "connected_location_ids": [
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Healer",
+    "description": "A peaceful hut surrounded by herbs and potions.",
+    "npc_ids": [
+      2
+    ],
+    "connected_location_ids": [
+      1,
+      3,
+      4
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Innkeeper",
+    "description": "A lively inn bustling with travelers and adventurers.",
+    "npc_ids": [
+      3
+    ],
+    "connected_location_ids": [
+      1,
+      2,
+      4
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Dorfplatz",
+    "description": "Ein Dorfplatz mit einem Brunnen in der Mitte.",
+    "npc_ids": [
+      3
+    ],
+    "connected_locations_ids": [
+      1,
+      2,
+      3
+    ]
+  }
+]
+
