@@ -48,7 +48,7 @@ public class LoadingScreen extends ScreenAdapter {
 		layout.setText(font, loadingText);
 
         engine.getBatch().begin();
-        font.draw(engine.getBatch(), loadingText, 960 - layout.width, 540);
+        font.draw(engine.getBatch(), loadingText, 960 - layout.width / 2, 540);
         engine.getBatch().end();
     }
 }
