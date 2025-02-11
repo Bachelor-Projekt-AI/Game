@@ -66,7 +66,7 @@ public class ChapterScreen extends ScreenAdapter {
         for (Location location : locations) {
 			String fullDescription = location.getName() + ": " + location.getDescription();
 			List<String> lines = splitAtSpace(fullDescription, 78);
-			questFont.draw(engine.getBatch(), "- " + lines.remove(0), 50, locationsOffset - (++locationLine * 30));
+			questFont.draw(engine.getBatch(), "- " + lines.removeFirst(), 50, locationsOffset - (++locationLine * 30));
 			for (String line : lines) {
 				questFont.draw(engine.getBatch(), line, 82, locationsOffset - (++locationLine * 30)); // move 2 chars = 32px to the right
 			}
@@ -79,7 +79,7 @@ public class ChapterScreen extends ScreenAdapter {
         for (QuestInstance quest : activeQuests) {
 			String title = quest.getQuestData().getTitle();
 			List<String> lines = splitAtSpace(title, 31); // Quests start at 1352 and end at 1870 (considering 50 padding), giving us 528/16 = 33 chars per line, remove two for "- "
-            questFont.draw(engine.getBatch(), "- " + lines.remove(0), 1352, 990 - questLine++ * 30);
+            questFont.draw(engine.getBatch(), "- " + lines.removeFirst(), 1352, 990 - questLine++ * 30);
 			for (String line : lines) {
 				questFont.draw(engine.getBatch(), line, 1384, 990 - questLine++ * 30);
 			}
@@ -95,8 +95,7 @@ public class ChapterScreen extends ScreenAdapter {
 			while (input.charAt(i--) != ' ') ;
 			list.add(input.substring(0, i+1));
 			list.addAll(splitAtSpace(input.substring(i+2), maxLen));
-		}
-		else {
+		} else {
 			list.add(input);
 		}
 		return list;
