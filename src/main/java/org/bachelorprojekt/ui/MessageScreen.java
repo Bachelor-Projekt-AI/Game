@@ -98,18 +98,18 @@ public class MessageScreen extends ScreenAdapter {
     }
 
     private void drawAnimatedText(float x, float startY) {
-        // Berechne, wie viele Zeichen basierend auf der verstrichenen Zeit sichtbar sein sollten
         long elapsedTime = TimeUtils.timeSinceMillis(startTime);
         currentCharIndex = Math.min((int) (elapsedTime / textSpeed), message.length());
 
-        // Überprüfe, ob der Text vollständig gerendert wurde
         if (currentCharIndex == message.length()) {
             textFullyRendered = true;
         }
 
-        // Zeichne nur den sichtbaren Teil des Textes, mit Zeilenumbruch
         float y = startY;
         int charsRendered = 0;
+        float modalWidth = Gdx.graphics.getWidth() / 2f; // Modalfenster-Breite
+        float textPadding = 20; // Abstand vom Rand des Modals
+
         for (String line : wrappedLines) {
             if (charsRendered >= currentCharIndex) break;
 
@@ -117,15 +117,17 @@ public class MessageScreen extends ScreenAdapter {
             String visibleText = line.substring(0, charsToShow);
             GlyphLayout layout = new GlyphLayout(font, visibleText);
 
-            // Zentrieren der Zeile
-            float centeredX = x + (Gdx.graphics.getWidth() / 2f - layout.width) / 2;
+            // **Fix:** Zentriere nur innerhalb des Modalfensters!
+            float centeredX = x + (modalWidth - layout.width) / 2 - textPadding;
+
             font.setColor(Color.WHITE);
             font.draw(batch, visibleText, centeredX, y);
-            y -= 35; // Zeilenhöhe anpassen
+            y -= 35;
 
             charsRendered += charsToShow;
         }
     }
+
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.E)) {
