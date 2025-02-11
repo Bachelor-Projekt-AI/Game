@@ -126,8 +126,8 @@ public class QuestScreen extends ScreenAdapter {
 
 	private List<String> splitAtSpace(String input) {
 		List<String> list = new ArrayList<String>();
-		if (input.length() > 37) {
-			int i = 37;
+		if (input.length() > 34) { // 36 chars per line; 2 for selection/indent
+			int i = 34;
 			while (input.charAt(i--) != ' ') ;
 			list.add(input.substring(0, i+1));
 			list.addAll(splitAtSpace(input.substring(i+2)));
