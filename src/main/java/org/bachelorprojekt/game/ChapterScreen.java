@@ -8,10 +8,12 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.combat.CombatSystem;
 import org.bachelorprojekt.quest.QuestInstance;
 import org.bachelorprojekt.ui.ContextMenu;
+import org.bachelorprojekt.ui.HelpScreen;
 import org.bachelorprojekt.ui.PauseMenu;
 import org.bachelorprojekt.ui.QuestScreen;
 import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.GameSystemManager;
+import org.bachelorprojekt.util.Keybind;
 import org.bachelorprojekt.util.json.jackson.Chapter;
 import org.bachelorprojekt.util.json.jackson.Enemy;
 import org.bachelorprojekt.util.json.jackson.Location;
@@ -103,27 +105,29 @@ public class ChapterScreen extends ScreenAdapter {
 	}
 
     protected void handleInput() {
-        // with e open inventory, with m open map, with esc open pause menu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            this.engine.getGameSystemManager().setInventoryOpen(true);
-            //this.engine.pushScreen(new InventoryScreen(engine, engine.getGameStateManager().getPlayer()));
-            System.out.println("Inventory opened.");
-            // Hier kannst du eine Aktion ausführen, wenn das Inventar geöffnet wird
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            System.out.println("Map opened.");
-            this.engine.getGameSystemManager().openMapWithChapter(this);
-            // Hier kannst du eine Aktion ausführen, wenn die Karte geöffnet wird
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
-            this.engine.pushScreen(new ContextMenu(engine, this));
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            System.out.println("Pause menu opened.");
-            engine.pushScreen(new PauseMenu(engine));
-            // Hier kannst du eine Aktion ausführen, wenn das Pause-Menü geöffnet wird
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            engine.pushScreen(new QuestScreen(engine));
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
-            CombatSystem combatSystem = new CombatSystem(engine, player, e);
-        }
+		new HelpScreen(engine, List.of(
+			new Keybind(Input.Keys.C, "Open context menu", () -> {
+            	this.engine.pushScreen(new ContextMenu(engine, this));
+			}),
+			new Keybind(Input.Keys.M, "Open map", () -> {
+				System.out.println("Map opened.");
+				this.engine.getGameSystemManager().openMapWithChapter(this);
+			}),
+			new Keybind(Input.Keys.E, "Open inventory", () -> {
+		this.engine.getGameSystemManager().setInventoryOpen(true);
+			System.out.println("Inventory opened.");
+			}),
+			new Keybind(Input.Keys.Q, "Open quest menu", () -> {
+				engine.pushScreen(new QuestScreen(engine));
+			}),
+			new Keybind(Input.Keys.K, "Open combat screen", () -> {
+				Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
+				CombatSystem combatSystem = new CombatSystem(engine, player, e);
+			}),
+			new Keybind(Input.Keys.ESCAPE, "Open pause menu", () -> {
+				System.out.println("Pause menu opened.");
+				engine.pushScreen(new PauseMenu(engine));
+			})
+		)).render(0);
     }
 }
