@@ -4,6 +4,8 @@ import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.game.GameEvent;
 import org.bachelorprojekt.game.events.EventDispatcher;
 import org.bachelorprojekt.game.events.EventListener;
+import org.bachelorprojekt.ui.MessageScreen;
+import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.json.jackson.Item;
 import org.bachelorprojekt.util.json.jackson.Quest;
 
@@ -14,13 +16,15 @@ public class QuestSystem implements EventListener {
     private final List<QuestInstance> completedQuests = new ArrayList<>();
     private final Map<Integer, Quest> questRepository = new HashMap<>();
     private final Player player;
+    private final Engine engine;
 
     /**
      * Initialisiert das Quest-System mit allen verfügbaren Quests.
      */
-    public QuestSystem(List<Quest> allQuests, Player player) {
+    public QuestSystem(List<Quest> allQuests, Player player, Engine engine) {
         loadAllQuests(allQuests);
         this.player = player;
+        this.engine = engine;
     }
 
     /**
@@ -40,6 +44,7 @@ public class QuestSystem implements EventListener {
         if (quest != null) {
             QuestInstance instance = QuestFactory.createQuestInstance(quest);
             registerQuestInstance(instance);
+            //engine.sendNotification("Quest gestartet: " + quest.getTitle());
             System.out.println("Quest gestartet: " + quest.getTitle());
         } else {
             System.out.println("Quest mit ID " + questId + " nicht gefunden.");

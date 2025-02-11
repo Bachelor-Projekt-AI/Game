@@ -3,6 +3,8 @@ package org.bachelorprojekt.util;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -11,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.bachelorprojekt.character.Player;
 import org.bachelorprojekt.ui.LoadingScreen;
 import org.bachelorprojekt.ui.Menu;
+import org.bachelorprojekt.ui.MessageScreen;
 
 import java.util.Stack;
 
@@ -23,6 +26,15 @@ public class Engine extends Game {
     private GameSystemManager gameSystemManager;
     private TextRenderer textRenderer;
     private final Stack<Screen> screenStack;
+    private Texture whiteTexture;
+
+    public void sendNotification(String message) {
+        pushScreen(new MessageScreen(this, message));
+    }
+
+    public Stack<Screen> getScreenStack() {
+        return screenStack;
+    }
 
     public Engine() {
         this.screenStack = new Stack<>();
@@ -59,6 +71,19 @@ public class Engine extends Game {
         }
     }
 
+    private void createWhiteTexture() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(1, 1, 1, 1); // Weiß
+        pixmap.fill();
+        whiteTexture = new Texture(pixmap);
+        pixmap.dispose();
+
+    }
+
+    public Texture getWhiteTexture() {
+        return whiteTexture;
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -68,6 +93,8 @@ public class Engine extends Game {
         textRenderer = new TextRenderer(this);
 
         Gdx.graphics.setForegroundFPS(60);
+
+        createWhiteTexture();
 
         pushScreen(new Menu(this, new String[]{"Play", "Options", "Exit"}));
     }
