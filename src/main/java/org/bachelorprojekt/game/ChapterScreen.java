@@ -74,17 +74,23 @@ public class ChapterScreen extends ScreenAdapter {
         }
 
         // **Dynamisch die aktiven Quests abrufen!**
-        List<QuestInstance> activeQuests = engine.getGameSystemManager().getQuestSystem().getActiveQuests();
-		int questLine = 0;
-        font.draw(engine.getBatch(), "Active Quests:", 1352, 1020);
-        for (QuestInstance quest : activeQuests) {
-			String title = quest.getQuestData().getTitle();
-			List<String> lines = splitAtSpace(title, 31); // Quests start at 1352 and end at 1870 (considering 50 padding), giving us 528/16 = 33 chars per line, remove two for "- "
-            font.draw(engine.getBatch(), "- " + lines.removeFirst(), 1352, 990 - questLine++ * 30);
-			for (String line : lines) {
-				font.draw(engine.getBatch(), line, 1384, 990 - questLine++ * 30);
-			}
+        // Sicherstellen, dass das GameSystemManager existiert
+        if (engine.getGameSystemManager() != null && engine.getGameSystemManager().getQuestSystem() != null) {
+            List<QuestInstance> activeQuests = engine.getGameSystemManager().getQuestSystem().getActiveQuests();
+            int questLine = 0;
+            font.draw(engine.getBatch(), "Active Quests:", 1352, 1020);
+            for (QuestInstance quest : activeQuests) {
+                String title = quest.getQuestData().getTitle();
+                List<String> lines = splitAtSpace(title, 31);
+                font.draw(engine.getBatch(), "- " + lines.removeFirst(), 1352, 990 - questLine++ * 30);
+                for (String line : lines) {
+                    font.draw(engine.getBatch(), line, 1384, 990 - questLine++ * 30);
+                }
+            }
+        } else {
+            font.draw(engine.getBatch(), "Loading quests...", 1352, 1020);
         }
+
 
         engine.getBatch().end();
     }

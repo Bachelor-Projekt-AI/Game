@@ -260,10 +260,11 @@ public class CombatMenu extends ScreenAdapter {
         }
 
 
-        // Inventar schließen
+        // CombatMenu
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             engine.popScreen();
-            System.out.println("Inventory closed.");
+            engine.sendNotification("Du bist geflohen. Der Gegner hat sich regeneriert.");
+            combatSystem.getEnemy().heal(combatSystem.getEnemy().getMaxHealth());
         }
     }
 }
