@@ -60,7 +60,7 @@ public class CombatMenu extends ScreenAdapter {
     }
 
     public static int getMaxCharsPerLine(BitmapFont font) {
-        float screenWidth = Gdx.graphics.getWidth(); // Fensterbreite
+        float screenWidth = 1920;
         GlyphLayout layout = new GlyphLayout(font, "W"); // Ein Zeichen ausmessen
         float charWidth = layout.width; // Breite eines Zeichens
 
@@ -68,7 +68,7 @@ public class CombatMenu extends ScreenAdapter {
     }
 
     public static int getMaxLinesOnScreen(BitmapFont font) {
-        float screenHeight = Gdx.graphics.getHeight();
+        float screenHeight = 1080;
         float lineHeight = font.getLineHeight(); // Höhe eines einzelnen Zeichens
         return (int) (screenHeight / lineHeight);
     }
