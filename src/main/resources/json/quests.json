@@ -10,6 +10,7 @@
       2
     ],
     "npc_id": 1,
+    "required_amount": 1,
     "type": "NPC_INTERACTION"
   },
   {
@@ -23,6 +24,7 @@
       1
     ],
     "npc_id": 2,
+    "required_amount": 1,
     "type": "NPC_INTERACTION"
   },
   {
@@ -36,6 +38,7 @@
       3
     ],
     "npc_id": 3,
+    "required_amount": 1,
     "type": "NPC_INTERACTION"
   },
   {
@@ -62,6 +65,7 @@
     "rewards_item_ids": [
       3
     ],
+    "required_amount": 1,
     "target_location_id": 2,
     "type": "VISIT_LOCATION"
   }

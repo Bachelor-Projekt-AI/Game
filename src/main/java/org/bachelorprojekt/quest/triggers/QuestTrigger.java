@@ -11,5 +11,9 @@ public interface QuestTrigger {
      */
     boolean isTriggered(GameEvent event);
 
+    default int getProgressAmount(GameEvent event) {
+        return 1;
+    }
+
     Class<? extends GameEvent> getEventType();
 }
