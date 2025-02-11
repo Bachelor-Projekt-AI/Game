@@ -14,6 +14,7 @@ public class StoryLoader {
     private final String mapsFile = "json/maps.json";
     private final String itemsFile = "json/items.json";
     private final String npcsFile = "json/npcs.json";
+    private final String enemiesFile = "json/enemies.json";
 
     private final ChapterManager chapterManager;
     private final LocationManager locationManager;
@@ -21,6 +22,7 @@ public class StoryLoader {
     private final MapManager mapManager;
     private final ItemManager itemManager;
     private final NpcManager npcManager;
+    private final EnemyManager enemyManager;
 
     public StoryLoader() {
 
@@ -32,6 +34,7 @@ public class StoryLoader {
             List<Maps> mapList = JsonLoader.loadMaps(mapsFile);
             List<Item> itemList = JsonLoader.loadItems(itemsFile);
             List<NPC> npcList = JsonLoader.loadNpcs(npcsFile);
+            List<Enemy> enemyList = JsonLoader.loadEnemies(enemiesFile);
 
             // Manager initialisieren
             this.chapterManager = new ChapterManager(chapterList, questList, locationList, mapList);
@@ -40,6 +43,7 @@ public class StoryLoader {
             this.itemManager = new ItemManager(itemList);
             this.mapManager = new MapManager(mapList, locationList);
             this.questManager = new QuestManager(questList, npcList, itemList, locationList);
+            this.enemyManager = new EnemyManager(enemyList, locationList, itemList);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,5 +77,9 @@ public class StoryLoader {
 
     public NpcManager getNpcManager() {
         return npcManager;
+    }
+
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
     }
 }

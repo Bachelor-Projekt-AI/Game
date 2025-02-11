@@ -38,4 +38,10 @@ public class JsonLoader {
         return mapper.readValue(Gdx.files.internal(filePath).read(),
                 mapper.getTypeFactory().constructCollectionType(List.class, NPC.class));
     }
+
+    public static List<Enemy> loadEnemies(String filePath) throws Exception {
+        return mapper.readValue(Gdx.files.internal(filePath).read(),
+                mapper.getTypeFactory().constructCollectionType(List.class, Enemy.class));
+    }
+
 }
