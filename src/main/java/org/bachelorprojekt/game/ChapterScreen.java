@@ -17,6 +17,7 @@ import org.bachelorprojekt.util.json.jackson.Location;
 import org.bachelorprojekt.util.json.jackson.Quest;
 import org.lwjgl.opengl.GL20;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChapterScreen extends ScreenAdapter {
@@ -66,23 +67,33 @@ public class ChapterScreen extends ScreenAdapter {
 
         // **Dynamisch die aktiven Quests abrufen!**
         List<QuestInstance> activeQuests = engine.getGameSystemManager().getQuestSystem().getActiveQuests();
-        int questOffsetX = 1870 - activeQuests.stream().map(quest -> {
-            GlyphLayout layout = new GlyphLayout();
-            layout.setText(questFont, quest.getQuestData().getTitle());
-            return (int) layout.width;
-        }).max(Integer::compare).orElse(0);
-
-        int questOffset = 0;
-        questFont.draw(engine.getBatch(), "Active Quests:", questOffsetX, 1020);
+		int lineNr = 0;
+        questFont.draw(engine.getBatch(), "Active Quests:", 1352, 1020);
         for (QuestInstance quest : activeQuests) {
-            questFont.draw(engine.getBatch(),
-                    "- " + quest.getQuestData().getTitle(),
-                    questOffsetX, 990 - questOffset++ * 30);
+			String title = quest.getQuestData().getTitle();
+			List<String> lines = splitString(title);
+            questFont.draw(engine.getBatch(), "- " + lines.remove(0), 1352, 990 - lineNr++ * 30);
+			for (String line : lines) {
+				questFont.draw(engine.getBatch(), line, 1384, 990 - lineNr++ * 30);
+			}
         }
 
         engine.getBatch().end();
     }
 
+	private List<String> splitString(String input) {
+		List<String> list = new ArrayList<String>();
+		if (input.length() > 31) { // Quests start at 1352 and end at 1870 (considering 50 padding). 1 char is 16 wide, giving us 528/16 = 33 chars per line, remove two for "- "
+			int i = 32;
+			while (input.charAt(i--) != ' ') ;
+			list.add(input.substring(0, i+1));
+			list.addAll(splitString(input.substring(i+2)));
+		}
+		else {
+			list.add(input);
+		}
+		return list;
+	}
 
     protected void handleInput() {
         // with e open inventory, with m open map, with esc open pause menu
