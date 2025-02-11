@@ -3,9 +3,9 @@
     "id": 1,
     "name": "Goblin",
     "dialogues": [
-      "Hehehe, du bist ein Leckerbissen für meine Sammlung!",
-      "Gold oder Leben? Ach, ich nehme einfach beides!",
-      "Du bist ja langsamer als meine Oma – und die ist schon tot!"
+      "Hehehe, you're a tasty treat for my collection!",
+      "Gold or life? Ah, I'll just take both!",
+      "You're slower than my grandma – and she's already dead!"
     ],
     "max_health": 75,
     "base_damage": 30,
@@ -28,9 +28,9 @@
     "id": 2,
     "name": "Orc Brute",
     "dialogues": [
-      "Ich zerquetsche dich wie eine Made!",
-      "Deine Knochen werden meine neue Trophäe sein!",
-      "Niemand besiegt mich! Naja... fast niemand."
+      "I'll crush you like a maggot!",
+      "Your bones will be my new trophy!",
+      "No one defeats me! Well... almost no one."
     ],
     "max_health": 120,
     "base_damage": 30,
@@ -53,9 +53,9 @@
     "id": 3,
     "name": "Undead Knight",
     "dialogues": [
-      "Dein Blut wird mein rostiges Schwert nähren!",
-      "Der Tod ist erst der Anfang... für DICH!",
-      "Ich war ein Krieger... jetzt bin ich eine Legende!"
+      "Your blood will nourish my rusty sword!",
+      "Death is just the beginning... for YOU!",
+      "I was a warrior... now I am a legend!"
     ],
     "max_health": 200,
     "base_damage": 30,

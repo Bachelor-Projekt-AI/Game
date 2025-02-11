@@ -32,21 +32,11 @@ public class GameSystemManager {
         questSystem.startQuest(2);
         questSystem.startQuest(3);
 
-        player.addToInventory(storyLoader.getItemManager().getItemById(4));
-        player.addToInventory(storyLoader.getItemManager().getItemById(5));
-        /*player.addToInventory(storyLoader.getItemManager().getItemById(6));
-        player.addToInventory(storyLoader.getItemManager().getItemById(7));
+        player.addToInventory(storyLoader.getItemManager().getItemById(8));
+        player.addToInventory(storyLoader.getItemManager().getItemById(9));
+        player.addToInventory(storyLoader.getItemManager().getItemById(10));
+        player.addToInventory(storyLoader.getItemManager().getItemById(11));
         player.addToInventory(storyLoader.getItemManager().getItemById(12));
-        player.addToInventory(storyLoader.getItemManager().getItemById(4));
-        player.addToInventory(storyLoader.getItemManager().getItemById(5));
-        player.addToInventory(storyLoader.getItemManager().getItemById(6));
-        player.addToInventory(storyLoader.getItemManager().getItemById(7));
-        player.addToInventory(storyLoader.getItemManager().getItemById(12));
-        player.addToInventory(storyLoader.getItemManager().getItemById(4));
-        player.addToInventory(storyLoader.getItemManager().getItemById(5));
-        player.addToInventory(storyLoader.getItemManager().getItemById(6));
-        player.addToInventory(storyLoader.getItemManager().getItemById(7));
-        player.addToInventory(storyLoader.getItemManager().getItemById(12));*/
     }
 
     /**

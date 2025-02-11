@@ -130,10 +130,6 @@ public class ChapterScreen extends ScreenAdapter {
 			new Keybind(Input.Keys.Q, "Open quest menu", () -> {
 				engine.pushScreen(new QuestScreen(engine));
 			}),
-			new Keybind(Input.Keys.K, "Open combat screen", () -> {
-				Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
-				CombatSystem combatSystem = new CombatSystem(engine, player, e);
-			}),
 			new Keybind(Input.Keys.ESCAPE, "Open pause menu", () -> {
 				System.out.println("Pause menu opened.");
 				engine.pushScreen(new PauseMenu(engine));

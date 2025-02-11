@@ -39,7 +39,7 @@ public class CombatSystem {
     }
 
     public void startCombat() {
-        System.out.println(("🔴 Kampf gestartet: " + player.getName() + " vs. " + enemy.getName()));
+        System.out.println(("Combat started: " + player.getName() + " vs. " + enemy.getName()));
     }
 
     public void playerAttack(Item weapon) {
@@ -79,9 +79,9 @@ public class CombatSystem {
         if (random.nextDouble() <= healRate) {
             int healAmount = enemy.getHealAmount();
             enemy.heal(healAmount);
-            combatMenu.logMessage("🩹 " + enemy.getName() + " heilt sich um " + healAmount + " HP!", Color.RED);
+            combatMenu.logMessage(enemy.getName() + " heals " + healAmount + " HP!", Color.RED);
         } else {
-            attack(enemy, player, damage, "Angriff");
+            attack(enemy, player, damage, "Attack");
         }
 
         checkCombatEnd();
@@ -94,15 +94,26 @@ public class CombatSystem {
 
         if (hit) {
             if (defender instanceof Player) {
-                ((Player) defender).damage(damage);
+                Item head = ((Player) defender).getHead();
+                Item body = ((Player) defender).getBody();
+                Item arms = ((Player) defender).getArms();
+                Item ring = ((Player) defender).getRing();
+                Item feet = ((Player) defender).getFeet();
+
+                int damageReduction = (head != null ? head.getDamageReduction() : 0) +
+                        (body != null ? body.getDamageReduction() : 0) +
+                        (arms != null ? arms.getDamageReduction() : 0) +
+                        (ring != null ? ring.getDamageReduction() : 0) +
+                        (feet != null ? feet.getDamageReduction() : 0);
+                ((Player) defender).damage(Math.max(0, damage - damageReduction));
             } else if (defender instanceof Enemy) {
                 ((Enemy) defender).damage(damage);
             }
 
-            combatMenu.logMessage("💥 " + getName(attacker) + " trifft mit " + attackName + " für " + damage + " Schaden!",
+            combatMenu.logMessage(getName(attacker) + " hits with " + attackName + " for " + damage + " damage!",
                     attacker instanceof Player ? Color.GREEN : Color.RED);
         } else {
-            combatMenu.logMessage("❌ " + getName(attacker) + " verfehlt mit " + attackName + "!",
+            combatMenu.logMessage(getName(attacker) + " does not hit with " + attackName + "!",
                     attacker instanceof Player ? Color.GREEN : Color.RED);
         }
     }
@@ -120,7 +131,7 @@ public class CombatSystem {
         if (!potion.givesHp()) return; // Nur Heiltränke verwenden
         int healAmount = potion.getHealth();
         player.heal(healAmount);
-        combatMenu.logMessage("🩹 " + player.getName() + " trinkt " + potion.getName() + " und heilt " + healAmount + " HP!", Color.GREEN);
+        combatMenu.logMessage("🩹 " + player.getName() + " drinks " + potion.getName() + " and heals " + healAmount + " HP!", Color.GREEN);
         combatMenu.resetSelectedIndex();
         player.getInventory().remove(potion); // Trank verbrauchen
     }
@@ -129,17 +140,17 @@ public class CombatSystem {
         System.out.println(player.isDead());
         System.out.println(player.getHealth());
         if (player.isDead()) {
-            combatMenu.logMessage("💀 " + player.getName() + " wurde besiegt!", Color.RED);
+            combatMenu.logMessage(player.getName() + " got defeated!", Color.RED);
             combatActive = false;
             engine.popScreen(); // Kampf beenden
-            engine.sendNotification("Du wurdest besiegt!");
+            engine.sendNotification("You got defeated!");
             player.revive();
             return true;
         } else if (enemy.isDead()) {
-            combatMenu.logMessage("🏆 " + enemy.getName() + " wurde besiegt!", Color.YELLOW);
+            combatMenu.logMessage(enemy.getName() + " got defeated!", Color.YELLOW);
             combatActive = false;
             engine.popScreen();
-            engine.sendNotification("Du hast den Kampf gewonnen! Deine HP haben sich erholt.");
+            engine.sendNotification("You won! Your HP is restored.");
             player.revive();
             return true;
         }

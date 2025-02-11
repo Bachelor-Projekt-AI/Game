@@ -193,7 +193,7 @@ public class CombatMenu extends ScreenAdapter {
                 itemStats.add("Mana: " + selectedItem.getMana());
             }
         } else {
-            itemStats.add("No Item Selected");
+            itemStats.add("No item selected");
         }
 
         // Zeige nur sichtbare Items (scrollOffset steuert die Anzeige)
@@ -215,8 +215,8 @@ public class CombatMenu extends ScreenAdapter {
 
         // Kontextmenü (Aktionen)
         template.add("| " + padEnd("Actions", LEFT_WIDTH - 3) + "| " + padEnd("", RIGHT_WIDTH - 3) + " |");
-        template.add("| " + padEnd("SPACE to attack", LEFT_WIDTH - 3) + "| " + padEnd("Press D to drop", RIGHT_WIDTH - 3) + " |");
-        template.add("| " + padEnd("Press X to see stats", LEFT_WIDTH - 3) + "| " + padEnd("Press Q to surrender", RIGHT_WIDTH - 3) + " |");
+        template.add("| " + padEnd("[UP] Move selection up", LEFT_WIDTH - 3) + "| " + padEnd("[ENTER] Select", RIGHT_WIDTH - 3) + " |");
+        template.add("| " + padEnd("[DOWN] Move selection down", LEFT_WIDTH - 3) + "| " + padEnd("[K] Escape", RIGHT_WIDTH - 3) + " |");
         template.add(borderLine);
 
         return template.toArray(new String[0]);
@@ -263,7 +263,7 @@ public class CombatMenu extends ScreenAdapter {
         // CombatMenu
         if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             engine.popScreen();
-            engine.sendNotification("Du bist geflohen. Der Gegner hat sich regeneriert.");
+            engine.sendNotification("You fled from combat. The enemy is now healed.");
             combatSystem.getEnemy().heal(combatSystem.getEnemy().getMaxHealth());
         }
     }
