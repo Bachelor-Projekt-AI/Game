@@ -20,7 +20,7 @@ public class CollectItemTrigger implements QuestTrigger {
             ItemCollectEvent itemEvent = (ItemCollectEvent) event;
             if (itemEvent.getItem().getId() == requiredItemId) {
                 currentAmount += itemEvent.getAmount();
-                return currentAmount >= requiredAmount;
+                return true;
             }
         }
         return false;

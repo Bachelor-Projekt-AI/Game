@@ -49,18 +49,18 @@
       "Find and collect 5 healing herbs in the forest."
     ],
     "rewards_item_ids": [
-      1
+      7
     ],
-    "required_item_id": 10,
+    "required_item_id": 1,
     "required_amount": 5,
     "type": "COLLECT_ITEM"
   },
   {
     "id": 5,
-    "title": "Reach the Ancient Ruins",
-    "description": "Travel to the ancient ruins to uncover their secrets.",
+    "title": "Reach the village square",
+    "description": "Travel to the village square.",
     "objectives": [
-      "Travel to the ancient ruins"
+      "Travel to the village square"
     ],
     "rewards_item_ids": [
       3

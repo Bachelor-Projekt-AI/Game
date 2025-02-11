@@ -34,6 +34,7 @@ public class EventDispatcher {
         // sout all events
         System.out.println("Event: " + event.getClass().getSimpleName());
         if (registeredListeners != null) {
+            System.out.println("Listeners: " + registeredListeners.size());
             for (EventListener listener : registeredListeners) {
                 listener.onEvent(event);
             }

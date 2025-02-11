@@ -104,7 +104,6 @@ public class QuestSystem implements EventListener {
     @Override
     public void onEvent(GameEvent event) {
         List<QuestInstance> relevantQuests = questInstancesByEvent.get(event.getClass());
-
         if (relevantQuests != null) {
             Iterator<QuestInstance> iterator = relevantQuests.iterator();
 

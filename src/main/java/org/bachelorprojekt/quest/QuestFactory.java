@@ -13,8 +13,8 @@ public class QuestFactory {
 
         switch (quest.getQuestType()) {
             case NPC_INTERACTION -> trigger = new NPCInteractionTrigger(quest.getNpcId());
-            //case COLLECT_ITEM -> trigger = new CollectItemTrigger(quest.getItemId(), quest.getAmount());
-            //case VISIT_LOCATION -> trigger = new VisitLocationTrigger(quest.getLocationId());
+            case COLLECT_ITEM -> trigger = new CollectItemTrigger(quest.getRequiredItemId(), quest.getRequiredAmount());
+            case VISIT_LOCATION -> trigger = new VisitLocationTrigger(quest.getTargetLocationId());
             default ->
                 throw new IllegalArgumentException("Unbekannter Quest-Typ: " + quest.getQuestType().toString());
         }
