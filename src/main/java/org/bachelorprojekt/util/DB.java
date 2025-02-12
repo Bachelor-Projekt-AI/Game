@@ -6,21 +6,34 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-// Utility class for database operations using Hibernate
+/**
+ * A utility class for database operations using Hibernate.
+ * This class provides methods for adding, retrieving, and updating objects in the database.
+ * The database connection is configured using Hibernate's SessionFactory.
+ */
 public class DB {
-	// Hibernate SessionFactory initialized with the configuration file and annotated classes
-	private SessionFactory factory;
+    // Hibernate SessionFactory initialized with the configuration file and annotated classes
+    private SessionFactory factory;
 
-	// Hibernate SessionFactory initialized with the configuration file and annotated classes
-	public DB(String filename) {
-		this.factory = new Configuration()
-			.configure("config/hibernate.xml") // Path to Hibernate configuration
-			.setProperty("hibernate.connection.url", "jdbc:sqlite:" + filename)
-			.addAnnotatedClass(Player.class) // Maps the Character entity
-			.buildSessionFactory();
-	}
+    /**
+     * Constructs a DB object with a Hibernate SessionFactory configured using the specified SQLite file.
+     * 
+     * @param filename The SQLite database file path.
+     */
+    public DB(String filename) {
+        this.factory = new Configuration()
+            .configure("config/hibernate.xml") // Path to Hibernate configuration
+            .setProperty("hibernate.connection.url", "jdbc:sqlite:" + filename)
+            .addAnnotatedClass(Player.class) // Maps the Character entity
+            .buildSessionFactory();
+    }
 
-    // Generic method to add an object to the database
+    /**
+     * Adds an object to the database.
+     * 
+     * @param <T> The type of the object to be added.
+     * @param obj The object to be persisted in the database.
+     */
     public <T> void add(T obj) {
         Session session = this.factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
@@ -28,7 +41,14 @@ public class DB {
         transaction.commit(); // Commit the transaction
     }
 
-    // Generic method to retrieve an object from the database by its ID
+    /**
+     * Retrieves an object from the database by its ID.
+     * 
+     * @param <T> The type of the object to be retrieved.
+     * @param type The class of the object to be retrieved.
+     * @param id The ID of the object to be retrieved.
+     * @return The object with the specified ID, or null if not found.
+     */
     public <T> T get(Class<T> type, Object id) {
         Session session = this.factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
@@ -37,7 +57,12 @@ public class DB {
         return read;
     }
 
-    // Generic method to update an object in the database
+    /**
+     * Updates an object in the database.
+     * 
+     * @param <T> The type of the object to be updated.
+     * @param obj The object with updated values.
+     */
     public <T> void update(T obj) {
         Session session = this.factory.getCurrentSession();
         Transaction transaction = session.beginTransaction();

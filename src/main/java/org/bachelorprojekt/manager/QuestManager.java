@@ -10,12 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Manages the quests in the application, providing methods to retrieve quests by ID,
+ * check if a quest exists, and get all quests.
+ */
 public class QuestManager {
 
     private final Map<Integer, Quest> quests;
 
     /**
-     * Initialisiert den QuestManager und führt das Mapping für Quests durch.
+     * Constructs a QuestManager instance, initializing the quests from the provided lists.
+     * The quests are mapped by their ID, and each quest is initialized with corresponding
+     * NPC, item, and location data.
+     *
+     * @param questList A list of quests to be managed.
+     * @param npcList A list of NPCs to be associated with the quests.
+     * @param itemList A list of items to be associated with the quests.
+     * @param locationList A list of locations to be associated with the quests.
      */
     public QuestManager(List<Quest> questList, List<NPC> npcList, List<Item> itemList, List<Location> locationList) {
         this.quests = new HashMap<>();
@@ -30,21 +41,29 @@ public class QuestManager {
     }
 
     /**
-     * Holt eine Quest anhand ihrer ID.
+     * Retrieves a quest by its ID.
+     *
+     * @param questId The ID of the quest to retrieve.
+     * @return The quest corresponding to the given ID, or null if not found.
      */
     public Quest getQuestById(int questId) {
         return quests.get(questId);
     }
 
     /**
-     * Gibt alle Quests zurück.
+     * Retrieves all quests managed by this QuestManager.
+     *
+     * @return A list of all quests.
      */
     public List<Quest> getAllQuests() {
         return List.copyOf(quests.values());
     }
 
     /**
-     * Überprüft, ob eine Quest existiert.
+     * Checks if a quest with the given ID exists.
+     *
+     * @param questId The ID of the quest to check.
+     * @return True if a quest with the given ID exists, false otherwise.
      */
     public boolean questExists(int questId) {
         return quests.containsKey(questId);

@@ -7,20 +7,38 @@ import org.bachelorprojekt.util.Engine;
 import org.bachelorprojekt.util.TextRenderer;
 import org.lwjgl.opengl.GL20;
 
+/**
+ * The PauseMenu class represents the in-game pause menu.
+ * It allows the player to pause the game and perform actions like resuming the game,
+ * saving the game, adjusting the resolution, and quitting to the main menu.
+ */
 public class PauseMenu extends ScreenAdapter {
+    
     private final Engine engine;
     private final TextRenderer textRenderer;
     private final String[] menuOptions = {"Resume", "Save Game", "Options", "Quit to Main Menu"};
     private int selectedOption;
     private final float startY;
 
+    /**
+     * Constructs a new PauseMenu.
+     * 
+     * @param engine The engine that drives the game logic and rendering.
+     */
     public PauseMenu(Engine engine) {
         this.engine = engine;
         this.textRenderer = engine.getTextRenderer();
-        this.selectedOption = 0; // Standardmäßig die erste Option auswählen
-        this.startY = 300; // Y-Position für das Menü
+        this.selectedOption = 0; // Default to the first option
+        this.startY = 300; // Y-position for the menu
     }
 
+    /**
+     * Renders the pause menu on the screen.
+     * It clears the screen, then draws the menu title and options.
+     * The selected option is highlighted.
+     * 
+     * @param delta The time elapsed since the last frame.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -28,10 +46,10 @@ public class PauseMenu extends ScreenAdapter {
 
         engine.getBatch().begin();
 
-        // Titel des Pause-Menüs
+        // Draw the title of the pause menu
         textRenderer.drawCenteredText("Paused", startY, this.engine.getFont());
 
-        // Render die Menüoptionen
+        // Render the menu options
         for (int i = 0; i < menuOptions.length; i++) {
             if (i == selectedOption) {
                 textRenderer.drawCenteredText("> " + menuOptions[i], startY - (i + 1) * 30 - 15, this.engine.getFont());
@@ -45,44 +63,55 @@ public class PauseMenu extends ScreenAdapter {
         handleInput();
     }
 
+    /**
+     * Handles the input from the user for navigating and selecting menu options.
+     * 
+     * The user can move up or down through the options and confirm the selection.
+     * If the user presses ESC, the menu will close and the game will resume.
+     */
     private void handleInput() {
-        // Navigiere nach oben
+        // Navigate up through the options
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             selectedOption = (selectedOption - 1 + menuOptions.length) % menuOptions.length;
         }
 
-        // Navigiere nach unten
+        // Navigate down through the options
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             selectedOption = (selectedOption + 1) % menuOptions.length;
         }
 
-        // Bestätige die aktuelle Auswahl
+        // Confirm the selected option
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             switch (selectedOption) {
                 case 0: // Resume
-                    engine.popScreen(); // Kehre zurück zum Kapitel
+                    engine.popScreen(); // Resume the game
                     break;
                 case 1: // Save Game
-                    saveGame();
+                    saveGame(); // Trigger save game logic
                     break;
-				case 2:
-					engine.pushScreen(new ResolutionSelectMenu(engine));
-					break;
+                case 2: // Options
+                    engine.pushScreen(new ResolutionSelectMenu(engine)); // Open resolution settings
+                    break;
                 case 3: // Quit to Main Menu
-                    engine.quitToMenu();
+                    engine.quitToMenu(); // Quit and return to the main menu
                     break;
             }
         }
 
-        // Menü schließen, wenn erneut ESC gedrückt wird
+        // Close the menu if ESC is pressed
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            engine.popScreen(); // Kehre zurück zum Kapitel
+            engine.popScreen(); // Resume the game
         }
     }
 
+    /**
+     * Saves the game state.
+     * This function currently only prints a message to the console.
+     * Implement the actual saving logic here to persist the game state.
+     */
     private void saveGame() {
-        // Spielstand speichern
-        //engine.getGameStateManager().saveGame();
+        // Save the game state (this is a placeholder implementation)
+        // Implement your saving mechanism here
         System.out.println("Game saved.");
     }
 }

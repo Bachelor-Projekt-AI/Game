@@ -23,14 +23,28 @@ import org.lwjgl.opengl.GL20;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Der `ChapterScreen` repräsentiert einen Bildschirm im Spiel, auf dem das aktuelle Kapitel,
+ * verfügbare Orte und aktive Quests angezeigt werden. Der Spieler kann hier durch verschiedene
+ * Eingaben interagieren, um Menüs zu öffnen oder in der Spielwelt zu navigieren.
+ * 
+ * @version 1.0
+ */
 public class ChapterScreen extends ScreenAdapter {
 
     private final Engine engine;
-    private final Chapter chapter; // Aktuelles Kapitel
+    private final Chapter chapter;
     private final Player player;
-    private final List<Location> locations; // Locations aus Chapter
+    private final List<Location> locations;
     private final BitmapFont font;
 
+    /**
+     * Erstellt einen neuen `ChapterScreen` für das angegebene Kapitel.
+     * 
+     * @param engine   Die Spiel-Engine, die für Rendering und Steuerung verwendet wird.
+     * @param chapter  Das aktuelle Kapitel, das dargestellt wird.
+     * @param gm       Das GameSystemManager-Objekt, um Spielsysteme zu verwalten.
+     */
     public ChapterScreen(Engine engine, Chapter chapter, GameSystemManager gm) {
         this.engine = engine;
         this.chapter = chapter;
@@ -42,42 +56,49 @@ public class ChapterScreen extends ScreenAdapter {
         player.setLocation(locations.get(0));
     }
 
+    /**
+     * Aktualisiert den Bildschirm und verarbeitet Benutzerinteraktionen.
+     * 
+     * @param delta Die Zeit, die seit dem letzten Frame vergangen ist.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		draw();
-
+        draw();
         handleInput();
     }
 
+    /**
+     * Zeichnet die Inhalte des `ChapterScreen`, einschließlich Kapitelinformationen,
+     * verfügbaren Orten und aktiven Quests.
+     */
     public void draw() {
         engine.getBatch().begin();
 
         // Kapitel-Info anzeigen
         font.draw(engine.getBatch(), "Chapter: " + chapter.getTitle(), 50, 1020);
-		List<String> description = splitAtSpace(chapter.getDescription(), 78); // 1 char is 16 wide. Quests start at 1352, giving us 1252/16 = 78.25 chars
-		int descriptionLine = 0;
-		for (String line : description) {
-			font.draw(engine.getBatch(), line, 50, 975 - descriptionLine++ * 30);
-		}
+        List<String> description = splitAtSpace(chapter.getDescription(), 78);
+        int descriptionLine = 0;
+        for (String line : description) {
+            font.draw(engine.getBatch(), line, 50, 975 - descriptionLine++ * 30);
+        }
 
-        // Dynamisch geladene Locations anzeigen
-		int locationsOffset = 960 - descriptionLine * 30;
+        // Verfügbare Orte anzeigen
+        int locationsOffset = 960 - descriptionLine * 30;
         font.draw(engine.getBatch(), "Nearby locations:", 50, locationsOffset);
         int locationLine = 0;
         for (Location location : locations) {
-			String fullDescription = location.getName() + ": " + location.getDescription();
-			List<String> lines = splitAtSpace(fullDescription, 78);
-			font.draw(engine.getBatch(), "- " + lines.removeFirst(), 50, locationsOffset - (++locationLine * 30));
-			for (String line : lines) {
-				font.draw(engine.getBatch(), line, 82, locationsOffset - (++locationLine * 30)); // move 2 chars = 32px to the right
-			}
+            String fullDescription = location.getName() + ": " + location.getDescription();
+            List<String> lines = splitAtSpace(fullDescription, 78);
+            font.draw(engine.getBatch(), "- " + lines.removeFirst(), 50, locationsOffset - (++locationLine * 30));
+            for (String line : lines) {
+                font.draw(engine.getBatch(), line, 82, locationsOffset - (++locationLine * 30));
+            }
         }
 
-        // **Dynamisch die aktiven Quests abrufen!**
-        // Sicherstellen, dass das GameSystemManager existiert
+        // Aktive Quests anzeigen
         if (engine.getGameSystemManager() != null && engine.getGameSystemManager().getQuestSystem() != null) {
             List<QuestInstance> activeQuests = engine.getGameSystemManager().getQuestSystem().getActiveQuests();
             int questLine = 0;
@@ -94,50 +115,59 @@ public class ChapterScreen extends ScreenAdapter {
             String loadingText = "Loading...";
             GlyphLayout layout = new GlyphLayout();
             layout.setText(font, loadingText);
-            font.draw(engine.getBatch(), "Loading...", 960 - layout.width, 540);
+            font.draw(engine.getBatch(), loadingText, 960 - layout.width, 540);
         }
-
 
         engine.getBatch().end();
     }
 
-	private List<String> splitAtSpace(String input, int maxLen) {
-		List<String> list = new ArrayList<String>();
-		if (input.length() > maxLen) {
-			int i = maxLen;
-			while (input.charAt(i--) != ' ') ;
-			list.add(input.substring(0, i+1));
-			list.addAll(splitAtSpace(input.substring(i+2), maxLen));
-		} else {
-			list.add(input);
-		}
-		return list;
-	}
+    /**
+     * Teilt einen langen String in mehrere Zeilen auf, basierend auf einer maximalen Zeichenlänge.
+     * 
+     * @param input  Der zu teilende String.
+     * @param maxLen Die maximale Anzahl an Zeichen pro Zeile.
+     * @return Eine Liste von Strings, die die gesplitteten Zeilen enthalten.
+     */
+    private List<String> splitAtSpace(String input, int maxLen) {
+        List<String> list = new ArrayList<>();
+        if (input.length() > maxLen) {
+            int i = maxLen;
+            while (input.charAt(i--) != ' ') ;
+            list.add(input.substring(0, i + 1));
+            list.addAll(splitAtSpace(input.substring(i + 2), maxLen));
+        } else {
+            list.add(input);
+        }
+        return list;
+    }
 
+    /**
+     * Verarbeitet Benutzereingaben und öffnet verschiedene Menüs basierend auf Tasteneingaben.
+     */
     protected void handleInput() {
-		new HelpScreen(engine, List.of(
-			new Keybind(Input.Keys.C, "Open context menu", () -> {
-            	this.engine.pushScreen(new ContextMenu(engine, this));
-			}),
-			new Keybind(Input.Keys.M, "Open map", () -> {
-				System.out.println("Map opened.");
-				this.engine.getGameSystemManager().openMapWithChapter(this);
-			}),
-			new Keybind(Input.Keys.E, "Open inventory", () -> {
-		this.engine.getGameSystemManager().setInventoryOpen(true);
-			System.out.println("Inventory opened.");
-			}),
-			new Keybind(Input.Keys.Q, "Open quest menu", () -> {
-				engine.pushScreen(new QuestScreen(engine));
-			}),
-			new Keybind(Input.Keys.K, "Open combat screen", () -> {
-				Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
-				CombatSystem combatSystem = new CombatSystem(engine, player, e);
-			}),
-			new Keybind(Input.Keys.ESCAPE, "Open pause menu", () -> {
-				System.out.println("Pause menu opened.");
-				engine.pushScreen(new PauseMenu(engine));
-			})
-		)).render(0);
+        new HelpScreen(engine, List.of(
+            new Keybind(Input.Keys.C, "Open context menu", () -> {
+                this.engine.pushScreen(new ContextMenu(engine, this));
+            }),
+            new Keybind(Input.Keys.M, "Open map", () -> {
+                System.out.println("Map opened.");
+                this.engine.getGameSystemManager().openMapWithChapter(this);
+            }),
+            new Keybind(Input.Keys.E, "Open inventory", () -> {
+                this.engine.getGameSystemManager().setInventoryOpen(true);
+                System.out.println("Inventory opened.");
+            }),
+            new Keybind(Input.Keys.Q, "Open quest menu", () -> {
+                engine.pushScreen(new QuestScreen(engine));
+            }),
+            new Keybind(Input.Keys.K, "Open combat screen", () -> {
+                Enemy e = engine.getGameSystemManager().getEnemyManager().getEnemyById(1);
+                CombatSystem combatSystem = new CombatSystem(engine, player, e);
+            }),
+            new Keybind(Input.Keys.ESCAPE, "Open pause menu", () -> {
+                System.out.println("Pause menu opened.");
+                engine.pushScreen(new PauseMenu(engine));
+            })
+        )).render(0);
     }
 }

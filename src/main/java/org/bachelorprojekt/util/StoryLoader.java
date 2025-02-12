@@ -6,6 +6,11 @@ import org.bachelorprojekt.util.json.jackson.*;
 
 import java.util.List;
 
+/**
+ * Loads and manages the story data for the game by parsing JSON files and initializing various managers.
+ * This class is responsible for loading all necessary game data such as chapters, locations, quests, items, NPCs, and enemies,
+ * and providing access to the corresponding manager instances.
+ */
 public class StoryLoader {
 
     private final String chaptersFile = "json/chapters.json";
@@ -24,8 +29,12 @@ public class StoryLoader {
     private final NpcManager npcManager;
     private final EnemyManager enemyManager;
 
+    /**
+     * Constructs a new StoryLoader and initializes the necessary managers by loading data from JSON files.
+     * 
+     * @throws RuntimeException if there is an error during the loading of the story data
+     */
     public StoryLoader() {
-
         try {
             // JSON-Dateien laden
             List<Chapter> chapterList = JsonLoader.loadChapters(chaptersFile);
@@ -55,30 +64,65 @@ public class StoryLoader {
     // ==                                      Getter-Methoden für Manager                                            ==
     // =================================================================================================================
 
+    /**
+     * Returns the manager responsible for handling chapter data.
+     *
+     * @return the ChapterManager instance
+     */
     public ChapterManager getChapterManager() {
         return chapterManager;
     }
 
+    /**
+     * Returns the manager responsible for handling location data.
+     *
+     * @return the LocationManager instance
+     */
     public LocationManager getLocationManager() {
         return locationManager;
     }
 
+    /**
+     * Returns the manager responsible for handling quest data.
+     *
+     * @return the QuestManager instance
+     */
     public QuestManager getQuestManager() {
         return questManager;
     }
 
+    /**
+     * Returns the manager responsible for handling map data.
+     *
+     * @return the MapManager instance
+     */
     public MapManager getMapManager() {
         return mapManager;
     }
 
+    /**
+     * Returns the manager responsible for handling item data.
+     *
+     * @return the ItemManager instance
+     */
     public ItemManager getItemManager() {
         return itemManager;
     }
 
+    /**
+     * Returns the manager responsible for handling NPC data.
+     *
+     * @return the NpcManager instance
+     */
     public NpcManager getNpcManager() {
         return npcManager;
     }
 
+    /**
+     * Returns the manager responsible for handling enemy data.
+     *
+     * @return the EnemyManager instance
+     */
     public EnemyManager getEnemyManager() {
         return enemyManager;
     }

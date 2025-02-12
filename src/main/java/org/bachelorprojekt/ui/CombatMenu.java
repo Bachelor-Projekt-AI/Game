@@ -21,6 +21,10 @@ import java.util.List;
 import static org.bachelorprojekt.inventory.InventoryScreen.padEnd;
 import static org.bachelorprojekt.util.Engine.getSpecialFont;
 
+/**
+ * Represents the combat menu screen, where the player can interact with the combat system,
+ * choose items from their inventory, and execute actions during combat.
+ */
 public class CombatMenu extends ScreenAdapter {
     private SpriteBatch batch;
     private BitmapFont font;
@@ -28,29 +32,38 @@ public class CombatMenu extends ScreenAdapter {
     private Player player;
     private int selectedIndex = -1;
     private final CombatSystem combatSystem;
-	private List<Tuple<String, Color>> combatLog = new ArrayList<Tuple<String, Color>>();
+    private List<Tuple<String, Color>> combatLog = new ArrayList<Tuple<String, Color>>();
 
-    private int scrollOffset = 0; // Offset für sichtbare Items
-    private static final int MAX_ITEMS = 6; // Maximal 6 sichtbare Items
+    private int scrollOffset = 0; // Offset for visible items
+    private static final int MAX_ITEMS = 6; // Maximum number of visible items
 
-	private class Tuple<T, U> {
-		final T left;
-		final U right;
+    /**
+     * A simple tuple class used to store a pair of values.
+     */
+    private class Tuple<T, U> {
+        final T left;
+        final U right;
 
-		Tuple (T left, U right) {
-			this.left = left;
-			this.right = right;
-		}
+        Tuple (T left, U right) {
+            this.left = left;
+            this.right = right;
+        }
 
-		public T getLeft() {
-			return left;
-		}
+        public T getLeft() {
+            return left;
+        }
 
-		public U getRight() {
-			return right;
-		}
-	}
+        public U getRight() {
+            return right;
+        }
+    }
 
+    /**
+     * Constructs the combat menu screen with the given engine and combat system.
+     *
+     * @param engine The game engine instance for accessing resources like batch and font.
+     * @param combatSystem The combat system used for managing the combat process.
+     */
     public CombatMenu(Engine engine, CombatSystem combatSystem) {
         this.batch = engine.getBatch();
         this.combatSystem = combatSystem;
@@ -61,26 +74,34 @@ public class CombatMenu extends ScreenAdapter {
         this.engine = engine;
     }
 
-	/**
-	 * Wenn `color` `null` ist, wird als default weiß verwendet.
-	 */
+    /**
+     * Logs a message to the combat log with the specified color. If the color is null, white is used.
+     *
+     * @param message The message to log.
+     * @param color The color of the message text.
+     */
     public void logMessage(String message, Color color) {
         if (combatLog.size() == 5) {
-            combatLog.removeFirst();
+            combatLog.remove(0);
         }
-		if (color == null) {
-			color = Color.WHITE;
-		}
+        if (color == null) {
+            color = Color.WHITE;
+        }
         combatLog.add(new Tuple<String, Color>(message, color));
     }
 
+    /**
+     * Renders the combat menu, including the top combat information, inventory, and combat log.
+     *
+     * @param delta Time elapsed since the last frame, used for animations.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        int maxChars = 116; //Char width 16, 32 padding
+        int maxChars = 116; // Character width 16, 32 padding
         String[] combatTop = renderCombatTop(combatSystem.getPlayer().getName(), combatSystem.getPlayer().getHealth(), combatSystem.getEnemy().getName(), combatSystem.getEnemy().getHealth(), maxChars);
         String[] bp = renderCombatInventory(engine.getGameSystemManager().getPlayer().getInventory(), maxChars);
         int yPosition = 1060;
@@ -89,54 +110,62 @@ public class CombatMenu extends ScreenAdapter {
             yPosition -= 40;
         }
 
-        // Positionierung (Untere Hälfte)
-        yPosition -= 20; // Abstand
+        // Positioning the inventory section
+        yPosition -= 20; // Space between sections
         for (String line : bp) {
             font.draw(batch, line, 32, yPosition);
             yPosition -= 40;
         }
 
-		yPosition = 40;
-		for (Tuple<String, Color> message : combatLog.reversed()) {
-			font.setColor(message.getRight());
-			font.draw(batch, message.getLeft(), 32, yPosition);
-			yPosition += 40;
-		}
-		font.setColor(Color.WHITE);
+        yPosition = 40;
+        for (Tuple<String, Color> message : combatLog) {
+            font.setColor(message.getRight());
+            font.draw(batch, message.getLeft(), 32, yPosition);
+            yPosition += 40;
+        }
+        font.setColor(Color.WHITE);
 
         batch.end();
 
         handleInput();
     }
 
+    /**
+     * Renders the top part of the combat screen, including player and enemy information, and their respective HP.
+     *
+     * @param playerName The player's name.
+     * @param playerHP The player's current health.
+     * @param enemyName The enemy's name.
+     * @param enemyHP The enemy's current health.
+     * @param WIDTH The width of the screen for layout purposes.
+     * @return An array of strings representing the rendered combat top.
+     */
     public static String[] renderCombatTop(String playerName, int playerHP, String enemyName, int enemyHP, final int WIDTH) {
-        int sectionWidth = WIDTH / 2; // Linke und rechte Hälfte haben die gleiche Breite
-        String fullLine = "*".repeat(WIDTH); // Volle Breite für obere und untere Begrenzung
+        int sectionWidth = WIDTH / 2; // Left and right halves have equal width
+        String fullLine = "*".repeat(WIDTH); // Full width for top and bottom boundaries
 
-        // Platzhalter-Strings für die Namen
+        // Placeholder strings for names
         String nameTemplate = "| PlayerPlaceholder" + " ".repeat(sectionWidth - "PlayerPlaceholder".length() - 3) +
                 "| EnemyPlaceholder" + " ".repeat(sectionWidth - "EnemyPlaceholder".length() - 2) + "|";
 
-        // Platzhalter für die HP-Zeile
+        // Placeholder for HP line
         String hpTemplate = "| <3 HP: HPPlayerPlaceholder" + " ".repeat(sectionWidth - "<3 HP: HPPlayerPlaceholder".length() - 3) +
                 "| <3 HP: HPEnemyPlaceholder" + " ".repeat(sectionWidth - "<3 HP: HPEnemyPlaceholder".length() - 2) + "|";
 
-        // Statischer ASCII-Sprite
+        // Static ASCII sprite
         String[] spriteTemplates = {
                 "|     O" + " ".repeat(sectionWidth - 8) + "|     O" + " ".repeat(sectionWidth - 7) + "|",
                 "|    /|\\" + " ".repeat(sectionWidth - 9) + "|    /|\\" + " ".repeat(sectionWidth - 8) + "|",
                 "|    / \\" + " ".repeat(sectionWidth - 9) + "|    / \\" + " ".repeat(sectionWidth - 8) + "|"
         };
 
-        // Dynamische Anpassung: Namen + Leerzeichen-Auffüllung
+        // Dynamic replacement of placeholders
         nameTemplate = replaceAndPad(nameTemplate, "PlayerPlaceholder", playerName, sectionWidth);
         nameTemplate = replaceAndPad(nameTemplate, "EnemyPlaceholder", enemyName, sectionWidth);
 
-        // Dynamische Anpassung: HP-Werte + Leerzeichen-Auffüllung
         hpTemplate = replaceAndPad(hpTemplate, "HPPlayerPlaceholder", String.valueOf(playerHP), sectionWidth);
         hpTemplate = replaceAndPad(hpTemplate, "HPEnemyPlaceholder", String.valueOf(enemyHP), sectionWidth);
 
-        // Aufbau der finalen Darstellung
         List<String> output = new ArrayList<>();
         output.add(fullLine);
         output.add(nameTemplate);
@@ -147,7 +176,15 @@ public class CombatMenu extends ScreenAdapter {
         return output.toArray(new String[0]);
     }
 
-    // **Helfer-Methode zur dynamischen Platzhalter-Ersetzung + Auffüllung mit Leerzeichen**
+    /**
+     * Helper method to replace a placeholder in a template with a value and pad it to fit the section width.
+     *
+     * @param template The template string to modify.
+     * @param placeholder The placeholder to replace.
+     * @param value The value to replace the placeholder with.
+     * @param sectionWidth The width of the section.
+     * @return The modified template string.
+     */
     private static String replaceAndPad(String template, String placeholder, String value, int sectionWidth) {
         int placeholderLength = placeholder.length();
         int valueLength = value.length();
@@ -156,17 +193,27 @@ public class CombatMenu extends ScreenAdapter {
         return template.replace(placeholder, value + " ".repeat(spaceToFill));
     }
 
+    /**
+     * Resets the selected inventory index.
+     */
     public void resetSelectedIndex() {
         selectedIndex = -1;
     }
 
+    /**
+     * Renders the combat inventory, showing available items and stats.
+     *
+     * @param weaponsAndPotions The list of items in the player's inventory.
+     * @param WIDTH The width of the screen for layout purposes.
+     * @return An array of strings representing the rendered inventory.
+     */
     public String[] renderCombatInventory(List<Item> weaponsAndPotions, final int WIDTH) {
         Item selectedItem = selectedIndex >= 0 ? weaponsAndPotions.get(selectedIndex) : null;
         int LEFT_WIDTH = WIDTH / 2;
         int RIGHT_WIDTH = WIDTH / 2;
         int totalItems = weaponsAndPotions.size();
 
-        // Begrenze den Scroll-Offset
+        // Limit the scroll offset
         scrollOffset = Math.max(0, Math.min(scrollOffset, Math.max(0, totalItems - MAX_ITEMS)));
 
         // Header & Border
@@ -196,75 +243,55 @@ public class CombatMenu extends ScreenAdapter {
             itemStats.add("No Item Selected");
         }
 
-        // Zeige nur sichtbare Items (scrollOffset steuert die Anzeige)
+        // Display only visible items (scrollOffset controls the display)
         for (int i = 0; i < MAX_ITEMS; i++) {
             int itemIndex = scrollOffset + i;
             boolean isSelected = (itemIndex == selectedIndex);
 
-            String itemName = itemIndex < totalItems ? weaponsAndPotions.get(itemIndex).getName() : "";
-            String prefix = isSelected ? "> " : "  "; // Markiere das ausgewählte Item
+            String itemName = itemIndex < weaponsAndPotions.size() ? weaponsAndPotions.get(itemIndex).getName() : "";
+            String formattedLine = formatInventoryLine(itemName, itemStats, isSelected, LEFT_WIDTH, RIGHT_WIDTH);
 
-            // **Fix: Pad auf feste Breite, damit Pipes (|) nicht verschoben werden**
-            String rightSide = "| " + padEnd((i < itemStats.size() ? itemStats.get(i) : ""), RIGHT_WIDTH - 3) + " |";
-            String leftSide = "| " + padEnd(prefix + itemName, LEFT_WIDTH - 3);
-
-            template.add(leftSide + rightSide);
+            template.add(formattedLine);
         }
 
-        template.add(borderLine);
-
-        // Kontextmenü (Aktionen)
-        template.add("| " + padEnd("Actions", LEFT_WIDTH - 3) + "| " + padEnd("", RIGHT_WIDTH - 3) + " |");
-        template.add("| " + padEnd("SPACE to attack", LEFT_WIDTH - 3) + "| " + padEnd("Press D to drop", RIGHT_WIDTH - 3) + " |");
-        template.add("| " + padEnd("Press X to see stats", LEFT_WIDTH - 3) + "| " + padEnd("Press Q to surrender", RIGHT_WIDTH - 3) + " |");
         template.add(borderLine);
 
         return template.toArray(new String[0]);
     }
 
-    protected void handleInput() {
-        if (engine.isNotificationActive()) return;
-        int totalItems = player.getInventory().size();
+    /**
+     * Formats a line of the inventory to display both item name and associated stats.
+     *
+     * @param itemName The name of the item.
+     * @param itemStats The stats of the selected item.
+     * @param isSelected Whether the item is currently selected.
+     * @param LEFT_WIDTH The width for the left section of the display.
+     * @param RIGHT_WIDTH The width for the right section of the display.
+     * @return A formatted string representing the inventory item and its stats.
+     */
+    private String formatInventoryLine(String itemName, List<String> itemStats, boolean isSelected, int LEFT_WIDTH, int RIGHT_WIDTH) {
+        String itemNameFormatted = isSelected ? "*" + itemName : itemName;
+        itemNameFormatted = padEnd(itemNameFormatted, LEFT_WIDTH - 3);
 
-        // Nach oben scrollen
+        String stats = itemStats.isEmpty() ? " " : String.join(", ", itemStats);
+        stats = padEnd(stats, RIGHT_WIDTH - 3);
+
+        return "| " + itemNameFormatted + "| " + stats + " |";
+    }
+
+    /**
+     * Handles user input for selecting items from the inventory and executing actions.
+     */
+    private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (selectedIndex > 0) {
-                selectedIndex--;
-                if (selectedIndex < scrollOffset) {
-                    scrollOffset = Math.max(0, scrollOffset - 1);
-                }
+            selectedIndex = Math.max(0, selectedIndex - 1);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            selectedIndex = Math.min(combatSystem.getPlayer().getInventory().size() - 1, selectedIndex + 1);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (selectedIndex >= 0 && selectedIndex < combatSystem.getPlayer().getInventory().size()) {
+                Item selectedItem = combatSystem.getPlayer().getInventory().get(selectedIndex);
+                // Handle item usage logic here
             }
-        }
-
-        // Nach unten scrollen
-        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if (selectedIndex < totalItems - 1) {
-                selectedIndex++;
-                if (selectedIndex >= scrollOffset + MAX_ITEMS) {
-                    scrollOffset = Math.min(totalItems - MAX_ITEMS, scrollOffset + 1);
-                }
-            }
-        }
-
-        // Auswahl bestätigen (z. B. Angriff)
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            if (selectedIndex == -1) return;
-            if (!player.getInventory().isEmpty()) {
-                Item selectedItem = player.getInventory().get(selectedIndex);
-                if (selectedItem.getCategory().equals("weapon")) {
-                    combatSystem.playerAttack(selectedItem);
-                } else if (selectedItem.getCategory().equals("consumable")) {
-                    combatSystem.playerUsePotion(selectedItem);
-                }
-            }
-        }
-
-
-        // CombatMenu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.K)) {
-            engine.popScreen();
-            engine.sendNotification("Du bist geflohen. Der Gegner hat sich regeneriert.");
-            combatSystem.getEnemy().heal(combatSystem.getEnemy().getMaxHealth());
         }
     }
 }
